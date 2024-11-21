@@ -11,7 +11,8 @@ fileListModel = ["Data06.dat"]
 with h5py.File("mg.h5", 'w') as hdf:
   i = 0
   for grpname in groups:
-    g = hdf.create_group(grpname)
-    g.create_dataset()
+    igroup = hdf.create_group(grpname)
+    print(grpname)
+    print(igroup)
 
     
