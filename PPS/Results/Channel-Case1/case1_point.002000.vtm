@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<VTKFile type="vtkMultiBlockDataSet" version="1.0" byte_order="LittleEndian">
+  <vtkMultiBlockDataSet>
+    <DataSet index="   1" file="case1/2000/1.vtr"/>
+    <DataSet index="   2" file="case1/2000/2.vtr"/>
+    <DataSet index="   3" file="case1/2000/3.vtr"/>
+    <DataSet index="   4" file="case1/2000/4.vtr"/>
+    <DataSet index="   5" file="case1/2000/5.vtr"/>
+    <DataSet index="   6" file="case1/2000/6.vtr"/>
+    <DataSet index="   7" file="case1/2000/7.vtr"/>
+    <DataSet index="   8" file="case1/2000/8.vtr"/>
+  </vtkMultiBlockDataSet>
+</VTKFile>

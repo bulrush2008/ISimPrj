@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<initialconditions version="5.7">
+	<VARIABLE variable_name="Pres-Div">
+		<method type="string" value="Automatic" />
+	</VARIABLE>
+	<VARIABLE variable_name="U-Velocity">
+		<method type="string" value="Automatic" />
+	</VARIABLE>
+	<VARIABLE variable_name="V-Velocity">
+		<method type="string" value="Automatic" />
+	</VARIABLE>
+	<VARIABLE variable_name="W-Velocity">
+		<method type="string" value="Automatic" />
+	</VARIABLE>
+</initialconditions>
