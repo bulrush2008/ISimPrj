@@ -9,10 +9,20 @@ fileListTest  = ["Data04.dat", "Data05.dat"]
 fileListModel = ["Data06.dat"]
 
 with h5py.File("mg.h5", 'w') as hdf:
-  i = 0
-  for grpname in groups:
+  for id, grpname in enumerate(groups):
     igroup = hdf.create_group(grpname)
-    print(grpname)
-    print(igroup)
+
+    if id==0:
+      for id2, file in enumerate(fileListTrain):
+        data = np.loadtxt(file, delimiter=',')
+        igroup.create_dataset(file, data=data)
+    elif id==1:
+      for id2, file in enumerate(fileListTest):
+        data = np.loadtxt(file, delimiter=',')
+        igroup.create_dataset(file, data=data)
+    elif id==2:
+      for id2, file in enumerate(fileListModel):
+        data = np.loadtxt(file, delimiter=',')
+        igroup.create_dataset(file, data=data)
 
     
