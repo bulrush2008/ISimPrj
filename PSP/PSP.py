@@ -34,6 +34,12 @@ with open(dir, 'rb') as vtm: # bytes string
 
 print("All the blocks are ", numOfBlocks, " and they are ", fileLists)
 
+#import os
+#curDir = os.getcwd(); print(curDir)
+
+VTRFilePath="D:\Development\FastSim\PSP\Results\Channel-Case1\case1\\2000"
+print(VTRFilePath)
+
 # move all the numpy file into h5 data base
 
 
