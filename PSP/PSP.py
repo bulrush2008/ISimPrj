@@ -10,5 +10,11 @@ This module is for Pre, Store and Post submodules.
 Xia, S        2024.11.2     Simpop.cn     v0.1
 '''
 
+# read VTK, and transfer to numpy file
+
+
+
+# move all the numpy file into h5 data base
+
 
 
