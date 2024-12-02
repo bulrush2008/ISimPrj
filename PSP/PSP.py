@@ -12,6 +12,15 @@ Xia, S        2024.11.2     Simpop.cn     v0.1
 
 # read VTK, and transfer to numpy file
 
+VTMFilePath = "D:\Development\FastSim\PSP\Results\Channel-Case1"
+VTMFileName = "case1_point.002000.vtm"
+
+dir = VTMFilePath+"\\"+VTMFileName
+#print("dir = ", dir)
+
+with open(dir, 'rb') as vtm:
+  data = vtm.readline()
+  print(data)
 
 
 # move all the numpy file into h5 data base
