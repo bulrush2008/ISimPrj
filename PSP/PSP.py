@@ -16,12 +16,23 @@ VTMFilePath = "D:\Development\FastSim\PSP\Results\Channel-Case1"
 VTMFileName = "case1_point.002000.vtm"
 
 dir = VTMFilePath+"\\"+VTMFileName
-#print("dir = ", dir)
 
-with open(dir, 'rb') as vtm:
-  data = vtm.readline()
-  print(data)
+numOfBlocks = 0
+fileLists = []
 
+#with open(dir, 'r') as vtm:
+with open(dir, 'rb') as vtm: # bytes string
+  while True:
+    line = vtm.readline()
+    if line[13:18]==b"index":
+      numOfBlocks += 1
+      fileLists.append(line[32:48])
+      #print(line[20:24], line[32:48])
+
+    if not line:
+      break
+
+print("All the blocks are ", numOfBlocks, " and they are ", fileLists)
 
 # move all the numpy file into h5 data base
 
