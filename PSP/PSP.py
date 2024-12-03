@@ -36,17 +36,24 @@ with open(dir, 'rb') as vtm: # bytes string
 #print(fileLists[0])
 
 from pathlib import Path
-curDir = Path.cwd(); print(curDir, type(curDir))
+curDir = Path.cwd()#; print(curDir, type(curDir))
 
-VTRFilePath = curDir / "../Results/Channel-Case1"
+VTRFilePath = curDir / "Results/Channel-Case1" / fileLists[0].decode('ascii')
 #print(VTRFilePath)
 #print(type(VTRFilePath))
 
-VTRFilePath = VTRFilePath / fileLists[0].decode('ascii')
-#print(VTRFilePath)
+fileNameStr = str(VTRFilePath)
+#print(fileNameStr)
+#print(type(fileNameStr))
 
-#VTRFilePath="D:\Development\FastSim\PSP\Results\Channel-Case1\case1\\2000"
-#print(VTRFilePath)
+# check if the vtr file exists
+#import os
+#live = os.path.exists(fileNameStr)
+#print(live)
+
+with open(fileNameStr, "rb") as vtr:
+  line = vtr.readline()
+  print(line)
 
 # move all the numpy file into h5 data base
 
