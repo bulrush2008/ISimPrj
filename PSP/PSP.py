@@ -124,6 +124,14 @@ with open(fileNameStr, "rb") as vtr:
   coordZ = line[38:45].decode("ASCII")
   #print(coordZ, type(coordZ))
 
+  line = vtr.readline()
+  line = vtr.readline()
+  line = vtr.readline()
+  line = vtr.readline()
+
+  line = vtr.readline()
+  print(line)
+
 # move all the numpy file into h5 data base
 
 
