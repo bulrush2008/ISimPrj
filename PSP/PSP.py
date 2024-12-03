@@ -51,11 +51,14 @@ fileNameStr = str(VTRFilePath)
 #live = os.path.exists(fileNameStr)
 #print(live)
 
+# The number of bytes offset is recorded at any time 
+offset = 0
+
 with open(fileNameStr, "rb") as vtr:
-  line = vtr.readline()
-  line = vtr.readline()
-  line = vtr.readline()
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)#; print(offset)
+  line = vtr.readline(); offset += len(line)#; print(offset)
+  line = vtr.readline(); offset += len(line)#; print(offset)
+  line = vtr.readline(); offset += len(line)#; print(offset)
 
   # indexes of i, j, k
   istab = line[17:22]; iendb = line[22:27]
@@ -71,66 +74,69 @@ with open(fileNameStr, "rb") as vtr:
   #print(jsta, jend)
   #print(ksta, kend)
 
-  line = vtr.readline()
-  line = vtr.readline()
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
+  line = vtr.readline(); offset += len(line)
+  line = vtr.readline(); offset += len(line)
 
   # read the variable names
   # Cellvolume
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
   var1 = line[38:48].decode("ASCII")
   #print(var1, type(var1))
 
   # P: pressure
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
   var2 = line[38:39].decode("ASCII")
   #print(var2, type(var2))
 
   # U: 1st component of velocity
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
   var3 = line[38:39].decode("ASCII")
   #print(var3, type(var3))
 
   # V: 2nd component of velocity
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
   var4 = line[38:39].decode("ASCII")
   #print(var4, type(var4))
 
   # W: 3rd component of velocity
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
   var5 = line[38:39].decode("ASCII")
   #print(var5, type(var5))
 
   # T: temperature
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
   var6 = line[38:39].decode("ASCII")
   #print(var6, type(var6))
 
-  line = vtr.readline()
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
+  line = vtr.readline(); offset += len(line)
 
   # Xcenter
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
   coordX = line[38:45].decode("ASCII")
   #print(coordX, type(coordX))
 
   # Ycenter
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
   coordY = line[38:45].decode("ASCII")
   #print(coordY, type(coordY))
 
   # Zcenter
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
   coordZ = line[38:45].decode("ASCII")
   #print(coordZ, type(coordZ))
 
-  line = vtr.readline()
-  line = vtr.readline()
-  line = vtr.readline()
-  line = vtr.readline()
+  line = vtr.readline(); offset += len(line)
+  line = vtr.readline(); offset += len(line)
+  line = vtr.readline(); offset += len(line)
+  line = vtr.readline(); offset += len(line)
 
-  line = vtr.readline()
-  print(int(line[0:4]))
+  import numpy as np
+  dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
+  print(dataNum)
+  #line = vtr.readline(); offset += len(line)
+  #print(int(line[0:4]))
 
 # move all the numpy file into h5 data base
 
