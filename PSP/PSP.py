@@ -32,13 +32,21 @@ with open(dir, 'rb') as vtm: # bytes string
     if not line:
       break
 
-print("All the blocks are ", numOfBlocks, " and they are ", fileLists)
+#print("All the blocks are ", numOfBlocks, "\n and they are ", fileLists)
+#print(fileLists[0])
 
-#import os
-#curDir = os.getcwd(); print(curDir)
+from pathlib import Path
+curDir = Path.cwd(); print(curDir, type(curDir))
 
-VTRFilePath="D:\Development\FastSim\PSP\Results\Channel-Case1\case1\\2000"
-print(VTRFilePath)
+VTRFilePath = curDir / "../Results/Channel-Case1"
+#print(VTRFilePath)
+#print(type(VTRFilePath))
+
+VTRFilePath = VTRFilePath / fileLists[0].decode('ascii')
+#print(VTRFilePath)
+
+#VTRFilePath="D:\Development\FastSim\PSP\Results\Channel-Case1\case1\\2000"
+#print(VTRFilePath)
 
 # move all the numpy file into h5 data base
 
