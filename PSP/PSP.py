@@ -53,7 +53,17 @@ fileNameStr = str(VTRFilePath)
 
 with open(fileNameStr, "rb") as vtr:
   line = vtr.readline()
-  print(line)
+  line = vtr.readline()
+  line = vtr.readline()
+  line = vtr.readline()
+
+  ista = line[17:22]; iend = line[22:27]
+  jsta = line[27:32]; jend = line[32:37]
+  ksta = line[37:42]; kend = line[42:47]
+
+  #print(ista, len(ista), iend, len(iend))
+  #print(jsta, len(jsta), jend, len(jend))
+  #print(ksta, len(ksta), kend, len(kend))
 
 # move all the numpy file into h5 data base
 
