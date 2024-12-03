@@ -42,14 +42,16 @@ VTRFilePath = curDir / "Results/Channel-Case1" / fileLists[5].decode('ascii')
 #print(VTRFilePath)
 #print(type(VTRFilePath))
 
-fileNameStr = str(VTRFilePath)
-print(fileNameStr)
+#fileNameStr = str(VTRFilePath)
+#print(fileNameStr)
 #print(type(fileNameStr))
+fileNameStr = "D:\Development\FastSim\PSP\Results\LD1B\ld3d\\200\\1.vtr"
 
 # check if the vtr file exists
-#import os
-#live = os.path.exists(fileNameStr)
-#print(live)
+import os
+live = os.path.exists(fileNameStr)
+print(live)
+print(fileNameStr)
 
 # The number of bytes offset is recorded at any time 
 offset = 0
@@ -130,19 +132,19 @@ with open(fileNameStr, "rb") as vtr:
   line = vtr.readline(); offset += len(line)
   line = vtr.readline(); offset += len(line)
   line = vtr.readline(); offset += len(line)
-  line = vtr.readline(); offset += len(line)
+  #line = vtr.readline(); offset += len(line)
   print(line)
-  print("Now the offset is ", offset)
+  #print("Now the offset is ", offset)
 
   #vtr.seek(offset)
   #vtr.seek(0)
 
   import numpy as np
-  dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
+  dataNum = np.fromfile(vtr, dtype=np.int16, count=1)
   print(dataNum)
 
   floats = np.fromfile(vtr, dtype=np.float64, count=dataNum[0])
-  #print(floats); print(len(floats))
+  print(floats); print(len(floats))
 
   #print(floats[10000:11000])
 
