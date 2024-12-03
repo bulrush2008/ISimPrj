@@ -78,33 +78,50 @@ with open(fileNameStr, "rb") as vtr:
   # Cellvolume
   line = vtr.readline()
   var1Str = line[38:48].decode("ASCII")
-  print(var1Str, type(var1Str))
+  #print(var1Str, type(var1Str))
 
   # P: pressure
   line = vtr.readline()
   var2Str = line[38:39].decode("ASCII")
-  print(var2Str, type(var2Str))
+  #print(var2Str, type(var2Str))
 
   # U: 1st component of velocity
   line = vtr.readline()
   var3Str = line[38:39].decode("ASCII")
-  print(var3Str, type(var3Str))
+  #print(var3Str, type(var3Str))
 
   # V: 2nd component of velocity
   line = vtr.readline()
   var4Str = line[38:39].decode("ASCII")
-  print(var4Str, type(var4Str))
+  #print(var4Str, type(var4Str))
 
   # W: 3rd component of velocity
   line = vtr.readline()
   var5Str = line[38:39].decode("ASCII")
-  print(var5Str, type(var5Str))
+  #print(var5Str, type(var5Str))
 
   # T: temperature
   line = vtr.readline()
   var6Str = line[38:39].decode("ASCII")
-  print(var6Str, type(var6Str))
+  #print(var6Str, type(var6Str))
 
+  line = vtr.readline()
+  line = vtr.readline()
+
+  # Xcenter
+  line = vtr.readline()
+  coordX = line[38:45].decode("ASCII")
+  print(coordX, type(coordX))
+
+  # Ycenter
+  line = vtr.readline()
+  coordY = line[38:45].decode("ASCII")
+  print(coordY, type(coordY))
+
+  # Zcenter
+  line = vtr.readline()
+  coordZ = line[38:45].decode("ASCII")
+  print(coordZ, type(coordZ))
   # read the variable names
 
 # move all the numpy file into h5 data base
