@@ -67,9 +67,43 @@ with open(fileNameStr, "rb") as vtr:
   jsta = int(jstab); jend = int(jendb)
   ksta = int(kstab); kend = int(kendb)
 
-  print(ista, iend)
-  print(jsta, jend)
-  print(ksta, kend)
+  #print(ista, iend)
+  #print(jsta, jend)
+  #print(ksta, kend)
+
+  line = vtr.readline()
+  line = vtr.readline()
+  line = vtr.readline()
+
+  # Cellvolume
+  line = vtr.readline()
+  var1Str = line[38:48].decode("ASCII")
+  print(var1Str, type(var1Str))
+
+  # P: pressure
+  line = vtr.readline()
+  var2Str = line[38:39].decode("ASCII")
+  print(var2Str, type(var2Str))
+
+  # U: 1st component of velocity
+  line = vtr.readline()
+  var3Str = line[38:39].decode("ASCII")
+  print(var3Str, type(var3Str))
+
+  # V: 2nd component of velocity
+  line = vtr.readline()
+  var4Str = line[38:39].decode("ASCII")
+  print(var4Str, type(var4Str))
+
+  # W: 3rd component of velocity
+  line = vtr.readline()
+  var5Str = line[38:39].decode("ASCII")
+  print(var5Str, type(var5Str))
+
+  # T: temperature
+  line = vtr.readline()
+  var6Str = line[38:39].decode("ASCII")
+  print(var6Str, type(var6Str))
 
   # read the variable names
 
