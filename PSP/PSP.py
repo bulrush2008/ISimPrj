@@ -38,12 +38,12 @@ with open(dir, 'rb') as vtm: # bytes string
 from pathlib import Path
 curDir = Path.cwd()#; print(curDir, type(curDir))
 
-VTRFilePath = curDir / "Results/Channel-Case1" / fileLists[0].decode('ascii')
+VTRFilePath = curDir / "Results/Channel-Case1" / fileLists[5].decode('ascii')
 #print(VTRFilePath)
 #print(type(VTRFilePath))
 
 fileNameStr = str(VTRFilePath)
-#print(fileNameStr)
+print(fileNameStr)
 #print(type(fileNameStr))
 
 # check if the vtr file exists
@@ -131,12 +131,20 @@ with open(fileNameStr, "rb") as vtr:
   line = vtr.readline(); offset += len(line)
   line = vtr.readline(); offset += len(line)
   line = vtr.readline(); offset += len(line)
+  print(line)
+  print("Now the offset is ", offset)
+
+  #vtr.seek(offset)
+  #vtr.seek(0)
 
   import numpy as np
   dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
   print(dataNum)
-  #line = vtr.readline(); offset += len(line)
-  #print(int(line[0:4]))
+
+  floats = np.fromfile(vtr, dtype=np.float64, count=dataNum[0])
+  #print(floats); print(len(floats))
+
+  #print(floats[10000:11000])
 
 # move all the numpy file into h5 data base
 
