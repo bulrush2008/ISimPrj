@@ -130,7 +130,7 @@ with open(fileNameStr, "rb") as vtr:
   line = vtr.readline()
 
   line = vtr.readline()
-  print(line)
+  print(int(line[0:4]))
 
 # move all the numpy file into h5 data base
 
