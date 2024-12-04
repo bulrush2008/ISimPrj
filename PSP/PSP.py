@@ -39,13 +39,12 @@ from pathlib import Path
 curDir = Path.cwd()#; print(curDir, type(curDir))
 
 VTRFilePath = curDir / "Results/Channel-Case1" / fileLists[5].decode('ascii')
-#print(VTRFilePath)
-#print(type(VTRFilePath))
+print(VTRFilePath)
 
-#fileNameStr = str(VTRFilePath)
+fileNameStr = str(VTRFilePath)
 #print(fileNameStr)
 #print(type(fileNameStr))
-fileNameStr = "D:\Development\FastSim\PSP\Results\LD1B\ld3d\\200\\1.vtr"
+#fileNameStr = "D:\Development\FastSim\PSP\Results\LD1B\ld3d\\200\\1.vtr"
 
 # check if the vtr file exists
 import os
@@ -132,25 +131,92 @@ with open(fileNameStr, "rb") as vtr:
   line = vtr.readline(); offset += len(line)
   line = vtr.readline(); offset += len(line)
   line = vtr.readline(); offset += len(line)
-  #line = vtr.readline(); offset += len(line)
-  print(line)
+  line = vtr.readline(); offset += len(line)
+  #print(line)
   #print("Now the offset is ", offset)
 
   #vtr.seek(offset+4)
   char = vtr.read(1).decode("ASCII")
-  print(char, "line 141")
+  #print(char, "line 141")
 
   import numpy as np
+
+  # first variable: Cellvolume
   dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
-  print(dataNum)
+  #print(dataNum)
 
-  c = dataNum[0] // 8#; print(f"c = {c}")
-
+  c = dataNum[0] // 8
   floats = np.fromfile(vtr, dtype=np.float64, count=c)
-  #print(len(floats))
-  print(floats[100:110])
 
-  #print(floats[10000:11000])
+  #floats_csv = floats.reshape((27, 51, 12), order='F')
+  #print(floats_csv[11, 33, 5])
+
+  # P
+  dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
+  #print(dataNum)
+
+  c = dataNum[0] // 8
+  floats = np.fromfile(vtr, dtype=np.float64, count=c)
+  #print(floats[500:510])
+
+  # U
+  dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
+  #print(dataNum)
+
+  c = dataNum[0] // 8
+  floats = np.fromfile(vtr, dtype=np.float64, count=c)
+  #print(floats[500:510])
+
+  # V
+  dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
+  #print(dataNum)
+
+  c = dataNum[0] // 8
+  floats = np.fromfile(vtr, dtype=np.float64, count=c)
+  #print(floats[500:510])
+
+  # W
+  dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
+  #print(dataNum)
+
+  c = dataNum[0] // 8
+  floats = np.fromfile(vtr, dtype=np.float64, count=c)
+  #print(floats[500:510])
+
+  # T
+  dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
+  #print(dataNum)
+
+  c = dataNum[0] // 8
+  floats = np.fromfile(vtr, dtype=np.float64, count=c)
+  #print(floats[500:510])
+
+  # coord x
+  dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
+  #print(dataNum)
+
+  c = dataNum[0] // 8
+  floats = np.fromfile(vtr, dtype=np.float64, count=c)
+  #print(floats[15])
+
+  # coord y
+  dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
+  #print(dataNum) # 51*8
+
+  c = dataNum[0] // 8
+  floats = np.fromfile(vtr, dtype=np.float64, count=c)
+  #print(floats[15])
+
+  # coord z
+  dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
+  print(dataNum) # 12*8
+
+  c = dataNum[0] // 8
+  floats = np.fromfile(vtr, dtype=np.float64, count=c)
+  print(floats[10])
+
+
+# transfer to numpy format
 
 # move all the numpy file into h5 data base
 
