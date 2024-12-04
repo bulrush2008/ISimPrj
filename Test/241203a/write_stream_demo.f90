@@ -21,6 +21,9 @@ program main
 
   write(1001) trim(adjustl(buffer))//char(10)
 
+  write(buffer,"(a)") "_"
+  write(1001) trim(buffer)
+
   write(1001) Nx*Ny, ((field(i,j),i=1,Nx),j=1,Ny)
 
   close(1001)
