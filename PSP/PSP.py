@@ -50,8 +50,8 @@ fileNameStr = "D:\Development\FastSim\PSP\Results\LD1B\ld3d\\200\\1.vtr"
 # check if the vtr file exists
 import os
 live = os.path.exists(fileNameStr)
-print(live)
-print(fileNameStr)
+#print(live, "Line 53")
+#print(fileNameStr)
 
 # The number of bytes offset is recorded at any time 
 offset = 0
@@ -136,13 +136,13 @@ with open(fileNameStr, "rb") as vtr:
   print(line)
   #print("Now the offset is ", offset)
 
-  vtr.seek(offset)
+  vtr.seek(offset+4)
 
   import numpy as np
   dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
   print(dataNum)
 
-  floats = np.fromfile(vtr, dtype=np.float64, count=dataNum[0])
+  floats = np.fromfile(vtr, dtype=np.float64, count=dataNum[0]/8)
   print(floats[100:150]); print(len(floats))
 
   #print(floats[10000:11000])
