@@ -209,11 +209,20 @@ with open(fileNameStr, "rb") as vtr:
 
   # coord z
   dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
-  print(dataNum) # 12*8
+  #print(dataNum) # 12*8
 
   c = dataNum[0] // 8
   floats = np.fromfile(vtr, dtype=np.float64, count=c)
-  print(floats[10])
+  #print(floats[10])
+
+  line = vtr.readline() # b'\n'
+  #print(line)
+
+  line = vtr.readline()
+  #print(line)
+
+  line = vtr.readline()
+  print(line)
 
 
 # transfer to numpy format
