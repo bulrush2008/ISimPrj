@@ -136,14 +136,19 @@ with open(fileNameStr, "rb") as vtr:
   print(line)
   #print("Now the offset is ", offset)
 
-  vtr.seek(offset+4)
+  #vtr.seek(offset+4)
+  char = vtr.read(1).decode("ASCII")
+  print(char, "line 141")
 
   import numpy as np
   dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
   print(dataNum)
 
-  floats = np.fromfile(vtr, dtype=np.float64, count=dataNum[0]/8)
-  print(floats[100:150]); print(len(floats))
+  c = dataNum[0] // 8#; print(f"c = {c}")
+
+  floats = np.fromfile(vtr, dtype=np.float64, count=c)
+  #print(len(floats))
+  print(floats[100:110])
 
   #print(floats[10000:11000])
 
