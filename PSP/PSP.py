@@ -136,15 +136,14 @@ with open(fileNameStr, "rb") as vtr:
   print(line)
   #print("Now the offset is ", offset)
 
-  #vtr.seek(offset)
-  #vtr.seek(0)
+  vtr.seek(offset)
 
   import numpy as np
-  dataNum = np.fromfile(vtr, dtype=np.int16, count=1)
+  dataNum = np.fromfile(vtr, dtype=np.int32, count=1)
   print(dataNum)
 
   floats = np.fromfile(vtr, dtype=np.float64, count=dataNum[0])
-  print(floats); print(len(floats))
+  print(floats[100:150]); print(len(floats))
 
   #print(floats[10000:11000])
 
