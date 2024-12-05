@@ -46,11 +46,28 @@ for i in range(NumOfCases):
   #print(CasePath[i])
 
 for i in range(NumOfCases):
-  vtm = "case" + "%d"%numList[i] + "_point.002000.vtm"
+  VTMFileName = "case" + "%d"%numList[i] + "_point.002000.vtm"
 
-  full_vtm = CasePath[i].joinpath(Path(vtm))
-  #print(full_vtm)
-  #with open()
+  VTMFilePath = CasePath[i].joinpath(Path(VTMFileName))
+
+  # assertain each vtm file is alive
+  #alive = VTMFilePath.exists()
+  #print(alive)
+
+  with open(VTMFilePath, "rb") as vtm:
+    numOfBlock = 0
+
+    while True:
+      line = vtm.readline()
+      if b"DataSet index" in line:
+        numOfBlock += 1
+      if not line:
+        break
+    #print(line)
+    pass
+
+print(numOfBlock)
+print("AA", b"AA")
 
 VTMFileNames = []
 
