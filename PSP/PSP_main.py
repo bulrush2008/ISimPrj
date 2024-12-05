@@ -86,9 +86,13 @@ for i in range(NumOfCases):
   #  print(VTRFilePath)
   pass  # over, read vtm file
 
-  if i==23:
-    for j in range(numOfBlock):
-      theVTRFile = CasePath[i].joinpath(VTRFilePath[j].decode("ASCII"))
+  # read vtr file for each block
+  for j in range(numOfBlock):
+    theVTRFile = CasePath[i].joinpath(VTRFilePath[j].decode("ASCII"))
 
-      print(type(theVTRFile))
-      print(theVTRFile.exists())
+    with open(theVTRFile, "rb") as vtr:
+      line = vtr.readline()
+      line = vtr.readline()
+      line = vtr.readline()
+      if i==0: print(line)
+
