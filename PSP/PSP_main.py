@@ -70,18 +70,25 @@ for i in range(NumOfCases):
           VTRFilePath.append(line[32:49])
         elif numList[i] >= 100:
           VTRFilePath.append(line[32:50])
+        pass
 
       if not line:
         break
+      pass
 
     #if numList[i] < 10: print(VTRFilePath)
     #if 10<=numList[i] and numList[i]<100: print(VTRFilePath)
     #if numList[i] >= 100: print(VTRFilePath)
 
-  if i==0:
-    print(VTMFilePath)
-    print(CasePath)
-#print("AA", b"AA")
+  #if i==0:
+  #  print(VTMFilePath)
+  #  print(CasePath[i])
+  #  print(VTRFilePath)
+  pass  # over, read vtm file
 
-#VTMFileNames = []
+  if i==23:
+    for j in range(numOfBlock):
+      theVTRFile = CasePath[i].joinpath(VTRFilePath[j].decode("ASCII"))
 
+      print(type(theVTRFile))
+      print(theVTRFile.exists())
