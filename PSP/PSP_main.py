@@ -54,6 +54,8 @@ for i in range(NumOfCases):
   #alive = VTMFilePath.exists()
   #print(alive)
 
+  VTRFilePath = []
+
   with open(VTMFilePath, "rb") as vtm:
     numOfBlock = 0
 
@@ -61,13 +63,25 @@ for i in range(NumOfCases):
       line = vtm.readline()
       if b"DataSet index" in line:
         numOfBlock += 1
+
+        if numList[i] < 10:
+          VTRFilePath.append(line[32:48])
+        elif 10<=numList[i] and numList[i]<100:
+          VTRFilePath.append(line[32:49])
+        elif numList[i] >= 100:
+          VTRFilePath.append(line[32:50])
+
       if not line:
         break
-    #print(line)
-    pass
 
-print(numOfBlock)
-print("AA", b"AA")
+    #if numList[i] < 10: print(VTRFilePath)
+    #if 10<=numList[i] and numList[i]<100: print(VTRFilePath)
+    #if numList[i] >= 100: print(VTRFilePath)
 
-VTMFileNames = []
+  if i==0:
+    print(VTMFilePath)
+    print(CasePath)
+#print("AA", b"AA")
+
+#VTMFileNames = []
 
