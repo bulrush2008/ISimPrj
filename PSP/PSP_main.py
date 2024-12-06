@@ -91,8 +91,16 @@ for i in range(NumOfCases):
     theVTRFile = CasePath[i].joinpath(VTRFilePath[j].decode("ASCII"))
 
     with open(theVTRFile, "rb") as vtr:
-      line = vtr.readline()
-      line = vtr.readline()
-      line = vtr.readline()
-      if i==0: print(line)
+      line = vtr.readline() # version
+      line = vtr.readline() # type and other
+      line = vtr.readline() # grid type: RectilinearGrid
+      line = vtr.readline() # Piece Extend
+      #if i==13: print(line)
+
+      # indexes range of i, j, k, from byte string to integer
+      ista = int(line[17:22]); iend = int(line[22:27])
+      jsta = int(line[27:32]); jend = int(line[32:37])
+      ksta = int(line[37:42]); kend = int(line[42:47])
+
+      #if i==13: print(ista, iend, jsta, jend, ksta, kend)
 
