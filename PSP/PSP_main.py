@@ -104,3 +104,25 @@ for i in range(NumOfCases):
 
       #if i==13: print(ista, iend, jsta, jend, ksta, kend)
 
+      line = vtr.readline()
+      line = vtr.readline()
+      line = vtr.readline()
+      line = vtr.readline() # Cellvolume
+
+      # names of each variable
+      line = vtr.readline() # P
+      varPBStr = line[38:39]
+
+      line = vtr.readline() # U
+      varUBStr = line[38:39]
+
+      line = vtr.readline() # V
+      varVBStr = line[38:39]
+
+      line = vtr.readline() # W
+      varWBStr = line[38:39]
+
+      line = vtr.readline() # T
+      varTBStr = line[38:39]
+      if i==0: print(varTBStr)
+
