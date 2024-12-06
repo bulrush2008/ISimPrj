@@ -182,5 +182,23 @@ for i in range(NumOfCases):
       numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
       numOfFloats = numOfBytes[0] // 8
       fieldT = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
-      if i==0: print(fieldT[1000:1010])
+      #if i==0: print(fieldT[1000:1010])
+
+      # X coords
+      numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
+      numOfFloats = numOfBytes[0] // 8
+      CoordsX = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+      #if i==0: print(numOfBytes,numOfFloats); print(CoordsX)
+
+      # Y coords
+      numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
+      numOfFloats = numOfBytes[0] // 8
+      CoordsY = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+      #if i==0: print(numOfBytes,numOfFloats); print(CoordsY)
+
+      # Z coords
+      numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
+      numOfFloats = numOfBytes[0] // 8
+      CoordsZ = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+      #if i==12: print(numOfBytes,numOfFloats); print(CoordsZ)
 
