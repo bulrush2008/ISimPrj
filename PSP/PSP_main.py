@@ -102,7 +102,7 @@ for i in range(NumOfCases):
       jsta = int(line[27:32]); jend = int(line[32:37])
       ksta = int(line[37:42]); kend = int(line[42:47])
 
-      #if i==13: print(ista, iend, jsta, jend, ksta, kend)
+      #if i==0: print("vtr-",j+1,":", ista, iend, jsta, jend, ksta, kend)
 
       line = vtr.readline()
       line = vtr.readline()
@@ -149,6 +149,38 @@ for i in range(NumOfCases):
 
       # number of bytes for each float variables
       import numpy as np
-      numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)
-      if i==0: print(numOfBytes)
+
+      # ignore the Cellvolume
+      numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
+      vtr.seek(numOfBytes[0], 1)  # move forward with /numOfBytes/ bytes
+
+      # field pressure
+      numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
+      numOfFloats = numOfBytes[0] // 8
+      fieldP = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+      #if i==0: print(fieldP[100:110])
+
+      # U field
+      numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
+      numOfFloats = numOfBytes[0] // 8
+      fieldU = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+      #if i==0: print(fieldU[100:110])
+
+      # V field
+      numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
+      numOfFloats = numOfBytes[0] // 8
+      fieldV = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+      #if i==0: print(fieldV[1000:1010])
+
+      # W field
+      numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
+      numOfFloats = numOfBytes[0] // 8
+      fieldW = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+      #if i==0: print(fieldW[1000:1010])
+
+      # T field
+      numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
+      numOfFloats = numOfBytes[0] // 8
+      fieldT = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+      if i==0: print(fieldT[1000:1010])
 
