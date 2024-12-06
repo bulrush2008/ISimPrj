@@ -19,7 +19,7 @@ from pathlib import Path
 # case indexes
 CommonPath = Path("../FSCases")
 
-numList = [  1,  3,  5,\
+idxList = [  1,  3,  5,\
             11, 13, 15,\
             21, 23, 25,\
             51, 53, 55,\
@@ -30,12 +30,12 @@ numList = [  1,  3,  5,\
            121,123,125]
 
 # number of cases
-NumOfCases = len(numList)
+NumOfCases = len(idxList)
 
 # register each case name to a list of strings
 Cases = []
 for i in range(NumOfCases):
-  s = "%03d"%numList[i]
+  s = "%03d"%idxList[i]
   Cases.append("C"+s)
 
 # assertain each case's path
@@ -47,7 +47,7 @@ for i in range(NumOfCases):
 
 # loop over each case
 for i in range(NumOfCases):
-  VTMFileName = "case" + "%d"%numList[i] + "_point.002000.vtm"
+  VTMFileName = "case" + "%d"%idxList[i] + "_point.002000.vtm"
 
   VTMFilePath = CasePath[i].joinpath(Path(VTMFileName))
 
@@ -66,11 +66,11 @@ for i in range(NumOfCases):
       if b"DataSet index" in line:
         numOfBlock += 1
 
-        if numList[i] < 10:
+        if idxList[i] < 10:
           VTRFilePath.append(line[32:48])
-        elif 10<=numList[i] and numList[i]<100:
+        elif 10<=idxList[i] and idxList[i]<100:
           VTRFilePath.append(line[32:49])
-        elif numList[i] >= 100:
+        elif idxList[i] >= 100:
           VTRFilePath.append(line[32:50])
         pass
 
@@ -180,4 +180,6 @@ for i in range(NumOfCases):
       numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
       numOfFloats = numOfBytes[0] // 8
       CoordsZ = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+
+      #if i==0: print(CoordsZ)
 
