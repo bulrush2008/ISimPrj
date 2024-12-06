@@ -111,18 +111,44 @@ for i in range(NumOfCases):
 
       # names of each variable
       line = vtr.readline() # P
-      varPBStr = line[38:39]
+      varPBStr = line[38:39].decode("ASCII")
 
       line = vtr.readline() # U
-      varUBStr = line[38:39]
+      varUBStr = line[38:39].decode("ASCII")
 
       line = vtr.readline() # V
-      varVBStr = line[38:39]
+      varVBStr = line[38:39].decode("ASCII")
 
       line = vtr.readline() # W
-      varWBStr = line[38:39]
+      varWBStr = line[38:39].decode("ASCII")
 
       line = vtr.readline() # T
-      varTBStr = line[38:39]
-      if i==0: print(varTBStr)
+      varTBStr = line[38:39].decode("ASCII")
+      #if i==0: print(varTBStr)
+
+      line = vtr.readline() # /PointData
+      line = vtr.readline() # /Coordinates
+
+      line = vtr.readline()
+      CoordX = line[38:45].decode("ASCII")
+
+      line = vtr.readline()
+      CoordY = line[38:45].decode("ASCII")
+
+      line = vtr.readline()
+      CoordZ = line[38:45].decode("ASCII")
+      #if i==11: print(CoordZ)
+
+      line = vtr.readline() # Coordinates
+      line = vtr.readline() # Piece
+      line = vtr.readline() # RectilinearGrid
+      line = vtr.readline() # AppendedData ...
+      #if i==0: print(line)
+      FloatStartSymbol = vtr.read(1) # '_'
+      #if i==0: print(FloatStartSymbol)
+
+      # number of bytes for each float variables
+      import numpy as np
+      numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)
+      if i==0: print(numOfBytes)
 
