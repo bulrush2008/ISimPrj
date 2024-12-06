@@ -45,6 +45,7 @@ for i in range(NumOfCases):
   CasePath.append(path)
   #print(CasePath[i])
 
+# loop over each case
 for i in range(NumOfCases):
   VTMFileName = "case" + "%d"%numList[i] + "_point.002000.vtm"
 
@@ -56,6 +57,7 @@ for i in range(NumOfCases):
 
   VTRFilePath = []
 
+  # open and parsing the vtm files. Each case has one vtm file
   with open(VTMFilePath, "rb") as vtm:
     numOfBlock = 0
 
@@ -74,19 +76,10 @@ for i in range(NumOfCases):
 
       if not line:
         break
-      pass
+      pass  # over for 'while-loop'
+    pass  # over, read vtm file
 
-    #if numList[i] < 10: print(VTRFilePath)
-    #if 10<=numList[i] and numList[i]<100: print(VTRFilePath)
-    #if numList[i] >= 100: print(VTRFilePath)
-
-  #if i==0:
-  #  print(VTMFilePath)
-  #  print(CasePath[i])
-  #  print(VTRFilePath)
-  pass  # over, read vtm file
-
-  # read vtr file for each block
+  # For certain case, loop all its vtr files, each of which relates to a block
   for j in range(numOfBlock):
     theVTRFile = CasePath[i].joinpath(VTRFilePath[j].decode("ASCII"))
 
@@ -95,14 +88,11 @@ for i in range(NumOfCases):
       line = vtr.readline() # type and other
       line = vtr.readline() # grid type: RectilinearGrid
       line = vtr.readline() # Piece Extend
-      #if i==13: print(line)
 
       # indexes range of i, j, k, from byte string to integer
       ista = int(line[17:22]); iend = int(line[22:27])
       jsta = int(line[27:32]); jend = int(line[32:37])
       ksta = int(line[37:42]); kend = int(line[42:47])
-
-      #if i==0: print("vtr-",j+1,":", ista, iend, jsta, jend, ksta, kend)
 
       line = vtr.readline()
       line = vtr.readline()
@@ -124,7 +114,6 @@ for i in range(NumOfCases):
 
       line = vtr.readline() # T
       varTBStr = line[38:39].decode("ASCII")
-      #if i==0: print(varTBStr)
 
       line = vtr.readline() # /PointData
       line = vtr.readline() # /Coordinates
@@ -137,15 +126,13 @@ for i in range(NumOfCases):
 
       line = vtr.readline()
       CoordZ = line[38:45].decode("ASCII")
-      #if i==11: print(CoordZ)
 
       line = vtr.readline() # Coordinates
       line = vtr.readline() # Piece
       line = vtr.readline() # RectilinearGrid
       line = vtr.readline() # AppendedData ...
-      #if i==0: print(line)
+
       FloatStartSymbol = vtr.read(1) # '_'
-      #if i==0: print(FloatStartSymbol)
 
       # number of bytes for each float variables
       import numpy as np
@@ -158,47 +145,39 @@ for i in range(NumOfCases):
       numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
       numOfFloats = numOfBytes[0] // 8
       fieldP = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
-      #if i==0: print(fieldP[100:110])
 
       # U field
       numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
       numOfFloats = numOfBytes[0] // 8
       fieldU = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
-      #if i==0: print(fieldU[100:110])
 
       # V field
       numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
       numOfFloats = numOfBytes[0] // 8
       fieldV = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
-      #if i==0: print(fieldV[1000:1010])
 
       # W field
       numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
       numOfFloats = numOfBytes[0] // 8
       fieldW = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
-      #if i==0: print(fieldW[1000:1010])
 
       # T field
       numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
       numOfFloats = numOfBytes[0] // 8
       fieldT = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
-      #if i==0: print(fieldT[1000:1010])
 
       # X coords
       numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
       numOfFloats = numOfBytes[0] // 8
       CoordsX = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
-      #if i==0: print(numOfBytes,numOfFloats); print(CoordsX)
 
       # Y coords
       numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
       numOfFloats = numOfBytes[0] // 8
       CoordsY = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
-      #if i==0: print(numOfBytes,numOfFloats); print(CoordsY)
 
       # Z coords
       numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
       numOfFloats = numOfBytes[0] // 8
       CoordsZ = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
-      #if i==12: print(numOfBytes,numOfFloats); print(CoordsZ)
 
