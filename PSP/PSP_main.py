@@ -12,11 +12,13 @@
 Xia, S        2024.11.7     Simpop.cn     v1.0
 """
 
-from pathlib import Path
 from ReadVTM import ReadVTM
 from ReadVTR import ReadVTR
+from AssertFileExist import AssertFileExist
 
+from pathlib import Path
 import numpy as np
+import sys
 
 # register all cases names to a list
 # case indexes
@@ -50,8 +52,10 @@ for i in range(numOfCases):
   VTMFilePath = casePaths[i].joinpath(VTMFileName)
 
   # assertain each vtm file is alive
-  #alive = VTMFilePath.exists()
-  #print(alive)
+  alive = AssertFileExist(VTMFilePath)
+  if not alive:
+    print(VTMFilePath, " Does Not Exsit.")
+    sys.exit(1)
 
   numOfBlock, VTRFilePath = ReadVTM(VTMFilePath, idxList[i])
 
@@ -59,8 +63,8 @@ for i in range(numOfCases):
   for j in range(numOfBlock):
     theVTRFile = casePaths[i].joinpath(VTRFilePath[j].decode("ASCII"))
 
-    fieldP, fieldU, fieldV, fieldW, fieldT, coordsX, coordsY, coordsZ\
-      = ReadVTR(theVTRFile)
+    fieldP, fieldU, fieldV, fieldW, fieldT, \
+    coordsX, coordsY, coordsZ = ReadVTR(theVTRFile)
 
     if i==0: print(coordsZ)
 
