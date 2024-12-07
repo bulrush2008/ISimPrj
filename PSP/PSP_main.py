@@ -63,23 +63,23 @@ paraInList = [[438.15, 2.511048614, 458333.3333],\
 #print(paraInList)
 
 # number of cases
-NumOfCases = len(idxList)
+numOfCases = len(idxList)
 
 # register each case name to a list of strings
 Cases = []
-for i in range(NumOfCases):
+for i in range(numOfCases):
   s = "%03d"%idxList[i]
   Cases.append("C"+s)
 
 # assertain each case's path
 CasePath = []
-for i in range(NumOfCases):
+for i in range(numOfCases):
   path = CommonPath.joinpath(Cases[i]) 
   CasePath.append(path)
   #print(CasePath[i])
 
 # loop over each case
-for i in range(NumOfCases):
+for i in range(numOfCases):
   VTMFileName = "case" + "%d"%idxList[i] + "_point.002000.vtm"
 
   VTMFilePath = CasePath[i].joinpath(Path(VTMFileName))
@@ -214,5 +214,5 @@ for i in range(NumOfCases):
       numOfFloats = numOfBytes[0] // 8
       CoordsZ = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
 
-      #if i==0: print(CoordsZ)
+      if i==0: print(CoordsZ)
 
