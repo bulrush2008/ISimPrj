@@ -31,7 +31,7 @@ commonPath = Path("../FSCases")
 # parameterization inputs consist a list
 from paraInList import paraInList
 numOfCases = len(paraInList)  # also
-print(numOfCases)
+#print(numOfCases)
 
 # register each case name to a list of strings
 caseNames = []  # e.g "Case003" or "Case115"
@@ -63,8 +63,13 @@ for i in range(numOfCases):
   for j in range(numOfBlock):
     theVTRFile = casePaths[i].joinpath(VTRFilePath[j].decode("ASCII"))
 
+    alive = AssertFileExist(theVTRFile)
+    if not alive:
+      print(f"{theVTRFile} Does Not Exist.")
+      sys.exit(2)
+
     fieldP, fieldU, fieldV, fieldW, fieldT, \
     coordsX, coordsY, coordsZ = ReadVTR(theVTRFile)
 
-    if i==0: print(coordsZ)
+    #if i==0: print(coordsZ)
 
