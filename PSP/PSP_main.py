@@ -14,48 +14,22 @@ Xia, S        2024.11.7     Simpop.cn     v1.0
 
 from pathlib import Path
 from ReadVTM import ReadVTM
-from idxList import idxList
 from ReadVTR import ReadVTR
 
 import numpy as np
 
 # register all cases names to a list
-
 # case indexes
-commonPath = Path("../FSCases")
-
-
+from idxList import idxList
 # number of cases
 numOfCases = len(idxList)
 
-# parameterization inputs: [inlet temperature, inlet velocity, heat flux]
-paraInList = [[438.15, 2.511048614, 458333.3333],\
-              [458.15, 2.511048614, 458333.3333],\
-              [478.15, 2.511048614, 458333.3333],\
-              [438.15, 2.064639971, 458333.3333],\
-              [458.15, 2.064639971, 458333.3333],\
-              [478.15, 2.064639971, 458333.3333],\
-              [438.15, 1.618231329, 458333.3333],\
-              [458.15, 1.618231329, 458333.3333],\
-              [478.15, 1.618231329, 458333.3333],\
-              [438.15, 2.511048614, 291666.6667],\
-              [458.15, 2.511048614, 291666.6667],\
-              [478.15, 2.511048614, 291666.6667],\
-              [438.15, 2.064639971, 291666.6667],\
-              [458.15, 2.064639971, 291666.6667],\
-              [478.15, 2.064639971, 291666.6667],\
-              [438.15, 1.618231329, 291666.6667],\
-              [458.15, 1.618231329, 291666.6667],\
-              [478.15, 1.618231329, 291666.6667],\
-              [438.15, 2.511048614, 125000.],\
-              [458.15, 2.511048614, 125000.],\
-              [478.15, 2.511048614, 125000.],\
-              [438.15, 2.064639971, 125000.],\
-              [458.15, 2.064639971, 125000.],\
-              [478.15, 2.064639971, 125000.],\
-              [438.15, 1.618231329, 125000.],\
-              [458.15, 1.618231329, 125000.],\
-              [478.15, 1.618231329, 125000.]]
+commonPath = Path("../FSCases")
+
+# parameterization inputs consist a list
+from paraInList import paraInList
+numOfCases = len(paraInList)  # also
+print(numOfCases)
 
 # register each case name to a list of strings
 caseNames = []  # e.g "Case003" or "Case115"
@@ -88,5 +62,5 @@ for i in range(numOfCases):
     fieldP, fieldU, fieldV, fieldW, fieldT, coordsX, coordsY, coordsZ\
       = ReadVTR(theVTRFile)
 
-    if i==0: print(coordsZ)
+    #if i==0: print(coordsZ)
 
