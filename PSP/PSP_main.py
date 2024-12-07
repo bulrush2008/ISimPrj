@@ -9,25 +9,18 @@
   displayed by Paraview
 
 @author       @date         @aff          @version
-Xia, S        2024.11.5     Simpop.cn     v1.0
+Xia, S        2024.11.7     Simpop.cn     v1.0
 """
 
 from pathlib import Path
+from ReadVTM import ReadVTM
+from idxList import idxList
 
 # register all cases names to a list
 
 # case indexes
 commonPath = Path("../FSCases")
 
-idxList = [  1,  3,  5,\
-            11, 13, 15,\
-            21, 23, 25,\
-            51, 53, 55,\
-            61, 63, 65,\
-            71, 73, 75,\
-           101,103,105,\
-           111,113,115,\
-           121,123,125]
 
 # number of cases
 numOfCases = len(idxList)
@@ -59,8 +52,7 @@ paraInList = [[438.15, 2.511048614, 458333.3333],\
               [478.15, 2.064639971, 125000.],\
               [438.15, 1.618231329, 125000.],\
               [458.15, 1.618231329, 125000.],\
-              [478.15, 1.618231329, 125000.]
-]
+              [478.15, 1.618231329, 125000.]]
 
 # register each case name to a list of strings
 caseNames = []  # e.g "Case003" or "Case115"
@@ -77,37 +69,14 @@ for i in range(numOfCases):
 
 # loop over each case
 for i in range(numOfCases):
-  VTMFileName = "case" + "%d"%idxList[i] + "_point.002000.vtm"
-
-  VTMFilePath = casePaths[i].joinpath(Path(VTMFileName))
+  VTMFileName = Path("case" + "%d"%idxList[i] + "_point.002000.vtm")
+  VTMFilePath = casePaths[i].joinpath(VTMFileName)
 
   # assertain each vtm file is alive
   #alive = VTMFilePath.exists()
   #print(alive)
 
-  VTRFilePath = []
-
-  # open and parsing the vtm files. Each case has one vtm file
-  with open(VTMFilePath, "rb") as vtm:
-    numOfBlock = 0
-
-    while True:
-      line = vtm.readline()
-      if b"DataSet index" in line:
-        numOfBlock += 1
-
-        if idxList[i] < 10:
-          VTRFilePath.append(line[32:48])
-        elif 10<=idxList[i] and idxList[i]<100:
-          VTRFilePath.append(line[32:49])
-        elif idxList[i] >= 100:
-          VTRFilePath.append(line[32:50])
-        pass
-
-      if not line:
-        break
-      pass  # over for 'while-loop'
-    pass  # over, read vtm file
+  numOfBlock, VTRFilePath = ReadVTM(VTMFilePath, i)
 
   # For certain case, loop all its vtr files, each of which relates to a block
   for j in range(numOfBlock):
