@@ -62,5 +62,5 @@ for i in range(numOfCases):
     fieldP, fieldU, fieldV, fieldW, fieldT, coordsX, coordsY, coordsZ\
       = ReadVTR(theVTRFile)
 
-    #if i==0: print(coordsZ)
+    if i==0: print(coordsZ)
 

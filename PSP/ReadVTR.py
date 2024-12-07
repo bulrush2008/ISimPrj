@@ -87,16 +87,16 @@ def ReadVTR(theVTRFile:Path)->np.ndarray:
     # X coords
     numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
     numOfFloats = numOfBytes[0] // 8
-    CoordsX = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+    coordsX = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
 
     # Y coords
     numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
     numOfFloats = numOfBytes[0] // 8
-    CoordsY = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+    coordsY = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
 
     # Z coords
     numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
     numOfFloats = numOfBytes[0] // 8
-    CoordsZ = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+    coordsZ = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
 
-  return fieldP, fieldU, fieldV, fieldW, fieldT, CoordsX, CoordsY, CoordsZ
+  return fieldP, fieldU, fieldV, fieldW, fieldT, coordsX, coordsY, coordsZ
