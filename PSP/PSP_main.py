@@ -63,23 +63,23 @@ paraInList = [[438.15, 2.511048614, 458333.3333],\
 ]
 
 # register each case name to a list of strings
-caseNames = []
+caseNames = []  # e.g "Case003" or "Case115"
 for i in range(numOfCases):
   s = "%03d"%idxList[i]
   caseNames.append("C"+s)
 
 # assertain each case's path
-casePath = []
+casePaths = []
 for i in range(numOfCases):
   path = commonPath.joinpath(caseNames[i]) 
-  casePath.append(path)
-  #print(casePath[i])
+  casePaths.append(path)
+  #print(casePaths[i])
 
 # loop over each case
 for i in range(numOfCases):
   VTMFileName = "case" + "%d"%idxList[i] + "_point.002000.vtm"
 
-  VTMFilePath = casePath[i].joinpath(Path(VTMFileName))
+  VTMFilePath = casePaths[i].joinpath(Path(VTMFileName))
 
   # assertain each vtm file is alive
   #alive = VTMFilePath.exists()
@@ -111,7 +111,7 @@ for i in range(numOfCases):
 
   # For certain case, loop all its vtr files, each of which relates to a block
   for j in range(numOfBlock):
-    theVTRFile = casePath[i].joinpath(VTRFilePath[j].decode("ASCII"))
+    theVTRFile = casePaths[i].joinpath(VTRFilePath[j].decode("ASCII"))
 
     with open(theVTRFile, "rb") as vtr:
       line = vtr.readline() # version
