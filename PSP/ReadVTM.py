@@ -1,7 +1,8 @@
 
 from idxList import idxList
+from pathlib import Path
 
-def ReadVTM(VTMFilePath, i):
+def ReadVTM(VTMFilePath:Path, idxi:int)->(int, list):
   VTRFilePath = []
 
   # open and parsing the vtm files. Each case has one vtm file
@@ -13,11 +14,11 @@ def ReadVTM(VTMFilePath, i):
       if b"DataSet index" in line:
         numOfBlock += 1
 
-        if idxList[i] < 10:
+        if idxi < 10:
           VTRFilePath.append(line[32:48])
-        elif 10<=idxList[i] and idxList[i]<100:
+        elif 10<=idxi and idxi<100:
           VTRFilePath.append(line[32:49])
-        elif idxList[i] >= 100:
+        elif idxi >= 100:
           VTRFilePath.append(line[32:50])
         pass
 

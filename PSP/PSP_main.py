@@ -53,7 +53,7 @@ for i in range(numOfCases):
   #alive = VTMFilePath.exists()
   #print(alive)
 
-  numOfBlock, VTRFilePath = ReadVTM(VTMFilePath, i)
+  numOfBlock, VTRFilePath = ReadVTM(VTMFilePath, idxList[i])
 
   # For certain case, loop all its vtr files, each of which relates to a block
   for j in range(numOfBlock):
