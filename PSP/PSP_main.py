@@ -29,6 +29,9 @@ idxList = [  1,  3,  5,\
            111,113,115,\
            121,123,125]
 
+# number of cases
+numOfCases = len(idxList)
+
 # parameterization inputs: [inlet temperature, inlet velocity, heat flux]
 paraInList = [[438.15, 2.511048614, 458333.3333],\
               [458.15, 2.511048614, 458333.3333],\
@@ -59,22 +62,16 @@ paraInList = [[438.15, 2.511048614, 458333.3333],\
               [478.15, 1.618231329, 125000.]
 ]
 
-#print(len(paraInList))
-#print(paraInList)
-
-# number of cases
-numOfCases = len(idxList)
-
 # register each case name to a list of strings
-cases = []
+caseNames = []
 for i in range(numOfCases):
   s = "%03d"%idxList[i]
-  cases.append("C"+s)
+  caseNames.append("C"+s)
 
 # assertain each case's path
 casePath = []
 for i in range(numOfCases):
-  path = commonPath.joinpath(cases[i]) 
+  path = commonPath.joinpath(caseNames[i]) 
   casePath.append(path)
   #print(casePath[i])
 
