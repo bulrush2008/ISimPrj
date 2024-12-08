@@ -81,12 +81,13 @@ for i in range(numOfCases):
 
     #if i==0: print(coordsZ)
 
-    grpC.create_dataset("Block-"+"%02d"%j + "P", data=fieldP)
-    grpC.create_dataset("Block-"+"%02d"%j + "U", data=fieldU)
-    grpC.create_dataset("Block-"+"%02d"%j + "V", data=fieldV)
-    grpC.create_dataset("Block-"+"%02d"%j + "W", data=fieldW)
-    grpC.create_dataset("Block-"+"%02d"%j + "T", data=fieldT)
+    grpC.create_dataset("Block-"+"%02d"%j + "-P", data=fieldP)
+    grpC.create_dataset("Block-"+"%02d"%j + "-U", data=fieldU)
+    grpC.create_dataset("Block-"+"%02d"%j + "-V", data=fieldV)
+    grpC.create_dataset("Block-"+"%02d"%j + "-W", data=fieldW)
+    grpC.create_dataset("Block-"+"%02d"%j + "-T", data=fieldT)
 
-print(hdf.keys())
+  #print(grpC.keys())
+#print(hdf.keys())
 
 hdf.close()
