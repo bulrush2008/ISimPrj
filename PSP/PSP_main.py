@@ -1,4 +1,6 @@
 """
+Get data from the vtk files and write them to hdf5 file, which serve as a database
+
 1, "P-": Preconditioning
   read the vtk file (.vtm, .vtr), converting to structured data;
 2, "S-": Save/Store
@@ -15,6 +17,7 @@ Xia, S        2024.11.7     Simpop.cn     v1.0
 from ReadVTM import ReadVTM
 from ReadVTR import ReadVTR
 from AssertFileExist import AssertFileExist
+import h5py
 
 from pathlib import Path
 import numpy as np
@@ -46,6 +49,10 @@ for i in range(numOfCases):
   casePaths.append(path)
   #print(casePaths[i])
 
+hdf = h5py.File("MatrixData.h5", 'w')
+
+grpC = hdf.create_group("Cases")
+
 # loop over each case
 for i in range(numOfCases):
   VTMFileName = Path("case" + "%d"%idxList[i] + "_point.002000.vtm")
@@ -73,3 +80,12 @@ for i in range(numOfCases):
 
     #if i==0: print(coordsZ)
 
+    grpC.create_dataset(caseNames[i]+"Block-"+"%02d"%j + "P", data=fieldP)
+    grpC.create_dataset(caseNames[i]+"Block-"+"%02d"%j + "U", data=fieldU)
+    grpC.create_dataset(caseNames[i]+"Block-"+"%02d"%j + "V", data=fieldV)
+    grpC.create_dataset(caseNames[i]+"Block-"+"%02d"%j + "W", data=fieldW)
+    grpC.create_dataset(caseNames[i]+"Block-"+"%02d"%j + "T", data=fieldT)
+
+print(hdf.keys())
+
+hdf.close()
