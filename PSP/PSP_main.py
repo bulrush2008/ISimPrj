@@ -55,9 +55,10 @@ hdf = h5py.File("MatrixData.h5", 'w')
 for i in range(numOfCases):
   VTMFileName = Path("case" + "%d"%idxList[i] + "_point.002000.vtm")
   VTMFilePath = casePaths[i].joinpath(VTMFileName)
-  print(caseNames[i])
+  #print(caseNames[i])
 
   grpC = hdf.create_group(caseNames[i])
+  grpC.create_dataset("InParam", data=paraInList[i])
 
   # assertain each vtm file is alive
   alive = AssertFileExist(VTMFilePath)
@@ -65,6 +66,7 @@ for i in range(numOfCases):
     print(VTMFilePath, " Does Not Exsit.")
     sys.exit(1)
 
+  # read the only vtm file in this case
   numOfBlock, VTRFilePath = ReadVTM(VTMFilePath, idxList[i])
 
   # For certain case, loop all its vtr files, each of which relates to a block
@@ -81,13 +83,19 @@ for i in range(numOfCases):
 
     #if i==0: print(coordsZ)
 
+    # add field data
     grpC.create_dataset("Block-"+"%02d"%j + "-P", data=fieldP)
     grpC.create_dataset("Block-"+"%02d"%j + "-U", data=fieldU)
     grpC.create_dataset("Block-"+"%02d"%j + "-V", data=fieldV)
     grpC.create_dataset("Block-"+"%02d"%j + "-W", data=fieldW)
     grpC.create_dataset("Block-"+"%02d"%j + "-T", data=fieldT)
 
-  #print(grpC.keys())
+    # add coordinates
+    grpC.create_dataset("Block-"+"%02d"%j + "-X", data=coordsX)
+    grpC.create_dataset("Block-"+"%02d"%j + "-Y", data=coordsY)
+    grpC.create_dataset("Block-"+"%02d"%j + "-Z", data=coordsZ)
+
+  if i==0: print(grpC.keys())
 #print(hdf.keys())
 
 hdf.close()
