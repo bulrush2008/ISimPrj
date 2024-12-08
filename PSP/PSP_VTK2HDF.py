@@ -1,5 +1,6 @@
 """
-Get data from the vtk files and write them to hdf5 file, which serve as a database
+Get data from the vtk files and write them to hdf5 file, which serve as a
+  database.
 
 1, "P-": Preconditioning
   read the vtk file (.vtm, .vtr), converting to structured data;
@@ -95,7 +96,7 @@ for i in range(numOfCases):
     grpC.create_dataset("Block-"+"%02d"%j + "-Y", data=coordsY)
     grpC.create_dataset("Block-"+"%02d"%j + "-Z", data=coordsZ)
 
-  if i==0: print(grpC.keys())
+  #if i==0: print(grpC.keys())
 #print(hdf.keys())
 
 hdf.close()
