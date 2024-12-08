@@ -9,13 +9,17 @@ Xia, S        2024.11.8     Simpop.cn     v1.0
 
 from pathlib import Path
 
+from WriteVTM import WriteVTM
+
 numOfBlocks = 8
 dirVTM = Path("./Disp")
 if not dirVTM.exists(): dirVTM.mkdir()
 #if dirVTM.exists(): dirVTM.rmdir() # 删除一个非空目录
 
+fileVTM = dirVTM.joinpath("t01.vtm")
+
 # todo
-#WriteVTM(numOfBlocks, dirVTM, dirVTR)
+dirVTR = WriteVTM(numOfBlocks, fileVTM)
 
 dirVTR = dirVTM.joinpath("blocks/")
 print(dirVTR)
