@@ -32,4 +32,5 @@ dirHDF = Path("./").joinpath("matrixData.h5")
 alive = dirHDF.exists()
 print("HDF File exists? ", alive)
 
-WriteVTRs(numOfBlocks, dirVTR, dirHDF)
+for idx in range(numOfBlocks):
+  if idx==0: WriteVTRs(idx, dirVTR, dirHDF)

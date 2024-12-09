@@ -7,11 +7,13 @@ from pathlib import Path
 import h5py
 import numpy as np
 
-def WriteVTRs(numOfBlocks:int, dirVTR:Path, dirHDF:Path)->None:
+def WriteVTRs(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   h5 = h5py.File(dirHDF, 'r')
 
   # demo: write one block, if success, add other blocks
-  filePathVTR = dirVTR.joinpath("1.vtr")
+  fileNameVTR = "%d"%(idxBlk+1) + ".vtr"
+  filePathVTR = dirVTR.joinpath(fileNameVTR)
+
   vtr = open(filePathVTR, 'wb')
 
   # write header lines
@@ -44,8 +46,12 @@ def WriteVTRs(numOfBlocks:int, dirVTR:Path, dirHDF:Path)->None:
   # add '_' denoting the starting floats data
   vtr.write(b'_')
 
+  grpName = "C001"
+
   # write pressure field "P"
-  fieldP = h5["C001"]["Block-00-P"][:]  # "[:]" is necessary
+  datasetName = "Block-" + "%02d"%idxBlk + "-P"
+
+  fieldP = h5[grpName][datasetName][:]  # "[:]" is necessary
   numOfBytes = np.int32((len(fieldP)*8))
 
   # write the byte offsets and float loop data
@@ -53,14 +59,18 @@ def WriteVTRs(numOfBlocks:int, dirVTR:Path, dirHDF:Path)->None:
   fieldP.tofile(vtr)
 
   # write U field "U"
-  fieldU = h5["C001"]["Block-00-U"][:]
+  datasetName = "Block-" + "%02d"%idxBlk + "-U"
+
+  fieldU = h5[grpName][datasetName][:]
   numOfBytes = np.int32(len(fieldU)*8)
 
   numOfBytes.tofile(vtr)
   fieldU.tofile(vtr)
 
   # write pressure field "V"
-  fieldV = h5["C001"]["Block-00-V"][:]  # "[:]" is necessary
+  datasetName = "Block-" + "%02d"%idxBlk + "-V"
+
+  fieldV = h5[grpName][datasetName][:]  # "[:]" is necessary
   numOfBytes = np.int32((len(fieldV)*8))
 
   # write the byte offsets and float loop data
@@ -68,7 +78,9 @@ def WriteVTRs(numOfBlocks:int, dirVTR:Path, dirHDF:Path)->None:
   fieldV.tofile(vtr)
 
   # write pressure field "W"
-  fieldW = h5["C001"]["Block-00-W"][:]  # "[:]" is necessary
+  datasetName = "Block-" + "%02d"%idxBlk + "-W"
+
+  fieldW = h5[grpName][datasetName][:]  # "[:]" is necessary
   numOfBytes = np.int32((len(fieldW)*8))
 
   # write the byte offsets and float loop data
@@ -76,7 +88,9 @@ def WriteVTRs(numOfBlocks:int, dirVTR:Path, dirHDF:Path)->None:
   fieldW.tofile(vtr)
 
   # write pressure field "T"
-  fieldT = h5["C001"]["Block-00-T"][:]  # "[:]" is necessary
+  datasetName = "Block-" + "%02d"%idxBlk + "-T"
+
+  fieldT = h5[grpName][datasetName][:]  # "[:]" is necessary
   numOfBytes = np.int32((len(fieldT)*8))
 
   # write the byte offsets and float loop data
@@ -84,21 +98,27 @@ def WriteVTRs(numOfBlocks:int, dirVTR:Path, dirHDF:Path)->None:
   fieldT.tofile(vtr)
 
   # write coords X
-  coordsX = h5["C001"]["Block-00-X"][:]
+  datasetName = "Block-" + "%02d"%idxBlk + "-X"
+
+  coordsX = h5[grpName][datasetName][:]
   numOfBytes = np.int32(len(coordsX) * 8)
 
   numOfBytes.tofile(vtr)
   coordsX.tofile(vtr)
 
   # write coords Y
-  coordsY = h5["C001"]["Block-00-Y"][:]
+  datasetName = "Block-" + "%02d"%idxBlk + "-Y"
+
+  coordsY = h5[grpName][datasetName][:]
   numOfBytes = np.int32(len(coordsY) * 8)
 
   numOfBytes.tofile(vtr)
   coordsY.tofile(vtr)
 
   # write coords Z
-  coordsZ = h5["C001"]["Block-00-Z"][:]
+  datasetName = "Block-" + "%02d"%idxBlk + "-Z"
+
+  coordsZ = h5[grpName][datasetName][:]
   numOfBytes = np.int32(len(coordsZ) * 8)
 
   numOfBytes.tofile(vtr)

@@ -2,5 +2,12 @@
 <VTKFile type="vtkMultiBlockDataSet" version="1.0" byte_order="LittleEndian">
   <vtkMultiBlockDataSet>
     <DataSet index="   1" file="channel/1.vtr"/>
+    <DataSet index="   2" file="channel/2.vtr"/>
+    <DataSet index="   3" file="channel/3.vtr"/>
+    <DataSet index="   4" file="channel/4.vtr"/>
+    <DataSet index="   5" file="channel/5.vtr"/>
+    <DataSet index="   6" file="channel/6.vtr"/>
+    <DataSet index="   7" file="channel/7.vtr"/>
+    <DataSet index="   8" file="channel/8.vtr"/>
   </vtkMultiBlockDataSet>
 </VTKFile>
