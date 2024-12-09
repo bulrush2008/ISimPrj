@@ -33,4 +33,4 @@ alive = dirHDF.exists()
 print("HDF File exists? ", alive)
 
 for idx in range(numOfBlocks):
-  if idx==0: WriteVTRs(idx, dirVTR, dirHDF)
+  WriteVTRs(idx, dirVTR, dirHDF)
