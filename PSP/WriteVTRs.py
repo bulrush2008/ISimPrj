@@ -47,10 +47,35 @@ def WriteVTRs(numOfBlocks:int, dirVTR:Path, dirHDF:Path)->None:
 
   numOfBytes = np.int32(numOfBytes)
   #print(numOfBytes, type(numOfBytes))
+  # write the byte offsets
   numOfBytes.tofile(vtr)
   #fieldP.tofile(vtr, dtype=np.int, count=1)
 
+  # write float data
   fieldP.tofile(vtr)
+
+  # write coords X
+  coordsX = h5["C001"]["Block-00-X"][:]
+  #print(coordsX)
+
+  numOfBytes = np.int32(len(coordsX) * 8)
+  numOfBytes.tofile(vtr)
+
+  coordsX.tofile(vtr)
+
+  # write coords Y
+  coordsY = h5["C001"]["Block-00-Y"][:]
+  numOfBytes = np.int32(len(coordsY) * 8)
+  numOfBytes.tofile(vtr)
+
+  coordsY.tofile(vtr)
+
+  # write coords Z
+  coordsZ = h5["C001"]["Block-00-Z"][:]
+  numOfBytes = np.int32(len(coordsZ) * 8)
+  numOfBytes.tofile(vtr)
+
+  coordsZ.tofile(vtr)
 
   vtr.write(b'\n')
   vtr.write(b'  </AppendedData>\n')
