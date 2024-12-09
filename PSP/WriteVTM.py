@@ -2,6 +2,12 @@
 from pathlib import Path
 
 def WriteVTM(numOfBlocks:int, fileVTM:Path)->Path:
+  """
+  Write the VTM file, each concerned with a Case.
+  In this file, it include info:
+    - how many vtr files in this case;
+    - each vtr-file's path and name.
+  """
   vtm = open(fileVTM, 'wb')
 
   vtm.write(b'<?xml version="1.0"?>\n')

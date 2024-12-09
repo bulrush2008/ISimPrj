@@ -8,9 +8,53 @@ import h5py
 import numpy as np
 
 def WriteVTRs(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
+  """
+  Write a block's data to a VTR file, according to the input parameter 'idxBlk'.
+  The data are from h5 file
+  """
   h5 = h5py.File(dirHDF, 'r')
 
-  # demo: write one block, if success, add other blocks
+  # take "C001" as an example. Other case can be selected too. 
+  grpName = "C001"
+
+  # first to read X/Y/Z, giving dims
+
+  # X
+  datasetName = "Block-" + "%02d"%idxBlk + "-X"
+  coordsX = h5[grpName][datasetName][:]
+
+  lenX = len(coordsX)#; print("lenX = ", lenX)
+
+  # Y
+  datasetName = "Block-" + "%02d"%idxBlk + "-Y"
+  coordsY = h5[grpName][datasetName][:]
+
+  lenY = len(coordsY)#; print("lenY = ", lenY)
+
+  # Z
+  datasetName = "Block-" + "%02d"%idxBlk + "-Z"
+  coordsZ = h5[grpName][datasetName][:]
+
+  lenZ = len(coordsZ)#; print("lenZ = ", lenZ)
+
+  # define the dims: start and final index
+  iSta = 1; iEnd = lenX#; print(iSta, iEnd)
+  jSta = 1; jEnd = lenY#; print(jSta, jEnd)
+  kSta = 1; kEnd = lenZ#; print(kSta, kEnd)
+
+  extent = str("%5d"%iSta)  \
+         + str("%5d"%iEnd)  \
+         + str("%5d"%jSta)  \
+         + str("%5d"%jEnd)  \
+         + str("%5d"%kSta)  \
+         + str("%5d"%kEnd)
+
+  #print(extent, type(extent))
+
+  extentByte = extent.encode("utf8")
+  #print(extentByte)
+
+  # the block's name
   fileNameVTR = "%d"%(idxBlk+1) + ".vtr"
   filePathVTR = dirVTR.joinpath(fileNameVTR)
 
@@ -19,8 +63,17 @@ def WriteVTRs(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   # write header lines
   vtr.write(b'<?xml version="1.0"?>\n')
   vtr.write(b'<VTKFile type="RectilinearGrid" version="0.1" byte_order="LittleEndian">\n')
-  vtr.write(b'  <RectilinearGrid WholeExtent="    2   27    2   52    2   12">\n')
-  vtr.write(b'  <Piece Extent="    2   27    2   52    2   12">\n')
+
+  bStr1 = b'  <RectilinearGrid WholeExtent="'
+  bStr2 = extentByte
+  bStr3 = b'">\n'
+  vtr.write(bStr1 + bStr2 + bStr3)
+
+  bStr1 = b'  <Piece Extent="'
+  bStr2 = extentByte
+  bStr3 = b'">\n'
+  vtr.write(bStr1 + bStr2 + bStr3)
+
   vtr.write(b'    <CellData>\n')
   vtr.write(b'    </CellData>\n')
   vtr.write(b'    <PointData>\n')
@@ -38,15 +91,13 @@ def WriteVTRs(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   vtr.write(b'      <DataArray type="Float64" Name="Xcenter" NumberOfComponents="1" format="appended" offset=" 583460"/>\n')
   vtr.write(b'      <DataArray type="Float64" Name="Ycenter" NumberOfComponents="1" format="appended" offset=" 583672"/>\n')
   vtr.write(b'      <DataArray type="Float64" Name="Zcenter" NumberOfComponents="1" format="appended" offset=" 584084"/>\n')
-  vtr.write(b'    </Coordinates>')
+  vtr.write(b'    </Coordinates>\n')
   vtr.write(b'  </Piece>\n')
   vtr.write(b'  </RectilinearGrid>\n')
   vtr.write(b'  <AppendedData encoding="raw">\n')
 
   # add '_' denoting the starting floats data
   vtr.write(b'_')
-
-  grpName = "C001"
 
   # write pressure field "P"
   datasetName = "Block-" + "%02d"%idxBlk + "-P"
@@ -101,7 +152,7 @@ def WriteVTRs(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   datasetName = "Block-" + "%02d"%idxBlk + "-X"
 
   coordsX = h5[grpName][datasetName][:]
-  numOfBytes = np.int32(len(coordsX) * 8)
+  numOfBytes = np.int32(len(coordsX)*8)
 
   numOfBytes.tofile(vtr)
   coordsX.tofile(vtr)
@@ -110,7 +161,7 @@ def WriteVTRs(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   datasetName = "Block-" + "%02d"%idxBlk + "-Y"
 
   coordsY = h5[grpName][datasetName][:]
-  numOfBytes = np.int32(len(coordsY) * 8)
+  numOfBytes = np.int32(len(coordsY)*8)
 
   numOfBytes.tofile(vtr)
   coordsY.tofile(vtr)
@@ -119,7 +170,7 @@ def WriteVTRs(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   datasetName = "Block-" + "%02d"%idxBlk + "-Z"
 
   coordsZ = h5[grpName][datasetName][:]
-  numOfBytes = np.int32(len(coordsZ) * 8)
+  numOfBytes = np.int32(len(coordsZ)*8)
 
   numOfBytes.tofile(vtr)
   coordsZ.tofile(vtr)
