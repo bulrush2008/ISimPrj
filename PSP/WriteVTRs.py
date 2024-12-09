@@ -67,30 +67,95 @@ def WriteVTRs(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   bStr1 = b'  <RectilinearGrid WholeExtent="'
   bStr2 = extentByte
   bStr3 = b'">\n'
-  vtr.write(bStr1 + bStr2 + bStr3)
+  bStrs = bStr1 + bStr2 + bStr3
+  vtr.write(bStrs)
 
   bStr1 = b'  <Piece Extent="'
   bStr2 = extentByte
   bStr3 = b'">\n'
-  vtr.write(bStr1 + bStr2 + bStr3)
+  bStrs = bStr1 + bStr2 + bStr3
+  vtr.write(bStrs)
 
   vtr.write(b'    <CellData>\n')
   vtr.write(b'    </CellData>\n')
   vtr.write(b'    <PointData>\n')
 
   # write P/U/V/W/T field and X/Y/Z
-  vtr.write(b'      <DataArray type="Float64" Name="P" NumberOfComponents="1" format="appended" offset="     0"/>\n')
-  vtr.write(b'      <DataArray type="Float64" Name="U" NumberOfComponents="1" format="appended" offset="116692"/>\n')
-  vtr.write(b'      <DataArray type="Float64" Name="V" NumberOfComponents="1" format="appended" offset="233384"/>\n')
-  vtr.write(b'      <DataArray type="Float64" Name="W" NumberOfComponents="1" format="appended" offset="350076"/>\n')
-  vtr.write(b'      <DataArray type="Float64" Name="T" NumberOfComponents="1" format="appended" offset="466768"/>\n')
+
+  # for P
+  OffsetP = 0 # the first variable, no offsets
+  bStr1 = b'      <DataArray type="Float64" Name="P" NumberOfComponents="1" format="appended" offset="'
+  bStr2 = str("%10d"%OffsetP).encode("utf-8")
+  bStr3 = b'"/>\n'
+  bStrs = bStr1 + bStr2 + bStr3
+  #print(bStrs)
+  vtr.write(bStrs)
+
+  # for U
+  bStr1 = b'      <DataArray type="Float64" Name="U" NumberOfComponents="1" format="appended" offset="'
+
+  OffsetU = OffsetP + lenX*lenY*lenZ * 8 + 4  # P before
+  bStr2 = str("%10d"%OffsetU).encode("utf-8")
+
+  bStr3 = b'"/>\n'
+  bStrs = bStr1 + bStr2 + bStr3
+  vtr.write(bStrs)
+
+  # for V
+  bStr1 = b'      <DataArray type="Float64" Name="V" NumberOfComponents="1" format="appended" offset="'
+
+  OffsetV = OffsetU * 2 # P/U before
+  bStr2 = str("%10d"%OffsetV).encode("utf-8")
+  bStr3 = b'"/>\n'
+  bStrs = bStr1 + bStr2 + bStr3
+  vtr.write(bStrs)
+
+  # for W
+  bStr1 = b'      <DataArray type="Float64" Name="W" NumberOfComponents="1" format="appended" offset="'
+  OffsetW = OffsetU * 3 # P/U/V before
+  bStr2 = str("%10d"%OffsetW).encode("utf-8")
+  bStr3 = b'"/>\n'
+  bStrs = bStr1 + bStr2 + bStr3
+  vtr.write(bStrs)
+
+  # for T
+  bStr1 = b'      <DataArray type="Float64" Name="T" NumberOfComponents="1" format="appended" offset="'
+  OffsetT = OffsetU * 4 # P/U/V/W before
+  bStr2 = str("%10d"%OffsetT).encode("utf-8")
+  bStr3 = b'"/>\n'
+  bStrs = bStr1 + bStr2 + bStr3
+  vtr.write(bStrs)
+
   vtr.write(b'    </PointData>\n')
 
   # coordinates are necessary
   vtr.write(b'    <Coordinates>\n')
-  vtr.write(b'      <DataArray type="Float64" Name="Xcenter" NumberOfComponents="1" format="appended" offset=" 583460"/>\n')
-  vtr.write(b'      <DataArray type="Float64" Name="Ycenter" NumberOfComponents="1" format="appended" offset=" 583672"/>\n')
-  vtr.write(b'      <DataArray type="Float64" Name="Zcenter" NumberOfComponents="1" format="appended" offset=" 584084"/>\n')
+
+  # for X
+  bStr1 = b'      <DataArray type="Float64" Name="Xcenter" NumberOfComponents="1" format="appended" offset="'
+
+  OffsetX = OffsetU * 5 # P/U/V/W/T before
+  bStr2 = str("%10d"%OffsetX).encode("utf-8")
+  bStr3 = b'"/>\n'
+  bStrs = bStr1 + bStr2 + bStr3
+  vtr.write(bStrs)
+
+  # for Y
+  bStr1 = b'      <DataArray type="Float64" Name="Ycenter" NumberOfComponents="1" format="appended" offset="'
+  OffsetY = OffsetX + lenX*8 + 4 # P/U/V/W/T/X before
+  bStr2 = str("%10d"%OffsetY).encode("utf-8")
+  bStr3 = b'"/>\n'
+  bStrs = bStr1 + bStr2 + bStr3
+  vtr.write(bStrs)
+
+  # for Z
+  bStr1 = b'      <DataArray type="Float64" Name="Zcenter" NumberOfComponents="1" format="appended" offset="'
+  OffsetZ = OffsetY + lenY*8 + 4 # P/U/V/W/T/X/Y before
+  bStr2 = str("%10d"%OffsetZ).encode("utf-8")
+  bStr3 = b'"/>\n'
+  bStrs = bStr1 + bStr2 + bStr3
+  vtr.write(bStrs)
+
   vtr.write(b'    </Coordinates>\n')
   vtr.write(b'  </Piece>\n')
   vtr.write(b'  </RectilinearGrid>\n')
