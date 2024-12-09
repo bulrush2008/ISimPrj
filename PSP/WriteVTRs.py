@@ -14,6 +14,7 @@ def WriteVTRs(numOfBlocks:int, dirVTR:Path, dirHDF:Path)->None:
   filePathVTR = dirVTR.joinpath("1.vtr")
   vtr = open(filePathVTR, 'wb')
 
+  # write header lines
   vtr.write(b'<?xml version="1.0"?>\n')
   vtr.write(b'<VTKFile type="RectilinearGrid" version="0.1" byte_order="LittleEndian">\n')
   vtr.write(b'  <RectilinearGrid WholeExtent="    2   27    2   52    2   12">\n')
@@ -21,6 +22,7 @@ def WriteVTRs(numOfBlocks:int, dirVTR:Path, dirHDF:Path)->None:
   vtr.write(b'    <CellData>\n')
   vtr.write(b'    </CellData>\n')
   vtr.write(b'    <PointData>\n')
+
   # now only write P field
   vtr.write(b'      <DataArray type="Float64" Name="P" NumberOfComponents="1" format="appended" offset="    0"/>\n')
   vtr.write(b'    </PointData>\n')
@@ -35,52 +37,39 @@ def WriteVTRs(numOfBlocks:int, dirVTR:Path, dirHDF:Path)->None:
   vtr.write(b'  </RectilinearGrid>\n')
   vtr.write(b'  <AppendedData encoding="raw">\n')
 
-  # add '_' to denote the starting floats data
+  # add '_' denoting the starting floats data
   vtr.write(b'_')
 
-  fieldP = h5["C001"]["Block-00-P"][:]  # “[:]” 不可少
-  #print(len(fieldP))
-  #print(fieldP[1010])
-  print(type(fieldP))
+  # write pressure field "P"
+  fieldP = h5["C001"]["Block-00-P"][:]  # "[:]" is necessary
+  numOfBytes = np.int32((len(fieldP) * 8))
 
-  numOfBytes = (len(fieldP) * 8)#; print(numOfBytes, type(numOfBytes))
-
-  numOfBytes = np.int32(numOfBytes)
-  #print(numOfBytes, type(numOfBytes))
-  # write the byte offsets
+  # write the byte offsets and float loop data
   numOfBytes.tofile(vtr)
-  #fieldP.tofile(vtr, dtype=np.int, count=1)
-
-  # write float data
   fieldP.tofile(vtr)
 
   # write coords X
   coordsX = h5["C001"]["Block-00-X"][:]
-  #print(coordsX)
-
   numOfBytes = np.int32(len(coordsX) * 8)
-  numOfBytes.tofile(vtr)
 
+  numOfBytes.tofile(vtr)
   coordsX.tofile(vtr)
 
   # write coords Y
   coordsY = h5["C001"]["Block-00-Y"][:]
   numOfBytes = np.int32(len(coordsY) * 8)
-  numOfBytes.tofile(vtr)
 
+  numOfBytes.tofile(vtr)
   coordsY.tofile(vtr)
 
   # write coords Z
   coordsZ = h5["C001"]["Block-00-Z"][:]
   numOfBytes = np.int32(len(coordsZ) * 8)
-  numOfBytes.tofile(vtr)
 
+  numOfBytes.tofile(vtr)
   coordsZ.tofile(vtr)
 
   vtr.write(b'\n')
   vtr.write(b'  </AppendedData>\n')
   vtr.write(b'</VTKFile>')
-
-  #print(list(h5.keys())[0])
-
   pass
