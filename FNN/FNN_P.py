@@ -29,3 +29,18 @@ class Regression(nn.Module):
       nn.Linear(100,125557), # output field, 8 block
       nn.Identity()
     )
+
+    self.loss_function = nn.MSELoss()
+    self.optimiser = torch.optim.SGD(self.parameters(),lr=0.01)
+
+    self.counter = 0
+    self.progress = []
+    pass
+
+  # 前向传播
+  def forward(self, inputs):
+    return self.model(inputs)
+
+  # 训练
+  def train(self, inputs, targets):
+    pass
