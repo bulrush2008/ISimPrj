@@ -1,11 +1,10 @@
 '''
-This is the first model to predict flow field.
-The model use the a fully-connected nural networks, also named as Fast-Foward neural Netorks, FNN.
-The input is boundary condition, while the output is flow field.
+This is the 1st model to predict flow field, which uses the a fully-connected
+  neural networks, also named as Fast-Foward neural Netorks, FNN. The input is
+  parameterized boundary condition, while the output is a flow field.
 
-@author Xia, Shuning
-@date   2024.11.15
-@aff    simpop.cn
+@author     @data       @aff        @version
+Xia, S      24.12.10    Simpop.cn   v1.0
 '''
 
 # import modules, esp torch, numpy and matplotlib
