@@ -10,6 +10,10 @@ Xia, S      24.12.10    Simpop.cn   v0.1
 import torch
 import torch.nn as nn
 import pandas
+import maptlotlib.pyplot as plt
+import h5py
+
+from torch.utils.data import Dataset
 
 class Regression(nn.Module):
   # 初始化 PyTorch 父类
@@ -63,6 +67,21 @@ class Regression(nn.Module):
   # 打印损失函数
   def plot_progress(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
-    df.plot()
+    ax = df.plot()
+    ax.figure.savefig("./Loss.png")
     pass
   pass
+
+# 数据类
+class FSimData(Dataset):
+  def __init__(self, hdf_file):
+    # "hdf_file": the h5 file's path, of class of pathlib.Path
+    self.data_hdf = h5py.File(hdf_file, 'r')
+    pass
+  def __len__(self):
+    # len[fsimdata] now legal
+    return len(self.data_hdf)
+
+  def __getitem__(self, idx):
+    # Thus the object of this class could be used like Obj[...]
+    pass
