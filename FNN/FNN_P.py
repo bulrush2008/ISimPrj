@@ -21,6 +21,30 @@ from pathlib import Path
 from torch.utils.data import Dataset
 
 class FSimDataset(Dataset):
-  def __init__(self, file:Path, idxList:np.ndarray):
-    self.fileObj = h5py.File(file, 'r')
-    self.dataset = fileObj["C001"]  # the first data
+  def __init__(self, file:Path, caseList:list):
+    """
+    The data are remain store in h5 file, read when needed
+
+    /caseList/: list of cases names, made of set either "test" or "train"
+    """
+    self.dataFile = h5py.File(file, 'r')
+    self.caseList = caseList
+
+  def __len__(self, idx):
+    """
+    return the input params and Pressure field
+    """
+    if idx >= self.num:
+      raise IndexError
+
+    data = []
+    for blk in range(8):
+      key = "Block-"+ "%02d"%blk + "-P"
+      presFieldBlk = list(dataFile[caseList[i]][key][:])
+      data += presFieldBlk
+
+    return np.array(data)
+
+    
+
+
