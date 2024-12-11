@@ -42,14 +42,21 @@ class FSimDataset(Dataset):
     if idx >= numOfCases:
       raise IndexError
 
+    hdf = self.dataFile
+    cid = self.caseList[idx]
+
+    inp = hdf[cid]["InParam"][:]
+    inp = torch.FloatTensor(inp)
+
     data = []
     for blk in range(8):
       key = "Block-"+ "%02d"%blk + "-P"
-      presFieldBlk = list(self.dataFile[self.caseList[idx]][key][:])
+
+      presFieldBlk = list(hdf[cid][key][:])
       data += presFieldBlk
       pass
 
-    return np.array(data)
+    return inp, torch.FloatTensor(data)
   
   def plotVTK(self, idx):
     if idx >= numOfCases:
@@ -100,7 +107,7 @@ fsDataset_train = FSimDataset(filePathH5, listTrainCase)
 #print(fsDataset_train.numCases)
 #print(fsDataset_train.dataFile)
 
-p = fsDataset_train[1]
+#p = fsDataset_train[1]
 
 #print(type(p))
 #print(len(p))
@@ -147,7 +154,7 @@ class Regression(nn.Module):
     loss = self.loss_function(outputs, targets)
 
     self.counter += 1
-    if(self.count%1 == 0):  # 对每个算例数据，记录损失值
+    if(self.counter%1 == 0):  # 对每个算例数据，记录损失值
       self.progress.append(loss.item())
       print(f"{self.counter} Cases Trained ...")
       pass
@@ -168,3 +175,18 @@ class Regression(nn.Module):
 
 R = Regression()
 
+# train the model
+
+epochs = 2
+
+for i in range(epochs):
+  print("Training Epoch", i+1, "of", epochs)
+
+  ic = 0
+  for bc, label in fsDataset_train:
+    R.train(bc, label)
+
+    ic += 1
+    print(f"Case {ic} Trained")
+
+  #for 
