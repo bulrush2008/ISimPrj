@@ -116,7 +116,7 @@ class Regression(nn.Module):
 
     # 初次设置 3 个隐藏层
     self.model = nn.Sequential(
-      nn.linear(3, 100),  # 3 inputs
+      nn.Linear(3, 100),  # 3 inputs
       nn.LeakyReLU(0.02),
       nn.LayerNorm(100),
 
@@ -165,4 +165,6 @@ class Regression(nn.Module):
     pass
 
   pass
+
+R = Regression()
 
