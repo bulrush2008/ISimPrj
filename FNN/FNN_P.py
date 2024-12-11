@@ -81,8 +81,20 @@ for i in permut[sizeOfTestSet:]:
   theCase = "C" + "%03d"%idxList[i]
   listTrainCase.append(theCase)
 
-#print(len(listTrainCase))
 #print(listTrainCase)
+#print(len(listTrainCase))
+#print(type(listTrainCase))
+
+from pathlib import Path
+import h5py
+
+filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
+
+#aLive = filePathH5.exists()
+#print(aLive)
+
+fsDataset_train = FSimDataset(filePathH5, listTrainCase)
+
 
 
 
