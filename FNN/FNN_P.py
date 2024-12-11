@@ -153,9 +153,12 @@ class Regression(nn.Module):
     # 计算损失值
     loss = self.loss_function(outputs, targets)
 
+    # each train step, the loss must be added
+    self.progress.append(loss.item())
+
     self.counter += 1
-    if(self.counter%1 == 0):  # 对每个算例数据，记录损失值
-      self.progress.append(loss.item())
+
+    if(self.counter%5 == 0):  # 对每个算例数据，记录损失值
       print(f"{self.counter} Cases Trained ...")
       pass
 
@@ -167,8 +170,9 @@ class Regression(nn.Module):
 
   # 打印损失函数
   def plot_progress(self):
-    #TODO
-    print("This obj.func() need implemented: plot_progress()")
+    df = pandas.DataFrame(self.progress, columns=["Loss"])
+    ax = df.plot()
+    ax.figure.savefig("progress.png")
     pass
 
   pass
@@ -177,16 +181,15 @@ R = Regression()
 
 # train the model
 
-epochs = 2
+epochs = 5
 
 for i in range(epochs):
   print("Training Epoch", i+1, "of", epochs)
 
-  ic = 0
   for bc, label in fsDataset_train:
     R.train(bc, label)
+    pass
+  pass
 
-    ic += 1
-    print(f"Case {ic} Trained")
+R.plot_progress()
 
-  #for 
