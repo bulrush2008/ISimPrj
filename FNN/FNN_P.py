@@ -15,10 +15,12 @@ import h5py
 import pandas, numpy, random
 import matplotlib.pyplot as plt
 
+import numpy as np
+
 from pathlib import Path
 from torch.utils.data import Dataset
 
 class FSimDataset(Dataset):
-  def __init__(self, file:Path):
+  def __init__(self, file:Path, idxList:np.ndarray):
     self.fileObj = h5py.File(file, 'r')
     self.dataset = fileObj["C001"]  # the first data
