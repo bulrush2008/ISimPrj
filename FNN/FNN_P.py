@@ -45,7 +45,7 @@ class FSimDataset(Dataset):
     data = []
     for blk in range(8):
       key = "Block-"+ "%02d"%blk + "-P"
-      presFieldBlk = list(dataFile[caseList[i]][key][:])
+      presFieldBlk = list(self.dataFile[self.caseList[idx]][key][:])
       data += presFieldBlk
       pass
 
@@ -55,6 +55,7 @@ class FSimDataset(Dataset):
     if idx >= numOfCases:
       raise IndexError
     #TODO
+    print("Todo: .plotVTK(...)")
     pass
 
 # split the data, 27 = 22 + 5
@@ -94,6 +95,16 @@ filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
 #print(aLive)
 
 fsDataset_train = FSimDataset(filePathH5, listTrainCase)
+
+#print(fsDataset_train.caseList)
+#print(fsDataset_train.numCases)
+#print(fsDataset_train.dataFile)
+
+p = fsDataset_train[1]
+
+#print(type(p))
+#print(len(p))
+#print(p[100:109])
 
 
 
