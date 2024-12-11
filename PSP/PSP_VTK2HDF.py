@@ -50,7 +50,12 @@ for i in range(numOfCases):
   casePaths.append(path)
   #print(casePaths[i])
 
-hdf = h5py.File("MatrixData.h5", 'w')
+h5Path = Path("../FSCases/FSHDF")
+if not h5Path.exists(): h5Path.mkdir()
+
+h5File = h5Path.joinpath("MatrixData.h5")
+
+hdf = h5py.File(h5File, 'w')
 
 # loop over each case
 for i in range(numOfCases):
