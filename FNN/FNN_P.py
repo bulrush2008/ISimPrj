@@ -167,7 +167,7 @@ class Regression(nn.Module):
     pass
 
   # 打印损失函数
-  def plot_progress(self):
+  def saveLossHistory2PNG(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
     ax = df.plot( title  = "Loss history of Pressure",\
                   color  = "black",                   \
@@ -192,7 +192,7 @@ for i in range(epochs):
   pass
 
 # 绘制损失函数历史
-#R.plot_progress()
+#R.saveLossHistory2PNG()
 
 # 预测
 
