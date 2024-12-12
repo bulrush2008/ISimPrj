@@ -167,9 +167,9 @@ class Regression(nn.Module):
     pass
 
   def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path):
-    h5 = open(dirFileHDF, 'w')
+    h5 = h5py.File(dirFileHDF, 'w')
 
-    grpName = Path("FNN_Out") # 相当于原“每个 Case”
+    grpName = "FNN_Out" # 相当于原“每个 Case”
     grp = h5.create_group(grpName)
 
     # 将预测数据，转化为 numpy 矩阵数据
@@ -208,21 +208,21 @@ class Regression(nn.Module):
     dsName = "Block-" + "%02d"%idxB + "-P"
 
     ista = 0; iend = numbPtsB1
-    grp.create_dataset(dsName, output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend])
 
     # for block 2
     idxB = 1
     dsName = "Block-" + "%02d"%idxB + "-P"
 
     ista = numbPtsB1; iend = numbPtsB1 + numbPtsB2
-    grp.create_dataset(dsName, output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend])
 
     # for block 3
     idxB = 2
     dsName = "Block-" + "%02d"%idxB + "-P"
 
     ista = numbPtsB1 + numbPtsB2; iend = numbPtsB1 + numbPtsB2 + numbPtsB3
-    grp.create_dataset(dsName, output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend])
 
     # for block 4
     idxB = 3
@@ -231,7 +231,7 @@ class Regression(nn.Module):
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
 
-    grp.create_dataset(dsName, output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend])
 
     # for block 5
     idxB = 4
@@ -240,7 +240,7 @@ class Regression(nn.Module):
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
 
-    grp.create_dataset(dsName, output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend])
 
     # for block 6
     idxB = 5
@@ -249,7 +249,7 @@ class Regression(nn.Module):
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
 
-    grp.create_dataset(dsName, output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend])
 
     # for block 7
     idxB = 6
@@ -258,7 +258,7 @@ class Regression(nn.Module):
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
 
-    grp.create_dataset(dsName, output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend])
 
     # for block 8
     idxB = 7
@@ -267,7 +267,7 @@ class Regression(nn.Module):
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7 + numbPtsB8
 
-    grp.create_dataset(dsName, output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend])
     pass
 
   # 打印损失函数
@@ -314,5 +314,5 @@ inp, pField = fsDataset_test[0]
 #print(outPres[100])
 #print(type(outPres))
 
-R.write2HDF(inp, Path("./"))
+R.write2HDF(inp, Path("./fnn.h5"))
 
