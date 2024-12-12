@@ -181,7 +181,7 @@ class Regression(nn.Module):
 R = Regression()
 
 # train the model
-epochs = 15
+epochs = 0
 
 for i in range(epochs):
   print("Training Epoch", i+1, "of", epochs)
@@ -192,5 +192,22 @@ for i in range(epochs):
   pass
 
 # 绘制损失函数历史
-R.plot_progress()
+#R.plot_progress()
+
+# 预测
+
+fsDataset_test = FSimDataset(filePathH5, listTestCase)
+
+len_test = fsDataset_test.numCases
+
+# for C025
+inp, pField = fsDataset_test[0]
+#print(type(inp), type(pField))
+
+outPresTorch = R.forward(inp)
+
+outPres = outPresTorch.detach().numpy()
+
+#print(outPres[100])
+#print(type(outPres))
 
