@@ -58,7 +58,7 @@ class FSimDataset(Dataset):
     coords["z"] = [[]]
 
     for blk in range(8):
-      key = "Block-"+ "%02d"%blk + "-P"
+      key = "Block-"+ "%02d"%blk + "-U"
 
       presFieldBlk = list(hdf[cid][key][:])
       data += presFieldBlk
@@ -144,7 +144,7 @@ class Regression(nn.Module):
 
     # 回归问题，需要使用 MSE
     self.loss_function = nn.MSELoss()
-    self.optimiser = torch.optim.SGD(self.parameters(),lr=0.0025)
+    self.optimiser = torch.optim.SGD(self.parameters(),lr=0.1)
 
     # counter 用来记录训练的次数
     self.counter = 0
@@ -188,10 +188,10 @@ class Regression(nn.Module):
     pass
 
   def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
-    h5 = h5py.File(dirFileHDF, 'w')
+    h5 = h5py.File(dirFileHDF, 'a')
 
     grpName = "FNN_Out" # 相当于原“每个 Case”
-    grp = h5.create_group(grpName)
+    grp = h5[grpName]
 
     # 将预测数据，转化为 numpy 矩阵数据
     output = self.forward(inp).detach().numpy()
@@ -226,7 +226,7 @@ class Regression(nn.Module):
 
     # for block 1
     idxB = 0
-    dsName = "Block-" + "%02d"%idxB + "-P"
+    dsName = "Block-" + "%02d"%idxB + "-U"
 
     ista = 0; iend = numbPtsB1
     grp.create_dataset(dsName, data=output[ista:iend])
@@ -245,7 +245,7 @@ class Regression(nn.Module):
 
     # for block 2
     idxB = 1
-    dsName = "Block-" + "%02d"%idxB + "-P"
+    dsName = "Block-" + "%02d"%idxB + "-U"
 
     ista = numbPtsB1; iend = numbPtsB1 + numbPtsB2
     grp.create_dataset(dsName, data=output[ista:iend])
@@ -264,7 +264,7 @@ class Regression(nn.Module):
 
     # for block 3
     idxB = 2
-    dsName = "Block-" + "%02d"%idxB + "-P"
+    dsName = "Block-" + "%02d"%idxB + "-U"
 
     ista = numbPtsB1 + numbPtsB2; iend = numbPtsB1 + numbPtsB2 + numbPtsB3
     grp.create_dataset(dsName, data=output[ista:iend])
@@ -283,7 +283,7 @@ class Regression(nn.Module):
 
     # for block 4
     idxB = 3
-    dsName = "Block-" + "%02d"%idxB + "-P"
+    dsName = "Block-" + "%02d"%idxB + "-U"
 
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
@@ -304,7 +304,7 @@ class Regression(nn.Module):
 
     # for block 5
     idxB = 4
-    dsName = "Block-" + "%02d"%idxB + "-P"
+    dsName = "Block-" + "%02d"%idxB + "-U"
 
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
@@ -325,7 +325,7 @@ class Regression(nn.Module):
 
     # for block 6
     idxB = 5
-    dsName = "Block-" + "%02d"%idxB + "-P"
+    dsName = "Block-" + "%02d"%idxB + "-U"
 
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
@@ -346,7 +346,7 @@ class Regression(nn.Module):
 
     # for block 7
     idxB = 6
-    dsName = "Block-" + "%02d"%idxB + "-P"
+    dsName = "Block-" + "%02d"%idxB + "-U"
 
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
@@ -367,7 +367,7 @@ class Regression(nn.Module):
 
     # for block 8
     idxB = 7
-    dsName = "Block-" + "%02d"%idxB + "-P"
+    dsName = "Block-" + "%02d"%idxB + "-U"
 
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7 + numbPtsB8
@@ -394,7 +394,7 @@ class Regression(nn.Module):
                   color  = "black",                   \
                   xlabel = "Epochs",                  \
                   ylabel = "Loss Value")
-    ax.figure.savefig("lossHistory_P.png")
+    ax.figure.savefig("lossHistory_U.png")
     pass
   pass
 
@@ -413,7 +413,7 @@ for i in range(epochs):
   pass
 
 # 绘制损失函数历史
-#R.saveLossHistory2PNG()
+R.saveLossHistory2PNG()
 
 # 预测
 
@@ -421,7 +421,7 @@ fsDataset_test = FSimDataset(filePathH5, listTestCase)
 
 #len_test = fsDataset_test.numCases
 # for C025
-inp, pField, coords = fsDataset_test[0]
+inp, uField, coords = fsDataset_test[0]
 #print(type(inp), type(pField))
 
 #outPresTorch = R.forward(inp)
@@ -431,5 +431,5 @@ inp, pField, coords = fsDataset_test[0]
 #print(outPres[100])
 #print(type(outPres))
 
-R.write2HDF(inp, Path("./fnn.h5"),coords=coords)
+R.write2HDF(inp, Path("./fnn.h5"),coords=None)
 
