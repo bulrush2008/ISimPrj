@@ -136,7 +136,7 @@ class Regression(nn.Module):
     )
 
     self.loss_function = nn.MSELoss()
-    self.optimiser = torch.optim.SGD(self.parameters(),lr=0.01)
+    self.optimiser = torch.optim.SGD(self.parameters(),lr=0.001)
 
     self.counter = 0
     self.progress = []
@@ -172,7 +172,7 @@ class Regression(nn.Module):
   def plot_progress(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
     ax = df.plot()
-    ax.figure.savefig("progress.png")
+    ax.figure.savefig("lossHistory.png")
     pass
 
   pass
@@ -181,7 +181,7 @@ R = Regression()
 
 # train the model
 
-epochs = 5
+epochs = 20
 
 for i in range(epochs):
   print("Training Epoch", i+1, "of", epochs)
