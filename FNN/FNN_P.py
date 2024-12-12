@@ -167,13 +167,13 @@ class Regression(nn.Module):
     pass
 
   def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path):
-    #h5 = open(dirFileHDF, 'w')
+    h5 = open(dirFileHDF, 'w')
 
-    #grpName = Path("FNN")
-    #grp = h5.create_group(grpName)
+    grpName = Path("FNN_Out") # 相当于原“每个 Case”
+    grp = h5.create_group(grpName)
 
     # 将预测数据，转化为 numpy 矩阵数据
-    #output = self.forward(inp).detach().numpy()
+    output = self.forward(inp).detach().numpy()
 
     ptsB1 = [2,27,2,52,2,12]
     numbPtsB1 = (ptsB1[1]-ptsB1[0]+1) * (ptsB1[3]-ptsB1[2]+1) * (ptsB1[5]-ptsB1[4]+1)
@@ -202,6 +202,72 @@ class Regression(nn.Module):
     numbAll = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 \
             + numbPtsB5 + numbPtsB6 + numbPtsB7 + numbPtsB8
     #print(numbAll)
+
+    # for block 1
+    idxB = 0
+    dsName = "Block-" + "%02d"%idxB + "-P"
+
+    ista = 0; iend = numbPtsB1
+    grp.create_dataset(dsName, output[ista:iend])
+
+    # for block 2
+    idxB = 1
+    dsName = "Block-" + "%02d"%idxB + "-P"
+
+    ista = numbPtsB1; iend = numbPtsB1 + numbPtsB2
+    grp.create_dataset(dsName, output[ista:iend])
+
+    # for block 3
+    idxB = 2
+    dsName = "Block-" + "%02d"%idxB + "-P"
+
+    ista = numbPtsB1 + numbPtsB2; iend = numbPtsB1 + numbPtsB2 + numbPtsB3
+    grp.create_dataset(dsName, output[ista:iend])
+
+    # for block 4
+    idxB = 3
+    dsName = "Block-" + "%02d"%idxB + "-P"
+
+    ista = numbPtsB1 + numbPtsB2 + numbPtsB3
+    iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
+
+    grp.create_dataset(dsName, output[ista:iend])
+
+    # for block 5
+    idxB = 4
+    dsName = "Block-" + "%02d"%idxB + "-P"
+
+    ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
+    iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
+
+    grp.create_dataset(dsName, output[ista:iend])
+
+    # for block 6
+    idxB = 5
+    dsName = "Block-" + "%02d"%idxB + "-P"
+
+    ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
+    iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
+
+    grp.create_dataset(dsName, output[ista:iend])
+
+    # for block 7
+    idxB = 6
+    dsName = "Block-" + "%02d"%idxB + "-P"
+
+    ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
+    iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
+
+    grp.create_dataset(dsName, output[ista:iend])
+
+    # for block 8
+    idxB = 7
+    dsName = "Block-" + "%02d"%idxB + "-P"
+
+    ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
+    iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7 + numbPtsB8
+
+    grp.create_dataset(dsName, output[ista:iend])
     pass
 
   # 打印损失函数
