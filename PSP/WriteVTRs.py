@@ -23,21 +23,21 @@ def WriteVTRs(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   datasetName = "Block-" + "%02d"%idxBlk + "-X"
   coordsX = h5[grpName][datasetName][:]
 
-  print("------- The block idx: ", idxBlk)
+  #print("------- The block idx: ", idxBlk)
 
-  lenX = len(coordsX); print("lenX = ", lenX)
+  lenX = len(coordsX)#; print("lenX = ", lenX)
 
   # Y
   datasetName = "Block-" + "%02d"%idxBlk + "-Y"
   coordsY = h5[grpName][datasetName][:]
 
-  lenY = len(coordsY); print("lenY = ", lenY)
+  lenY = len(coordsY)#; print("lenY = ", lenY)
 
   # Z
   datasetName = "Block-" + "%02d"%idxBlk + "-Z"
   coordsZ = h5[grpName][datasetName][:]
 
-  lenZ = len(coordsZ); print("lenZ = ", lenZ)
+  lenZ = len(coordsZ)#; print("lenZ = ", lenZ)
 
   # define the dims: start and final index
   iSta = 1; iEnd = lenX#; print(iSta, iEnd)

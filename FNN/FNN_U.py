@@ -233,18 +233,18 @@ class Regression(nn.Module):
     dsName = "Block-" + "%02d"%idxB + "-U"
 
     ista = 0; iend = numbPtsB1
-    grp.create_dataset(dsName, data=output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
 
     # 写入坐标
     if coords is not None:
       dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB])
+      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB])
+      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB])
+      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
       pass
 
     # for block 2
@@ -252,18 +252,18 @@ class Regression(nn.Module):
     dsName = "Block-" + "%02d"%idxB + "-U"
 
     ista = numbPtsB1; iend = numbPtsB1 + numbPtsB2
-    grp.create_dataset(dsName, data=output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
 
     # 写入坐标
     if coords is not None:
       dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB])
+      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB])
+      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB])
+      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
       pass
 
     # for block 3
@@ -271,18 +271,18 @@ class Regression(nn.Module):
     dsName = "Block-" + "%02d"%idxB + "-U"
 
     ista = numbPtsB1 + numbPtsB2; iend = numbPtsB1 + numbPtsB2 + numbPtsB3
-    grp.create_dataset(dsName, data=output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
 
     # 写入坐标
     if coords is not None:
       dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB])
+      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB])
+      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB])
+      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
       pass
 
     # for block 4
@@ -292,18 +292,18 @@ class Regression(nn.Module):
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
 
-    grp.create_dataset(dsName, data=output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
 
     # 写入坐标
     if coords is not None:
       dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB])
+      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB])
+      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB])
+      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
       pass
 
     # for block 5
@@ -313,18 +313,18 @@ class Regression(nn.Module):
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
 
-    grp.create_dataset(dsName, data=output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
 
     # 写入坐标
     if coords is not None:
       dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB])
+      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB])
+      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB])
+      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
       pass
 
     # for block 6
@@ -334,18 +334,18 @@ class Regression(nn.Module):
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
 
-    grp.create_dataset(dsName, data=output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
 
     # 写入坐标
     if coords is not None:
       dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB])
+      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB])
+      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB])
+      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
       pass
 
     # for block 7
@@ -355,18 +355,18 @@ class Regression(nn.Module):
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
 
-    grp.create_dataset(dsName, data=output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
 
     # 写入坐标
     if coords is not None:
       dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB])
+      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB])
+      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB])
+      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
       pass
 
     # for block 8
@@ -376,18 +376,18 @@ class Regression(nn.Module):
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7 + numbPtsB8
 
-    grp.create_dataset(dsName, data=output[ista:iend])
+    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
 
     # 写入坐标
     if coords is not None:
       dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB])
+      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB])
+      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
 
       dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB])
+      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
       pass
     pass
 
