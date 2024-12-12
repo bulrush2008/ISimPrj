@@ -140,7 +140,7 @@ class Regression(nn.Module):
     self._initialize_weights()
 
     self.loss_function = nn.MSELoss()
-    self.optimiser = torch.optim.SGD(self.parameters(),lr=0.001)
+    self.optimiser = torch.optim.SGD(self.parameters(),lr=0.0025)
 
     self.counter = 0
     self.progress = []
@@ -198,7 +198,7 @@ R = Regression()
 
 # train the model
 
-epochs = 5
+epochs = 15
 
 for i in range(epochs):
   print("Training Epoch", i+1, "of", epochs)
