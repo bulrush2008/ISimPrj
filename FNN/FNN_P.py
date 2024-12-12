@@ -166,6 +166,44 @@ class Regression(nn.Module):
     self.optimiser.step()
     pass
 
+  def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path):
+    #h5 = open(dirFileHDF, 'w')
+
+    #grpName = Path("FNN")
+    #grp = h5.create_group(grpName)
+
+    # 将预测数据，转化为 numpy 矩阵数据
+    #output = self.forward(inp).detach().numpy()
+
+    ptsB1 = [2,27,2,52,2,12]
+    numbPtsB1 = (ptsB1[1]-ptsB1[0]+1) * (ptsB1[3]-ptsB1[2]+1) * (ptsB1[5]-ptsB1[4]+1)
+
+    ptsB2 = [2,27,2,52,2,13]
+    numbPtsB2 = (ptsB2[1]-ptsB2[0]+1) * (ptsB2[3]-ptsB2[2]+1) * (ptsB2[5]-ptsB2[4]+1)
+
+    ptsB3 = [2,27,2,53,2,12]
+    numbPtsB3 = (ptsB3[1]-ptsB3[0]+1) * (ptsB3[3]-ptsB3[2]+1) * (ptsB3[5]-ptsB3[4]+1)
+
+    ptsB4 = [2,27,2,53,2,13]
+    numbPtsB4 = (ptsB4[1]-ptsB4[0]+1) * (ptsB4[3]-ptsB4[2]+1) * (ptsB4[5]-ptsB4[4]+1)
+
+    ptsB5 = [2,28,2,52,2,12]
+    numbPtsB5 = (ptsB5[1]-ptsB5[0]+1) * (ptsB5[3]-ptsB5[2]+1) * (ptsB5[5]-ptsB5[4]+1)
+
+    ptsB6 = [2,28,2,52,2,13]
+    numbPtsB6 = (ptsB6[1]-ptsB6[0]+1) * (ptsB6[3]-ptsB6[2]+1) * (ptsB6[5]-ptsB6[4]+1)
+
+    ptsB7 = [2,28,2,53,2,12]
+    numbPtsB7 = (ptsB7[1]-ptsB7[0]+1) * (ptsB7[3]-ptsB7[2]+1) * (ptsB7[5]-ptsB7[4]+1)
+
+    ptsB8 = [2,28,2,53,2,13]
+    numbPtsB8 = (ptsB8[1]-ptsB8[0]+1) * (ptsB8[3]-ptsB8[2]+1) * (ptsB8[5]-ptsB8[4]+1)
+
+    numbAll = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 \
+            + numbPtsB5 + numbPtsB6 + numbPtsB7 + numbPtsB8
+    #print(numbAll)
+    pass
+
   # 打印损失函数
   def saveLossHistory2PNG(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
@@ -181,7 +219,7 @@ class Regression(nn.Module):
 R = Regression()
 
 # train the model
-epochs = 0
+epochs = 5
 
 for i in range(epochs):
   print("Training Epoch", i+1, "of", epochs)
@@ -198,16 +236,17 @@ for i in range(epochs):
 
 fsDataset_test = FSimDataset(filePathH5, listTestCase)
 
-len_test = fsDataset_test.numCases
-
+#len_test = fsDataset_test.numCases
 # for C025
 inp, pField = fsDataset_test[0]
 #print(type(inp), type(pField))
 
-outPresTorch = R.forward(inp)
+#outPresTorch = R.forward(inp)
 
-outPres = outPresTorch.detach().numpy()
+#outPres = outPresTorch.detach().numpy()
 
 #print(outPres[100])
 #print(type(outPres))
+
+R.write2HDF(inp, Path("./"))
 
