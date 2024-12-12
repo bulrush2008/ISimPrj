@@ -51,14 +51,35 @@ class FSimDataset(Dataset):
     inp = torch.FloatTensor(inp)
 
     data = []
+    coords = {}
+
+    coords["x"] = [[]]
+    coords["y"] = [[]]
+    coords["z"] = [[]]
+
     for blk in range(8):
       key = "Block-"+ "%02d"%blk + "-P"
 
       presFieldBlk = list(hdf[cid][key][:])
       data += presFieldBlk
+
+      # coordx
+      key = "Block-"+ "%02d"%blk + "-X"
+      crd = list(hdf[cid][key][:])
+      coords["x"].append(crd)
+
+      # coordy
+      key = "Block-"+ "%02d"%blk + "-Y"
+      crd = list(hdf[cid][key][:])
+      coords["y"].append(crd)
+
+      # coordz
+      key = "Block-"+ "%02d"%blk + "-Z"
+      crd = list(hdf[cid][key][:])
+      coords["z"].append(crd)
       pass
 
-    return inp, torch.FloatTensor(data)
+    return inp, torch.FloatTensor(data), coords
   
   def plotVTK(self, idx):
     if idx >= numOfCases:
@@ -166,7 +187,7 @@ class Regression(nn.Module):
     self.optimiser.step()
     pass
 
-  def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path):
+  def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
     h5 = h5py.File(dirFileHDF, 'w')
 
     grpName = "FNN_Out" # 相当于原“每个 Case”
@@ -210,6 +231,18 @@ class Regression(nn.Module):
     ista = 0; iend = numbPtsB1
     grp.create_dataset(dsName, data=output[ista:iend])
 
+    # 写入坐标
+    if coords is not None:
+      dsName = "Block-" + "%02d"%idxB + "-X"
+      grp.create_dataset(dsName, data=coords["x"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Y"
+      grp.create_dataset(dsName, data=coords["y"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Z"
+      grp.create_dataset(dsName, data=coords["z"][idxB])
+      pass
+
     # for block 2
     idxB = 1
     dsName = "Block-" + "%02d"%idxB + "-P"
@@ -217,12 +250,36 @@ class Regression(nn.Module):
     ista = numbPtsB1; iend = numbPtsB1 + numbPtsB2
     grp.create_dataset(dsName, data=output[ista:iend])
 
+    # 写入坐标
+    if coords is not None:
+      dsName = "Block-" + "%02d"%idxB + "-X"
+      grp.create_dataset(dsName, data=coords["x"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Y"
+      grp.create_dataset(dsName, data=coords["y"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Z"
+      grp.create_dataset(dsName, data=coords["z"][idxB])
+      pass
+
     # for block 3
     idxB = 2
     dsName = "Block-" + "%02d"%idxB + "-P"
 
     ista = numbPtsB1 + numbPtsB2; iend = numbPtsB1 + numbPtsB2 + numbPtsB3
     grp.create_dataset(dsName, data=output[ista:iend])
+
+    # 写入坐标
+    if coords is not None:
+      dsName = "Block-" + "%02d"%idxB + "-X"
+      grp.create_dataset(dsName, data=coords["x"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Y"
+      grp.create_dataset(dsName, data=coords["y"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Z"
+      grp.create_dataset(dsName, data=coords["z"][idxB])
+      pass
 
     # for block 4
     idxB = 3
@@ -233,6 +290,18 @@ class Regression(nn.Module):
 
     grp.create_dataset(dsName, data=output[ista:iend])
 
+    # 写入坐标
+    if coords is not None:
+      dsName = "Block-" + "%02d"%idxB + "-X"
+      grp.create_dataset(dsName, data=coords["x"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Y"
+      grp.create_dataset(dsName, data=coords["y"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Z"
+      grp.create_dataset(dsName, data=coords["z"][idxB])
+      pass
+
     # for block 5
     idxB = 4
     dsName = "Block-" + "%02d"%idxB + "-P"
@@ -241,6 +310,18 @@ class Regression(nn.Module):
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
 
     grp.create_dataset(dsName, data=output[ista:iend])
+
+    # 写入坐标
+    if coords is not None:
+      dsName = "Block-" + "%02d"%idxB + "-X"
+      grp.create_dataset(dsName, data=coords["x"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Y"
+      grp.create_dataset(dsName, data=coords["y"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Z"
+      grp.create_dataset(dsName, data=coords["z"][idxB])
+      pass
 
     # for block 6
     idxB = 5
@@ -251,6 +332,18 @@ class Regression(nn.Module):
 
     grp.create_dataset(dsName, data=output[ista:iend])
 
+    # 写入坐标
+    if coords is not None:
+      dsName = "Block-" + "%02d"%idxB + "-X"
+      grp.create_dataset(dsName, data=coords["x"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Y"
+      grp.create_dataset(dsName, data=coords["y"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Z"
+      grp.create_dataset(dsName, data=coords["z"][idxB])
+      pass
+
     # for block 7
     idxB = 6
     dsName = "Block-" + "%02d"%idxB + "-P"
@@ -260,6 +353,18 @@ class Regression(nn.Module):
 
     grp.create_dataset(dsName, data=output[ista:iend])
 
+    # 写入坐标
+    if coords is not None:
+      dsName = "Block-" + "%02d"%idxB + "-X"
+      grp.create_dataset(dsName, data=coords["x"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Y"
+      grp.create_dataset(dsName, data=coords["y"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Z"
+      grp.create_dataset(dsName, data=coords["z"][idxB])
+      pass
+
     # for block 8
     idxB = 7
     dsName = "Block-" + "%02d"%idxB + "-P"
@@ -268,6 +373,18 @@ class Regression(nn.Module):
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7 + numbPtsB8
 
     grp.create_dataset(dsName, data=output[ista:iend])
+
+    # 写入坐标
+    if coords is not None:
+      dsName = "Block-" + "%02d"%idxB + "-X"
+      grp.create_dataset(dsName, data=coords["x"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Y"
+      grp.create_dataset(dsName, data=coords["y"][idxB])
+
+      dsName = "Block-" + "%02d"%idxB + "-Z"
+      grp.create_dataset(dsName, data=coords["z"][idxB])
+      pass
     pass
 
   # 打印损失函数
@@ -290,7 +407,7 @@ epochs = 5
 for i in range(epochs):
   print("Training Epoch", i+1, "of", epochs)
 
-  for bc, label in fsDataset_train:
+  for bc, label, _ in fsDataset_train:
     R.train(bc, label)
     pass
   pass
@@ -304,7 +421,7 @@ fsDataset_test = FSimDataset(filePathH5, listTestCase)
 
 #len_test = fsDataset_test.numCases
 # for C025
-inp, pField = fsDataset_test[0]
+inp, pField, coords = fsDataset_test[0]
 #print(type(inp), type(pField))
 
 #outPresTorch = R.forward(inp)
@@ -314,5 +431,5 @@ inp, pField = fsDataset_test[0]
 #print(outPres[100])
 #print(type(outPres))
 
-R.write2HDF(inp, Path("./fnn.h5"))
+R.write2HDF(inp, Path("./fnn.h5"),coords=coords)
 
