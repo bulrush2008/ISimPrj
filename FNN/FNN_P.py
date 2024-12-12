@@ -15,6 +15,8 @@ import h5py
 import pandas, numpy, random
 import matplotlib.pyplot as plt
 
+import math
+
 import numpy as np
 
 from pathlib import Path
@@ -135,12 +137,21 @@ class Regression(nn.Module):
       nn.Identity()
     )
 
+    self._initialize_weights()
+
     self.loss_function = nn.MSELoss()
     self.optimiser = torch.optim.SGD(self.parameters(),lr=0.001)
 
     self.counter = 0
     self.progress = []
     pass
+
+  def _initialize_weights(self):
+    for m in self.model:
+      if isinstance(m, nn.Linear):
+        nn.init.kaiming_uniform_(m.weight, a=math.sqrt(5))
+        if m.bias is not None:
+          nn.init.zeros_(m.bias)
 
   # 前向传播
   def forward(self, inputs):
@@ -183,7 +194,7 @@ class Regression(nn.Module):
 R = Regression()
 
 # init the model weights
-#torch.nn.init.kaiming_normal_(R.model) # illegal
+#R.init.kaiming_normal_() # illegal
 
 # train the model
 
