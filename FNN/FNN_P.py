@@ -158,7 +158,7 @@ class Regression(nn.Module):
 
     self.counter += 1
 
-    if(self.counter%5 == 0):  # 对每个算例数据，记录损失值
+    if(self.counter%10 == 0):  # 对每个算例数据，记录损失值
       print(f"{self.counter} Cases Trained ...")
       pass
 
@@ -171,7 +171,10 @@ class Regression(nn.Module):
   # 打印损失函数
   def plot_progress(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
-    ax = df.plot()
+    ax = df.plot( title  = "Loss history of Pressure",\
+                  color  = "black",                   \
+                  xlabel = "Epochs",                  \
+                  ylabel = "Loss Value")
     ax.figure.savefig("lossHistory.png")
     pass
 
@@ -179,9 +182,12 @@ class Regression(nn.Module):
 
 R = Regression()
 
+# init the model weights
+#torch.nn.init.kaiming_normal_(R.model) # illegal
+
 # train the model
 
-epochs = 20
+epochs = 5
 
 for i in range(epochs):
   print("Training Epoch", i+1, "of", epochs)
