@@ -4,7 +4,7 @@ The FNN model is used to prediction Pressure field. And also as a base code
 for Other field variables.
 
 @author     @data       @aff        @version
-Xia, S      24.12.11    Simpop.cn   v0.2
+Xia, S      24.12.12    Simpop.cn   v1.0
 """
 
 # import libraries
@@ -68,7 +68,6 @@ class FSimDataset(Dataset):
     pass
 
 # split the data, 27 = 22 + 5
-
 numOfCases = 27
 ratioTest = 0.2
 
@@ -84,16 +83,10 @@ for i in permut[:sizeOfTestSet]:
   theCase = "C" + "%03d"%idxList[i]
   listTestCase.append(theCase)
 
-#print(listTestCase, len(listTestCase))
-
 listTrainCase = []
 for i in permut[sizeOfTestSet:]:
   theCase = "C" + "%03d"%idxList[i]
   listTrainCase.append(theCase)
-
-#print(listTrainCase)
-#print(len(listTrainCase))
-#print(type(listTrainCase))
 
 from pathlib import Path
 import h5py
@@ -104,18 +97,6 @@ filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
 #print(aLive)
 
 fsDataset_train = FSimDataset(filePathH5, listTrainCase)
-
-#print(fsDataset_train.caseList)
-#print(fsDataset_train.numCases)
-#print(fsDataset_train.dataFile)
-
-#p = fsDataset_train[1]
-
-#print(type(p))
-#print(len(p))
-#print(p[100:109])
-
-#fsDataset_train.plotVTK(1)
 
 # Regression class: Core of FNN
 class Regression(nn.Module):
@@ -137,16 +118,22 @@ class Regression(nn.Module):
       nn.Identity()
     )
 
+    # 初始化权重，目前使用 He Kaiming 方法
     self._initialize_weights()
 
+    # 回归问题，需要使用 MSE
     self.loss_function = nn.MSELoss()
     self.optimiser = torch.optim.SGD(self.parameters(),lr=0.0025)
 
+    # counter 用来记录训练的次数
     self.counter = 0
-    self.progress = []
+    self.progress = []  # 存储每一步的损失值
     pass
 
   def _initialize_weights(self):
+    """
+    内部函数，在模型初始化时调用一次，用于配置初始化参数
+    """
     for m in self.model:
       if isinstance(m, nn.Linear):
         nn.init.kaiming_uniform_(m.weight, a=math.sqrt(5))
@@ -188,16 +175,12 @@ class Regression(nn.Module):
                   ylabel = "Loss Value")
     ax.figure.savefig("lossHistory.png")
     pass
-
   pass
 
+# 生成一个回归模型对象
 R = Regression()
 
-# init the model weights
-#R.init.kaiming_normal_() # illegal
-
 # train the model
-
 epochs = 15
 
 for i in range(epochs):
@@ -208,5 +191,6 @@ for i in range(epochs):
     pass
   pass
 
+# 绘制损失函数历史
 R.plot_progress()
 
