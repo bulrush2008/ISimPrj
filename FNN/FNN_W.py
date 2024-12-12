@@ -79,6 +79,10 @@ class FSimDataset(Dataset):
       coords["z"].append(crd)
       pass
 
+    del coords["x"][0]
+    del coords["y"][0]
+    del coords["z"][0]
+
     return inp, torch.FloatTensor(data), coords
   
   def plotVTK(self, idx):
@@ -390,7 +394,7 @@ class Regression(nn.Module):
   # 打印损失函数
   def saveLossHistory2PNG(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
-    ax = df.plot( title  = "Loss history of Pressure",\
+    ax = df.plot( title  = "Loss history of W",\
                   color  = "black",                   \
                   xlabel = "Epochs",                  \
                   ylabel = "Loss Value")

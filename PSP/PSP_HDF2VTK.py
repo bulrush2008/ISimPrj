@@ -13,7 +13,7 @@ from WriteVTM import WriteVTM
 from WriteVTRs import WriteVTRs
 
 numOfBlocks = 8
-dirVTM = Path("./FNN")
+dirVTM = Path("./FNN_Case_Test")
 if not dirVTM.exists(): dirVTM.mkdir()
 #if dirVTM.exists(): dirVTM.rmdir() # 删除一个空目录
 
@@ -28,7 +28,7 @@ print(dirVTR)
 
 if not dirVTR.exists(): dirVTR.mkdir(parents=True)
 
-dirHDF = Path("./").joinpath("matrixData.h5")
+dirHDF = Path("../FNN").joinpath("fnn.h5")
 alive = dirHDF.exists()
 print("HDF File exists? ", alive)
 

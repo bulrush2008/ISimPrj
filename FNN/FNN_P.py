@@ -79,6 +79,10 @@ class FSimDataset(Dataset):
       coords["z"].append(crd)
       pass
 
+    del coords["x"][0]
+    del coords["y"][0]
+    del coords["z"][0]
+
     return inp, torch.FloatTensor(data), coords
   
   def plotVTK(self, idx):
@@ -413,7 +417,7 @@ for i in range(epochs):
   pass
 
 # 绘制损失函数历史
-#R.saveLossHistory2PNG()
+R.saveLossHistory2PNG()
 
 # 预测
 
