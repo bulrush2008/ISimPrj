@@ -422,10 +422,12 @@ R.saveLossHistory2PNG()
 # 预测
 
 fsDataset_test = FSimDataset(filePathH5, listTestCase)
+print(listTestCase)
 
 #len_test = fsDataset_test.numCases
 # for C025
 inp, pField, coords = fsDataset_test[0]
+print(fsDataset_test.caseList)
 #print(type(inp), type(pField))
 
 #outPresTorch = R.forward(inp)
