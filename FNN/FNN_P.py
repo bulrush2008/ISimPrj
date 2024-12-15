@@ -406,7 +406,7 @@ class Regression(nn.Module):
 R = Regression()
 
 # train the model
-epochs = 5
+epochs = 15
 
 for i in range(epochs):
   print("Training Epoch", i+1, "of", epochs)
