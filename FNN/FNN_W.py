@@ -135,11 +135,15 @@ class Regression(nn.Module):
       nn.LeakyReLU(0.02),
       nn.LayerNorm(100),
 
-      nn.Linear(100,100),
+      nn.Linear(100,300),
       nn.LeakyReLU(0.02),
-      nn.LayerNorm(100),
+      nn.LayerNorm(300),
 
-      nn.Linear(100,125557), # output field, 8 block
+      nn.Linear(300,1000),
+      nn.LeakyReLU(0.02),
+      nn.LayerNorm(1000),
+
+      nn.Linear(1000,125557), # output field, 8 block
       nn.Identity()
     )
 
@@ -148,7 +152,7 @@ class Regression(nn.Module):
 
     # 回归问题，需要使用 MSE
     self.loss_function = nn.MSELoss()
-    self.optimiser = torch.optim.SGD(self.parameters(),lr=2.0)
+    self.optimiser = torch.optim.Adam(self.parameters(),lr=2.0)
 
     # counter 用来记录训练的次数
     self.counter = 0
