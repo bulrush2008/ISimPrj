@@ -135,31 +135,15 @@ class Regression(nn.Module):
       nn.LeakyReLU(0.02),
       nn.LayerNorm(100),
 
-      nn.Linear(100,50),
+      nn.Linear(100,300),
       nn.LeakyReLU(0.02),
-      nn.LayerNorm(50),
+      nn.LayerNorm(300),
 
-      nn.Linear(50,25),
+      nn.Linear(300,1000),
       nn.LeakyReLU(0.02),
-      nn.LayerNorm(25),
+      nn.LayerNorm(1000),
 
-      nn.Linear(25,10),
-      nn.LeakyReLU(0.02),
-      nn.LayerNorm(10),
-
-      nn.Linear(10,25),
-      nn.LeakyReLU(0.02),
-      nn.LayerNorm(25),
-
-      nn.Linear(25,50),
-      nn.LeakyReLU(0.02),
-      nn.LayerNorm(50),
-
-      nn.Linear(50,100),
-      nn.LeakyReLU(0.02),
-      nn.LayerNorm(100),
-
-      nn.Linear(100,125557), # output field, 8 block
+      nn.Linear(1000,125557), # output field, 8 block
       nn.Identity()
     )
 
@@ -168,7 +152,8 @@ class Regression(nn.Module):
 
     # 回归问题，需要使用 MSE
     self.loss_function = nn.MSELoss()
-    self.optimiser = torch.optim.SGD(self.parameters(),lr=0.0001)
+    #self.optimiser = torch.optim.SGD(self.parameters(),lr=0.0001)
+    self.optimiser = torch.optim.Adam(self.parameters(), lr=0.01)
 
     # counter 用来记录训练的次数
     self.counter = 0
@@ -426,12 +411,13 @@ class Regression(nn.Module):
 R = Regression()
 
 # train the model
-epochs = 50
+epochs = 15
 
 for i in range(epochs):
   print("Training Epoch", i+1, "of", epochs)
 
   for bc, label, _ in fsDataset_train:
+    #print(bc)
     R.train(bc, label)
     pass
   pass
