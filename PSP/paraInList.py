@@ -27,3 +27,23 @@ paraInList = [[438.15, 2.511048614, 458333.3333],\
               [438.15, 1.618231329, 125000.],\
               [458.15, 1.618231329, 125000.],\
               [478.15, 1.618231329, 125000.]]
+
+lenParaIn = len(paraInList)
+
+# normalize the input
+for i in range(lenParaIn):
+  paraInList[i][0] = (paraInList[i][0] - 400.0) / 100.0
+
+for i in range(lenParaIn):
+  paraInList[i][1] = paraInList[i][1] - 1.5
+
+for i in range(lenParaIn):
+  paraInList[i][2] = paraInList[i][2] / 1000000.0
+
+
+if __name__=="__main__":
+  #print(lenParaIn)
+  #for i in range(len(paraInList)):
+  #  print(paraInList[i][0])
+  for i in range(len(paraInList)):
+    print(paraInList[i][2])
