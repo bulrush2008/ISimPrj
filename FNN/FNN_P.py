@@ -135,7 +135,27 @@ class Regression(nn.Module):
       nn.LeakyReLU(0.02),
       nn.LayerNorm(100),
 
-      nn.Linear(100,100),
+      nn.Linear(100,50),
+      nn.LeakyReLU(0.02),
+      nn.LayerNorm(50),
+
+      nn.Linear(50,25),
+      nn.LeakyReLU(0.02),
+      nn.LayerNorm(25),
+
+      nn.Linear(25,10),
+      nn.LeakyReLU(0.02),
+      nn.LayerNorm(10),
+
+      nn.Linear(10,25),
+      nn.LeakyReLU(0.02),
+      nn.LayerNorm(25),
+
+      nn.Linear(25,50),
+      nn.LeakyReLU(0.02),
+      nn.LayerNorm(50),
+
+      nn.Linear(50,100),
       nn.LeakyReLU(0.02),
       nn.LayerNorm(100),
 
@@ -148,7 +168,7 @@ class Regression(nn.Module):
 
     # 回归问题，需要使用 MSE
     self.loss_function = nn.MSELoss()
-    self.optimiser = torch.optim.SGD(self.parameters(),lr=0.0025)
+    self.optimiser = torch.optim.SGD(self.parameters(),lr=0.0001)
 
     # counter 用来记录训练的次数
     self.counter = 0
@@ -406,7 +426,7 @@ class Regression(nn.Module):
 R = Regression()
 
 # train the model
-epochs = 15
+epochs = 50
 
 for i in range(epochs):
   print("Training Epoch", i+1, "of", epochs)
