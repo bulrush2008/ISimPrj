@@ -11,6 +11,9 @@ Xia, S      24.12.12    Simpop.cn   v1.0
 import torch
 import torch.nn as nn
 
+from pathlib import Path
+import h5py
+
 import h5py
 import pandas, numpy, random
 import matplotlib.pyplot as plt
@@ -21,6 +24,10 @@ import numpy as np
 
 from pathlib import Path
 from torch.utils.data import Dataset
+
+from idxList import idxList
+from idxList import numOfAllCases
+
 
 class FSimDataset(Dataset):
   def __init__(self, file:Path, caseList:list):
@@ -92,16 +99,14 @@ class FSimDataset(Dataset):
     print("Todo: .plotVTK(...)")
     pass
 
-# split the data, 27 = 22 + 5
-numOfCases = 27
+# split the data, 49 = 40 + 9
+numOfCases = numOfAllCases
 ratioTest = 0.2
 
 sizeOfTestSet = np.int64(numOfCases * ratioTest)
 
 np.random.seed(42)
 permut = np.random.permutation(numOfCases)
-
-from idxList import idxList
 
 listTestCase = []
 for i in permut[:sizeOfTestSet]:
@@ -112,9 +117,6 @@ listTrainCase = []
 for i in permut[sizeOfTestSet:]:
   theCase = "C" + "%03d"%idxList[i]
   listTrainCase.append(theCase)
-
-from pathlib import Path
-import h5py
 
 filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
 
@@ -428,9 +430,9 @@ R.saveLossHistory2PNG()
 fsDataset_test = FSimDataset(filePathH5, listTestCase)
 
 #len_test = fsDataset_test.numCases
-# for C025
-inp, uField, coords = fsDataset_test[0]
-#print(type(inp), type(pField))
+# for C034
+inp, vField, coords = fsDataset_test[0]
+#print(type(inp), type(vField))
 
 #outPresTorch = R.forward(inp)
 
