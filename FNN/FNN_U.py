@@ -25,6 +25,7 @@ from torch.utils.data import Dataset
 from idxList import idxList
 from idxList import numOfAllCases
 
+
 class FSimDataset(Dataset):
   def __init__(self, file:Path, caseList:list):
     """
@@ -114,9 +115,6 @@ listTrainCase = []
 for i in permut[sizeOfTestSet:]:
   theCase = "C" + "%03d"%idxList[i]
   listTrainCase.append(theCase)
-
-from pathlib import Path
-import h5py
 
 filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
 
@@ -400,10 +398,11 @@ class Regression(nn.Module):
   # 打印损失函数
   def saveLossHistory2PNG(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
-    ax = df.plot( title  = "Loss history of U",\
-                  color  = "black",                   \
-                  xlabel = "Epochs",                  \
-                  ylabel = "Loss Value")
+    ax = df.plot( title  = "Loss history of U", \
+                  color  = "black",             \
+                  xlabel = "Epochs",            \
+                  ylabel = "Loss Value",        \
+                  logy   = True)
     ax.figure.savefig("lossHistory_U.png")
     pass
   pass

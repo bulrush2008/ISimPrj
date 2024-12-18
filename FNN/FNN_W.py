@@ -11,7 +11,6 @@ Xia, S      24.12.12    Simpop.cn   v1.0
 import torch
 import torch.nn as nn
 
-import h5py
 import pandas, numpy, random
 import matplotlib.pyplot as plt
 
@@ -25,8 +24,6 @@ from torch.utils.data import Dataset
 from idxList import idxList
 from idxList import numOfAllCases
 import h5py
-
-
 
 class FSimDataset(Dataset):
   def __init__(self, file:Path, caseList:list):
@@ -399,10 +396,10 @@ class Regression(nn.Module):
   # 打印损失函数
   def saveLossHistory2PNG(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
-    ax = df.plot( title  = "Loss history of W",\
-                  color  = "black",            \
-                  xlabel = "Epochs",           \
-                  ylabel = "Loss Value",       \
+    ax = df.plot( title  = "Loss history of W", \
+                  color  = "black",             \
+                  xlabel = "Epochs",            \
+                  ylabel = "Loss Value",        \
                   logy   = True)
     ax.figure.savefig("lossHistory_W.png")
     pass
@@ -421,7 +418,7 @@ for i in range(epochs):
     R.train(bc, label)
     pass
   pass
-
+n
 # 绘制损失函数历史
 R.saveLossHistory2PNG()
 

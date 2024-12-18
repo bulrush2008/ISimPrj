@@ -14,7 +14,6 @@ import torch.nn as nn
 from pathlib import Path
 import h5py
 
-import h5py
 import pandas, numpy, random
 import matplotlib.pyplot as plt
 
@@ -22,7 +21,6 @@ import math
 
 import numpy as np
 
-from pathlib import Path
 from torch.utils.data import Dataset
 
 from idxList import idxList
@@ -401,9 +399,10 @@ class Regression(nn.Module):
   def saveLossHistory2PNG(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
     ax = df.plot( title  = "Loss history of T",\
-                  color  = "black",                   \
-                  xlabel = "Epochs",                  \
-                  ylabel = "Loss Value")
+                  color  = "black",            \
+                  xlabel = "Epochs",           \
+                  ylabel = "Loss Value",       \
+                  logy   = True)
     ax.figure.savefig("lossHistory_T.png")
     pass
   pass

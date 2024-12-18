@@ -11,9 +11,6 @@ Xia, S      24.12.12    Simpop.cn   v1.0
 import torch
 import torch.nn as nn
 
-from pathlib import Path
-import h5py
-
 import h5py
 import pandas, numpy, random
 import matplotlib.pyplot as plt
@@ -400,10 +397,11 @@ class Regression(nn.Module):
   # 打印损失函数
   def saveLossHistory2PNG(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
-    ax = df.plot( title  = "Loss history of V",\
-                  color  = "black",                   \
-                  xlabel = "Epochs",                  \
-                  ylabel = "Loss Value")
+    ax = df.plot( title  = "Loss history of V", \
+                  color  = "black",             \
+                  xlabel = "Epochs",            \
+                  ylabel = "Loss Value",        \
+                  logy   = True)
     ax.figure.savefig("lossHistory_V.png")
     pass
   pass

@@ -115,9 +115,6 @@ for i in permut[sizeOfTestSet:]:
   theCase = "C" + "%03d"%idxList[i]
   listTrainCase.append(theCase)
 
-from pathlib import Path
-import h5py
-
 filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
 
 #aLive = filePathH5.exists()
@@ -401,10 +398,11 @@ class Regression(nn.Module):
   # 打印损失函数
   def saveLossHistory2PNG(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
-    ax = df.plot( title  = "Loss history of Pressure",\
-                  color  = "black",                   \
-                  xlabel = "Epochs",                  \
-                  ylabel = "Loss Value")
+    ax = df.plot( title  = "Loss history of P", \
+                  color  = "black",             \
+                  xlabel = "Epochs",            \
+                  ylabel = "Loss Value",        \
+                  logy   = True)
     ax.figure.savefig("lossHistory_P.png")
     pass
   pass
