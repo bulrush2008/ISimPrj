@@ -22,6 +22,9 @@ import numpy as np
 from pathlib import Path
 from torch.utils.data import Dataset
 
+from idxList import idxList
+from idxList import numOfAllCases
+
 class FSimDataset(Dataset):
   def __init__(self, file:Path, caseList:list):
     """
@@ -92,16 +95,15 @@ class FSimDataset(Dataset):
     print("Todo: .plotVTK(...)")
     pass
 
-# split the data, 27 = 22 + 5
-numOfCases = 27
+# split the data, 49 = 40 + 9
+numOfCases = numOfAllCases
 ratioTest = 0.2
 
 sizeOfTestSet = np.int64(numOfCases * ratioTest)
 
+# 其它整数也可
 np.random.seed(42)
 permut = np.random.permutation(numOfCases)
-
-from idxList import idxList
 
 listTestCase = []
 for i in permut[:sizeOfTestSet]:
@@ -428,9 +430,9 @@ R.saveLossHistory2PNG()
 fsDataset_test = FSimDataset(filePathH5, listTestCase)
 
 #len_test = fsDataset_test.numCases
-# for C025
+# for C034
 inp, uField, coords = fsDataset_test[0]
-#print(type(inp), type(pField))
+#print(type(inp), type(uField))
 
 #outPresTorch = R.forward(inp)
 
