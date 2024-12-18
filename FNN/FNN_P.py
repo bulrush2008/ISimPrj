@@ -433,7 +433,7 @@ fsDataset_test = FSimDataset(filePathH5, listTestCase)
 #print(listTestCase)
 
 #len_test = fsDataset_test.numCases
-# for C025
+# for C034
 inp, pField, coords = fsDataset_test[0]
 #print(fsDataset_test.caseList)
 #print(type(inp), type(pField))
