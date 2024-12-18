@@ -9,4 +9,5 @@ h5FileDir = Path("../FSCases/FSHDF/MatrixData.h5")
 #print(aLive)
 
 h5 = h5py.File(h5FileDir)
+print(len(h5.keys()))
 print(h5.keys())

@@ -65,6 +65,7 @@ for i in range(lenParaIn):
 if __name__=="__main__":
   print(lenParaIn)
   #for i in range(len(paraInList)):
-  #  print(paraInList[i][0])
+  #  print(paraInList[i])
   #for i in range(len(paraInList)):
   #  print(paraInList[i][2])
+  pass
