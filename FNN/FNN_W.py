@@ -22,6 +22,12 @@ import numpy as np
 from pathlib import Path
 from torch.utils.data import Dataset
 
+from idxList import idxList
+from idxList import numOfAllCases
+import h5py
+
+
+
 class FSimDataset(Dataset):
   def __init__(self, file:Path, caseList:list):
     """
@@ -92,16 +98,14 @@ class FSimDataset(Dataset):
     print("Todo: .plotVTK(...)")
     pass
 
-# split the data, 27 = 22 + 5
-numOfCases = 27
+# split the data, 49 = 40 + 9
+numOfCases = numOfAllCases
 ratioTest = 0.2
 
 sizeOfTestSet = np.int64(numOfCases * ratioTest)
 
 np.random.seed(42)
 permut = np.random.permutation(numOfCases)
-
-from idxList import idxList
 
 listTestCase = []
 for i in permut[:sizeOfTestSet]:
@@ -112,9 +116,6 @@ listTrainCase = []
 for i in permut[sizeOfTestSet:]:
   theCase = "C" + "%03d"%idxList[i]
   listTrainCase.append(theCase)
-
-from pathlib import Path
-import h5py
 
 filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
 
@@ -399,9 +400,10 @@ class Regression(nn.Module):
   def saveLossHistory2PNG(self):
     df = pandas.DataFrame(self.progress, columns=["Loss"])
     ax = df.plot( title  = "Loss history of W",\
-                  color  = "black",                   \
-                  xlabel = "Epochs",                  \
-                  ylabel = "Loss Value")
+                  color  = "black",            \
+                  xlabel = "Epochs",           \
+                  ylabel = "Loss Value",       \
+                  logy   = True)
     ax.figure.savefig("lossHistory_W.png")
     pass
   pass
@@ -428,9 +430,9 @@ R.saveLossHistory2PNG()
 fsDataset_test = FSimDataset(filePathH5, listTestCase)
 
 #len_test = fsDataset_test.numCases
-# for C025
-inp, uField, coords = fsDataset_test[0]
-#print(type(inp), type(pField))
+# for C034
+inp, wField, coords = fsDataset_test[0]
+#print(type(inp), type(wField))
 
 #outPresTorch = R.forward(inp)
 
