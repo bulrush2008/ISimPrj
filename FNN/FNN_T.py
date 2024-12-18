@@ -429,8 +429,8 @@ fsDataset_test = FSimDataset(filePathH5, listTestCase)
 
 #len_test = fsDataset_test.numCases
 # for C025
-inp, uField, coords = fsDataset_test[0]
-#print(type(inp), type(pField))
+inp, tField, coords = fsDataset_test[0]
+print(type(inp), type(tField))
 
 #outPresTorch = R.forward(inp)
 
