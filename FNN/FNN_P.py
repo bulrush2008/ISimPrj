@@ -20,8 +20,8 @@ from pathlib import Path
 import math
 import numpy as np
 
-from idxList import idxList
-from idxList import numOfAllCases
+from Common.idxList import idxList
+from Common.idxList import numOfAllCases
 
 class FSimDataset(Dataset):
   def __init__(self, file:Path, caseList:list):
@@ -393,14 +393,15 @@ class Regression(nn.Module):
     pass
 
   # 打印损失函数
-  def saveLossHistory2PNG(self):
+  def saveLossHistory2PNG(self, outDir:Path)->None:
     df = pandas.DataFrame(self.progress, columns=["Loss"])
     ax = df.plot( title  = "Loss history of P", \
                   color  = "black",             \
                   xlabel = "Epochs",            \
                   ylabel = "Loss Value",        \
                   logy   = True)
-    ax.figure.savefig("lossHistory_P.png")
+    outFile = outDir.joinpath("lossHistory_P.png")
+    ax.figure.savefig(outFile)
     pass
   pass
 
@@ -408,7 +409,7 @@ class Regression(nn.Module):
 R = Regression()
 
 # train the model
-epochs = 15
+epochs = 1
 
 for i in range(epochs):
   print("Training Epoch", i+1, "of", epochs)
@@ -420,7 +421,8 @@ for i in range(epochs):
   pass
 
 # 绘制损失函数历史
-R.saveLossHistory2PNG()
+DirPNG = Path("./Common")
+R.saveLossHistory2PNG(DirPNG)
 
 # 预测
 
