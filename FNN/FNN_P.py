@@ -9,7 +9,6 @@ Xia, S      24.12.19    Simpop.cn   v2.x
 
 # import libraries
 import torch
-from torch.utils.data import Dataset
 
 import h5py
 import pandas, numpy, random
@@ -18,81 +17,10 @@ from pathlib import Path
 
 import numpy as np
 
-from Common.idxList import idxList
-from Common.idxList import numOfAllCases
+from Common.idxList import idxList, numOfAllCases
 
 from Common.Regression import Regression
-
-class FSimDataset(Dataset):
-  def __init__(self, file:Path, caseList:list):
-    """
-    - The data remain stored in h5 file, read when needed
-
-    - inputs:
-    /caseList/: list of cases names, made of set either "test" or "train"
-
-    - member data: self.x
-      - dataFile: HDF5 file
-      - caseList: dataList, a char string list in hdf5 file
-      - numCases: number of cases input
-    """
-    self.dataFile = h5py.File(file, 'r')
-    self.caseList = caseList
-    self.numCases = len(caseList)
-
-  def __len__(self):
-    return self.numCases
-
-  def __getitem__(self, idx):
-    """
-    return the input params and field
-    """
-    if idx >= numOfCases:
-      raise IndexError
-
-    hdf = self.dataFile
-    cid = self.caseList[idx]
-
-    inp = hdf[cid]["InParam"][:]
-    inp = torch.FloatTensor(inp)
-
-    data = []
-    coords = {}
-
-    coords["x"] = [[]]
-    coords["y"] = [[]]
-    coords["z"] = [[]]
-
-    for blk in range(8):
-      key = "Block-"+ "%02d"%blk + "-P"
-
-      presFieldBlk = list(hdf[cid][key][:])
-      data += presFieldBlk
-
-      # coordx
-      key = "Block-"+ "%02d"%blk + "-X"
-      crd = list(hdf[cid][key][:])
-      coords["x"].append(crd)
-
-      # coordy
-      key = "Block-"+ "%02d"%blk + "-Y"
-      crd = list(hdf[cid][key][:])
-      coords["y"].append(crd)
-
-      # coordz
-      key = "Block-"+ "%02d"%blk + "-Z"
-      crd = list(hdf[cid][key][:])
-      coords["z"].append(crd)
-      pass
-
-    del coords["x"][0]
-    del coords["y"][0]
-    del coords["z"][0]
-
-    return inp, torch.FloatTensor(data), coords
-  
-  def plotVTK(self, idx):
-    pass
+from Common.FSimDataset import FSimDataset
 
 # split the data, 49 = 40 + 9
 numOfCases = numOfAllCases
