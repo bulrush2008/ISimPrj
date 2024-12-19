@@ -19,6 +19,7 @@ from Common.FSimDataset import FSimDataset
 
 def train_p()->bool:
   iSuccess = False
+
   # ----------------- 分割并确定训练数据表、测试数据表 ----------------------
   # split the data, 49 = 40 + 9
   ratioTest = 0.2
@@ -53,9 +54,8 @@ def train_p()->bool:
   epochs = 1
   for i in range(epochs):
     print("Training Epoch", i+1, "of", epochs)
-    for bc, label, _ in fsDataset_train:
-      #print(bc)
-      R.train(bc, label)
+    for inp, label, _ in fsDataset_train:
+      R.train(inp, label)
       pass
     pass
 
@@ -63,13 +63,13 @@ def train_p()->bool:
   DirPNG = Path("./Pics")
   R.saveLossHistory2PNG(DirPNG)
 
-  # ------------- 预测，并于测试集比较 -------------------------
+  # ------------- 预测，并与测试集比较 -------------------------
   fsDataset_test = FSimDataset(filePathH5, listTestCase)
 
   # for C034
-  inp, pField, coords = fsDataset_test[0]
+  inp, _, coords = fsDataset_test[0]
 
-  # 先预测数据，再写到 HDF5 文件中
+  # 1-先预测数据，2-再写到 HDF5 文件中
   # 坐标是可选输入数据
   R.write2HDF(inp, Path("./fnn.h5"), coords=coords)
 
