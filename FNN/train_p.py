@@ -48,7 +48,7 @@ def train_p()->bool:
   fsDataset_train = FSimDataset(filePathH5, listTrainCase)
 
   # ------------ 生成一个回归模型对象，并执行训练 ----------------
-  R = Regression()
+  R = Regression("P")
 
   # train the model
   epochs = 1
