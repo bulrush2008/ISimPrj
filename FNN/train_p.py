@@ -11,7 +11,7 @@ Xia, S      24.12.19    Simpop.cn   v2.x
 import torch
 
 import h5py
-import pandas, numpy, random
+import pandas
 import matplotlib.pyplot as plt
 from pathlib import Path
 
@@ -23,14 +23,13 @@ from Common.Regression import Regression
 from Common.FSimDataset import FSimDataset
 
 # split the data, 49 = 40 + 9
-numOfCases = numOfAllCases
 ratioTest = 0.2
 
-sizeOfTestSet = np.int64(numOfCases * ratioTest)
+sizeOfTestSet = np.int64(numOfAllCases * ratioTest)
 
 # 42 是随机种子，其它整数也可以
 np.random.seed(42)
-permut = np.random.permutation(numOfCases)
+permut = np.random.permutation(numOfAllCases)
 
 listTestCase = []
 for i in permut[:sizeOfTestSet]:
