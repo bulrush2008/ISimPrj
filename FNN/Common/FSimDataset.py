@@ -6,7 +6,7 @@ import torch
 import h5py
 
 class FSimDataset(Dataset):
-  def __init__(self, file:Path, caseList:list):
+  def __init__(self, file:Path, caseList:list, varName:str):
     """
     - The data remain stored in h5 file, read when needed
 
@@ -17,10 +17,12 @@ class FSimDataset(Dataset):
       - dataFile: HDF5 file
       - caseList: dataList, a char string list in hdf5 file
       - numCases: number of cases input
+      - varName : "P/U/V/W/T", other is for now illegal
     """
     self.dataFile = h5py.File(file, 'r')
     self.caseList = caseList
     self.numCases = len(caseList)
+    self.varName  = varName
 
   def __len__(self):
     return self.numCases
@@ -30,13 +32,13 @@ class FSimDataset(Dataset):
     return the input params and field
     """
     if idx >= self.numCases:
-      raise IndexError
+      raise IndexError(f"idx must be less than {self.numCases}")
 
     hdf = self.dataFile
     cid = self.caseList[idx]
 
-    inp = hdf[cid]["InParam"][:]
-    inp = torch.FloatTensor(inp)
+    inp = hdf[cid]["InParam"][:]  # numpy.ndarray
+    inp = torch.FloatTensor(inp)  # torch.FloatTensor
 
     data = []
     coords = {}
@@ -46,10 +48,10 @@ class FSimDataset(Dataset):
     coords["z"] = []  # ..
 
     for blk in range(8):
-      key = "Block-"+ "%02d"%blk + "-P"
+      key = "Block-"+ "%02d"%blk + "-" + self.varName
 
-      presFieldBlk = list(hdf[cid][key][:])
-      data += presFieldBlk
+      varFieldBlk = list(hdf[cid][key][:])
+      data += varFieldBlk
 
       # coordx
       key = "Block-"+ "%02d"%blk + "-X"

@@ -20,6 +20,8 @@ from Common.FSimDataset import FSimDataset
 def train_p()->bool:
   iSuccess = False
 
+  varName = "P" # for pressure field
+
   # ----------------- 分割并确定训练数据表、测试数据表 ----------------------
   # split the data, 49 = 40 + 9
   ratioTest = 0.2
@@ -45,7 +47,7 @@ def train_p()->bool:
   #aLive = filePathH5.exists()
   #print(aLive)
 
-  fsDataset_train = FSimDataset(filePathH5, listTrainCase)
+  fsDataset_train = FSimDataset(filePathH5, listTrainCase, varName)
 
   # ------------ 生成一个回归模型对象，并执行训练 ----------------
   R = Regression("P")
@@ -64,7 +66,7 @@ def train_p()->bool:
   R.saveLossHistory2PNG(DirPNG)
 
   # ------------- 预测，并与测试集比较 -------------------------
-  fsDataset_test = FSimDataset(filePathH5, listTestCase)
+  fsDataset_test = FSimDataset(filePathH5, listTestCase, varName)
 
   # for C034
   inp, _, coords = fsDataset_test[0]
