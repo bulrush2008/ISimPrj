@@ -4,23 +4,21 @@ The FNN model is used to prediction Pressure field. And also as a base code
 for Other field variables.
 
 @author     @data       @aff        @version
-Xia, S      24.12.12    Simpop.cn   v1.0
+Xia, S      24.12.19    Simpop.cn   v2.x
 """
 
 # import libraries
 import torch
 import torch.nn as nn
+from torch.utils.data import Dataset
 
 import h5py
 import pandas, numpy, random
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 import math
-
 import numpy as np
-
-from pathlib import Path
-from torch.utils.data import Dataset
 
 from idxList import idxList
 from idxList import numOfAllCases
@@ -28,10 +26,15 @@ from idxList import numOfAllCases
 class FSimDataset(Dataset):
   def __init__(self, file:Path, caseList:list):
     """
-    - The data are remain store in h5 file, read when needed
+    - The data remain stored in h5 file, read when needed
 
-    inputs:
+    - inputs:
     /caseList/: list of cases names, made of set either "test" or "train"
+
+    - member data: self.x
+      - dataFile: HDF5 file
+      - caseList: dataList, a char string list in hdf5 file
+      - numCases: number of cases input
     """
     self.dataFile = h5py.File(file, 'r')
     self.caseList = caseList
@@ -42,7 +45,7 @@ class FSimDataset(Dataset):
 
   def __getitem__(self, idx):
     """
-    return the input params and Pressure field
+    return the input params and field
     """
     if idx >= numOfCases:
       raise IndexError
@@ -89,10 +92,6 @@ class FSimDataset(Dataset):
     return inp, torch.FloatTensor(data), coords
   
   def plotVTK(self, idx):
-    if idx >= numOfCases:
-      raise IndexError
-    #TODO
-    print("Todo: .plotVTK(...)")
     pass
 
 # split the data, 49 = 40 + 9
@@ -151,7 +150,6 @@ class Regression(nn.Module):
 
     # 回归问题，需要使用 MSE
     self.loss_function = nn.MSELoss()
-    #self.optimiser = torch.optim.SGD(self.parameters(),lr=0.0001)
     self.optimiser = torch.optim.Adam(self.parameters(), lr=0.01)
 
     # counter 用来记录训练的次数
@@ -184,7 +182,6 @@ class Regression(nn.Module):
     self.progress.append(loss.item())
 
     self.counter += 1
-
     if(self.counter%10 == 0):  # 对每个算例数据，记录损失值
       print(f"{self.counter} Cases Trained ...")
       pass
