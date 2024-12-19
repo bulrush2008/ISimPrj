@@ -7,7 +7,7 @@ for Other field variables.
 Xia, S      24.12.19    Simpop.cn   v2.x
 """
 
-# import libraries
+# --------------- import libraries ----------------------
 import torch
 import numpy as np
 
@@ -17,6 +17,8 @@ from Common.idxList     import idxList, numOfAllCases
 from Common.Regression  import Regression
 from Common.FSimDataset import FSimDataset
 
+
+# ----------------- 分割并确定训练数据表、测试数据表 ----------------------
 # split the data, 49 = 40 + 9
 ratioTest = 0.2
 
@@ -36,14 +38,14 @@ for i in permut[sizeOfTestSet:]:
   theCase = "C" + "%03d"%idxList[i]
   listTrainCase.append(theCase)
 
+# ------------------ 数据类的初始化 ---------------------
 filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
-
 #aLive = filePathH5.exists()
 #print(aLive)
 
 fsDataset_train = FSimDataset(filePathH5, listTrainCase)
 
-# 生成一个回归模型对象
+# ------------ 生成一个回归模型对象，并执行训练 ----------------
 R = Regression()
 
 # train the model
@@ -58,12 +60,11 @@ for i in range(epochs):
     pass
   pass
 
-# 绘制损失函数历史
+# ---------- 训练完毕，绘制损失函数历史 ----------------------
 DirPNG = Path("./Pics")
 R.saveLossHistory2PNG(DirPNG)
 
-# 预测
-
+# ------------- 预测，并于测试集比较 -------------------------
 fsDataset_test = FSimDataset(filePathH5, listTestCase)
 #print(listTestCase)
 
@@ -82,5 +83,6 @@ print(coords["x"])
 #print(outPres[100])
 #print(type(outPres))
 
+# -------------------- 将预测数据写道 HDF5 文件中 -------------------
 R.write2HDF(inp, Path("./fnn.h5"),coords=coords)
 
