@@ -22,6 +22,10 @@ class FSimDataset(Dataset):
     self.dataFile = h5py.File(file, 'r')
     self.caseList = caseList
     self.numCases = len(caseList)
+
+    if varName not in ["P", "U", "V", "W", "T"]:
+      raise ValueError("Error: the Variable Name must be P/U/V/W/T.")
+
     self.varName  = varName
 
   def __len__(self):

@@ -12,13 +12,13 @@ from pathlib import Path
 # Regression class: Core of FNN
 class Regression(nn.Module):
   # 初始化 PyTorch 父类
-  def __init__(self, VarName:str):
+  def __init__(self, varName:str):
     super().__init__()
 
-    if VarName not in ["P", "U", "V", "W", "T"]:
+    if varName not in ["P", "U", "V", "W", "T"]:
       raise ValueError("Error: the Variable Name must be P/U/V/W/T.")
 
-    self.VarName = VarName
+    self.varName = varName
 
     # 初次设置 3 个隐藏层
     self.model = nn.Sequential(
@@ -124,7 +124,7 @@ class Regression(nn.Module):
 
     # for block 1
     idxB = 0
-    dsName = "Block-" + "%02d"%idxB + "-" + self.VarName
+    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
 
     ista = 0; iend = numbPtsB1
     grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
@@ -143,7 +143,7 @@ class Regression(nn.Module):
 
     # for block 2
     idxB = 1
-    dsName = "Block-" + "%02d"%idxB + "-" + self.VarName
+    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
 
     ista = numbPtsB1; iend = numbPtsB1 + numbPtsB2
     grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
@@ -162,7 +162,7 @@ class Regression(nn.Module):
 
     # for block 3
     idxB = 2
-    dsName = "Block-" + "%02d"%idxB + "-" + self.VarName
+    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
 
     ista = numbPtsB1 + numbPtsB2; iend = numbPtsB1 + numbPtsB2 + numbPtsB3
     grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
@@ -181,7 +181,7 @@ class Regression(nn.Module):
 
     # for block 4
     idxB = 3
-    dsName = "Block-" + "%02d"%idxB + "-" + self.VarName
+    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
 
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
@@ -202,7 +202,7 @@ class Regression(nn.Module):
 
     # for block 5
     idxB = 4
-    dsName = "Block-" + "%02d"%idxB + "-" + self.VarName
+    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
 
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
@@ -223,7 +223,7 @@ class Regression(nn.Module):
 
     # for block 6
     idxB = 5
-    dsName = "Block-" + "%02d"%idxB + "-" + self.VarName
+    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
 
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
@@ -244,7 +244,7 @@ class Regression(nn.Module):
 
     # for block 7
     idxB = 6
-    dsName = "Block-" + "%02d"%idxB + "-" + self.VarName
+    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
 
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
@@ -265,7 +265,7 @@ class Regression(nn.Module):
 
     # for block 8
     idxB = 7
-    dsName = "Block-" + "%02d"%idxB + "-" + self.VarName
+    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
 
     ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
     iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7 + numbPtsB8
@@ -288,12 +288,12 @@ class Regression(nn.Module):
   # 打印损失函数
   def saveLossHistory2PNG(self, outDir:Path)->None:
     df = pandas.DataFrame(self.progress, columns=["Loss"])
-    ax = df.plot( title  = f"Loss history of {self.VarName}", \
+    ax = df.plot( title  = f"Loss history of {self.varName}", \
                   color  = "black",             \
                   xlabel = "Epochs",            \
                   ylabel = "Loss Value",        \
                   logy   = True)
-    outFile = outDir.joinpath(f"lossHistory_{self.VarName}.png")
+    outFile = outDir.joinpath(f"lossHistory_{self.varName}.png")
     ax.figure.savefig(outFile)
     pass
   pass
