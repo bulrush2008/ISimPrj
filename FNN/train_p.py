@@ -9,17 +9,12 @@ Xia, S      24.12.19    Simpop.cn   v2.x
 
 # import libraries
 import torch
-
-import h5py
-import pandas
-import matplotlib.pyplot as plt
-from pathlib import Path
-
 import numpy as np
 
-from Common.idxList import idxList, numOfAllCases
+from pathlib import Path
 
-from Common.Regression import Regression
+from Common.idxList     import idxList, numOfAllCases
+from Common.Regression  import Regression
 from Common.FSimDataset import FSimDataset
 
 # split the data, 49 = 40 + 9
@@ -47,7 +42,6 @@ filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
 #print(aLive)
 
 fsDataset_train = FSimDataset(filePathH5, listTrainCase)
-
 
 # 生成一个回归模型对象
 R = Regression()
