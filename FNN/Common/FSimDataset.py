@@ -41,9 +41,9 @@ class FSimDataset(Dataset):
     data = []
     coords = {}
 
-    coords["x"] = [[]]
-    coords["y"] = [[]]
-    coords["z"] = [[]]
+    coords["x"] = []  # 2d list
+    coords["y"] = []  # ..
+    coords["z"] = []  # ..
 
     for blk in range(8):
       key = "Block-"+ "%02d"%blk + "-P"
@@ -66,10 +66,6 @@ class FSimDataset(Dataset):
       crd = list(hdf[cid][key][:])
       coords["z"].append(crd)
       pass
-
-    del coords["x"][0]
-    del coords["y"][0]
-    del coords["z"][0]
 
     return inp, torch.FloatTensor(data), coords
   

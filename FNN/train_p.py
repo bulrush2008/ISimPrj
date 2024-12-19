@@ -72,6 +72,8 @@ fsDataset_test = FSimDataset(filePathH5, listTestCase)
 inp, pField, coords = fsDataset_test[0]
 #print(fsDataset_test.caseList)
 #print(type(inp), type(pField))
+print(len(coords["x"]))
+print(coords["x"])
 
 #outPresTorch = R.forward(inp)
 
