@@ -9,7 +9,7 @@ import numpy as np
 
 from pathlib import Path
 
-# Regression class: Core of FNN
+# Regression class as a Generator: Core of GAN
 class Regression(nn.Module):
   # 初始化 PyTorch 父类
   def __init__(self, varName:str):
