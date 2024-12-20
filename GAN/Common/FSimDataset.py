@@ -1,0 +1,79 @@
+
+from torch.utils.data import Dataset
+from pathlib import Path
+
+import torch
+import h5py
+
+class FSimDataset(Dataset):
+  def __init__(self, file:Path, caseList:list, varName:str):
+    """
+    - The data remain stored in h5 file, read when needed
+
+    - inputs:
+    /caseList/: list of cases names, made of set either "test" or "train"
+
+    - member data: self.x
+      - dataFile: HDF5 file
+      - caseList: dataList, a char string list in hdf5 file
+      - numCases: number of cases input
+      - varName : "P/U/V/W/T", other is for now illegal
+    """
+    self.dataFile = h5py.File(file, 'r')
+    self.caseList = caseList
+    self.numCases = len(caseList)
+
+    if varName not in ["P", "U", "V", "W", "T"]:
+      raise ValueError("Error: the Variable Name must be P/U/V/W/T.")
+
+    self.varName  = varName
+
+  def __len__(self):
+    return self.numCases
+
+  def __getitem__(self, idx):
+    """
+    return the input params and field
+    """
+    if idx >= self.numCases:
+      raise IndexError(f"idx must be less than {self.numCases}")
+
+    hdf = self.dataFile
+    cid = self.caseList[idx]
+
+    inp = hdf[cid]["InParam"][:]  # numpy.ndarray
+    inp = torch.FloatTensor(inp)  # torch.FloatTensor
+
+    data = []
+    coords = {}
+
+    coords["x"] = []  # 2d list
+    coords["y"] = []  # ..
+    coords["z"] = []  # ..
+
+    for blk in range(8):
+      key = "Block-"+ "%02d"%blk + "-" + self.varName
+
+      varFieldBlk = list(hdf[cid][key][:])
+      data += varFieldBlk
+
+      # coordx
+      key = "Block-"+ "%02d"%blk + "-X"
+      crd = list(hdf[cid][key][:])
+      coords["x"].append(crd)
+
+      # coordy
+      key = "Block-"+ "%02d"%blk + "-Y"
+      crd = list(hdf[cid][key][:])
+      coords["y"].append(crd)
+
+      # coordz
+      key = "Block-"+ "%02d"%blk + "-Z"
+      crd = list(hdf[cid][key][:])
+      coords["z"].append(crd)
+      pass
+
+    return inp, torch.FloatTensor(data), coords
+  
+  def plotVTK(self, idx):
+    pass
