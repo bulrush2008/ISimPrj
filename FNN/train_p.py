@@ -17,7 +17,7 @@ from Common.idxList     import idxList, numOfAllCases
 from Common.Regression  import Regression
 from Common.FSimDataset import FSimDataset
 
-def train_p(numOfEpochs:int)->bool:
+def train_p(numOfEpochs:int=5)->bool:
   iSuccess = False
 
   varName = "P" # for pressure field
