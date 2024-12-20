@@ -17,10 +17,10 @@ from Common.idxList     import idxList, numOfAllCases
 from Common.Regression  import Regression
 from Common.FSimDataset import FSimDataset
 
-def train_p(numOfEpochs:int=5)->bool:
+def train_v(numOfEpochs:int=15)->bool:
   iSuccess = False
 
-  varName = "P" # for pressure field
+  varName = "V" # for pressure field
 
   # ----------------- 分割并确定训练数据表、测试数据表 ----------------------
   # split the data, 49 = 40 + 9
@@ -73,7 +73,7 @@ def train_p(numOfEpochs:int=5)->bool:
 
   # 1-先预测数据，2-再写到 HDF5 文件中
   # 坐标是可选输入数据
-  R.write2HDF(inp, Path("./fnn.h5"), coords=coords)
+  R.write2HDF(inp, Path("./fnn.h5"), coords=None)
 
   iSuccess = True
   return iSuccess
