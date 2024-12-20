@@ -65,11 +65,15 @@ class Regression(nn.Module):
     return self.model(inputs)
 
   # 训练
-  def train(self, inputs, targets):
-    outputs = self.forward(inputs)
+  def train(self, D, inputs, targets):
+    # calculate the output of the network
+    g_outputs = self.forward(inputs)
+
+    # pass onto Discriminator
+    d_outputs = D.forward(g_outputs)
 
     # 计算损失值
-    loss = self.loss_function(outputs, targets)
+    loss = D.loss_function(d_outputs, targets)
 
     # each train step, the loss must be added
     self.progress.append(loss.item())
