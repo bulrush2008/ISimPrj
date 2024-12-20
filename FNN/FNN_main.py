@@ -10,5 +10,5 @@ This is main function to call:
 
 from train_p import train_p
 
-iSuccess = train_p()
+iSuccess = train_p(numOfEpochs=20)
 print("Train Pres Successed? ", iSuccess)
