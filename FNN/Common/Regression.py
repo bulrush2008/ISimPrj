@@ -86,16 +86,14 @@ class Regression(nn.Module):
     pass
 
   def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
-    if self.varName == "P":
-      h5 = h5py.File(dirFileHDF, 'w')
-      grpName = "FNN_Out" # 相当于原“每个 Case”
-      grp = h5.create_group(grpName)
-      #print("P: grp = ", grp)
-    else:
-      h5 = h5py.File(dirFileHDF, 'a')
-      grpName = "FNN_Out" # 相当于原“每个 Case”
+    grpName = "FNN_Out" # 相当于原“A Case”
+
+    h5 = h5py.File(dirFileHDF, 'a')
+
+    if grpName in h5:
       grp = h5[grpName]
-      pass
+    else:
+      grp = h5.create_group(grpName)
 
     # 将预测数据，转化为 numpy 矩阵数据
     output = self.forward(inp).detach().numpy()

@@ -8,11 +8,17 @@ This is main function to call:
   - train_w.py
 """
 
+import h5py
+
 from train_p import train_p
 from train_t import train_t
 from train_u import train_u
 from train_v import train_v
 from train_w import train_w
+
+# create a new empty h5 file
+h5 = h5py.File("./fnn.h5", 'w')
+h5.close()
 
 iSuccess = train_p(numOfEpochs=1)
 print("Train Pres Successed? ", iSuccess)
