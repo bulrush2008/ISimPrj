@@ -12,7 +12,7 @@ Xia, S      24.12.19    Simpop.cn   v3.x
 
 import h5py
 
-from train_p import train_p
+from train import train
 
 #------------------------------------------------------------------------------
 # case names list of train set and test set
@@ -44,7 +44,7 @@ h5.close()
 #------------------------------------------------------------------------------
 # train the fields one has assigned, which must belong in ["P", "T", "U", "V", "W"]
 
-iSuccess = train_p(numOfEpochs=1)
+iSuccess = train( numOfEpochs=1 )
 print("Train Pres Successed? ", iSuccess)
 
 #------------------------------------------------------------------------------
