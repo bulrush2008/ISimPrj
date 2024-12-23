@@ -86,7 +86,7 @@ class Regression(nn.Module):
     pass
 
   def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
-    grpName = "FNN_Out" # 相当于原“A Case”
+    grpName = "FNN_Out" # a case data is a group
 
     h5 = h5py.File(dirFileHDF, 'a')
 
@@ -94,8 +94,9 @@ class Regression(nn.Module):
       grp = h5[grpName]
     else:
       grp = h5.create_group(grpName)
+      pass
 
-    # 将预测数据，转化为 numpy 矩阵数据
+    # the predicted data should be detached and converted to numpy format
     output = self.forward(inp).detach().numpy()
 
     ptsB1 = [2,27,2,52,2,12]
@@ -124,7 +125,6 @@ class Regression(nn.Module):
 
     numbAll = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 \
             + numbPtsB5 + numbPtsB6 + numbPtsB7 + numbPtsB8
-    #print(numbAll)
 
     # for block 1
     idxB = 0

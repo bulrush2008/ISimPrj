@@ -43,7 +43,7 @@ def train(epochList:list, fields:list, trainSet:list, testSet:list )->bool:
     # gen a obj as regression, and then train the model
     R = Regression(var)
 
-    print(f"Now we train the {var} field:")
+    print(f"*Now we train the {var} field:")
 
     # train the model
     epochs = epochList[ifield]
