@@ -1,11 +1,13 @@
 
 """
 This is main function to call:
-  - train_p.py,
-  - train_t.py,
-  - train_u.py,
-  - train_v.py, and
-  - train_w.py
+  - split the data into train and test sets
+  - train,
+  - predict,
+  - save to the database: .h5
+
+@author     @data       @aff        @version
+Xia, S      24.12.19    Simpop.cn   v3.x
 """
 
 import h5py
