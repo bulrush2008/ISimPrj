@@ -3,6 +3,7 @@ import numpy as np
 
 class CaseSet:
   def __init__(self, ratio=0.2):
+    # all cases list
     self.idxList = [1,   3,   5,   8,   11,  13,  15,
                     18,  21,  23,  25,  28,  31,  34,
                     37,  40,  43,  46,  49,  51,  53,
@@ -13,6 +14,14 @@ class CaseSet:
     
     self.size = len(self.idxList)
     self.ratio = ratio
+
+    # info of each case
+    self.blockNumb = 8
+
+    self.blockInfo = []
+    self.blockPosi = []
+    
+    self._calcBlockPos()
 
   def __len__( self ):
     """
@@ -27,6 +36,66 @@ class CaseSet:
     if idx >= self.size:
       raise IndexError(f"{idx} beyond range.")
     return self.idxList[idx]
+
+  def _calcBlockPos(self):
+    calcPtsNum = lambda l: (l[1]-l[0]+1) * (l[3]-l[2]+1) * (l[5]-l[4]+1)
+
+    # for block 0
+    ptsB0 = [2,27,2,52,2,12]
+    numbPtsB0 = calcPtsNum(ptsB0)
+
+    self.blockInfo.append(ptsB0)
+    self.blockPosi.append(numbPtsB0 + 0)
+
+    # for block 1
+    ptsB1 = [2,27,2,52,2,13]
+    numbPtsB1 = calcPtsNum(ptsB1)
+
+    self.blockInfo.append(ptsB1)
+    self.blockPosi.append(numbPtsB1 + self.blockPosi[0])
+
+    # for block 2
+    ptsB2 = [2,27,2,53,2,12]
+    numbPtsB2 = calcPtsNum(ptsB2)
+
+    self.blockInfo.append(ptsB2)
+    self.blockPosi.append(numbPtsB2 + self.blockPosi[1])
+
+    # for block 3
+    ptsB3 = [2,27,2,53,2,13]
+    numbPtsB3 = calcPtsNum(ptsB3)
+
+    self.blockInfo.append(ptsB3)
+    self.blockPosi.append(numbPtsB3 + self.blockPosi[2])
+
+    # for block 4
+    ptsB4 = [2,28,2,52,2,12]
+    numbPtsB4 = calcPtsNum(ptsB4)
+
+    self.blockInfo.append(ptsB4)
+    self.blockPosi.append(numbPtsB4 + self.blockPosi[3])
+
+    # for block 5
+    ptsB5 = [2,28,2,52,2,13]
+    numbPtsB5 = calcPtsNum(ptsB5)
+
+    self.blockInfo.append(ptsB5)
+    self.blockPosi.append(numbPtsB5 + self.blockPosi[4])
+
+    # for block 6
+    ptsB6 = [2,28,2,53,2,12]
+    numbPtsB6 = calcPtsNum(ptsB6)
+
+    self.blockInfo.append(ptsB6)
+    self.blockPosi.append(numbPtsB6 + self.blockPosi[5])
+
+    # for block 7
+    ptsB7 = [2,28,2,53,2,13]
+    numbPtsB7 = calcPtsNum(ptsB7)
+
+    self.blockInfo.append(ptsB7)
+    self.blockPosi.append(numbPtsB7 + self.blockPosi[6])
+    pass
 
   def splitSet(self):
     """
@@ -56,8 +125,12 @@ if __name__=="__main__":
 
   cases = CaseSet( ratio=0.2 )
 
-  print(len(cases), cases.size)
-  print(cases[4], cases[43]) # 11, 113
+  #print(len(cases), cases.size)
+  #print(cases[4], cases[43]) # 11, 113
 
-  listTrn, listTst = cases.splitSet()
-  print(listTrn, "\n", listTst)
+  #listTrn, listTst = cases.splitSet()
+  #print(listTrn, "\n", listTst)
+  print(cases.blockNumb)
+  for iblk in range(cases.blockNumb):
+    print(cases.blockInfo[iblk])
+    print(cases.blockPosi[iblk])
