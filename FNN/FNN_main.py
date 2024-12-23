@@ -35,7 +35,7 @@ h5.close()
 #varFields = ["T", "P", "U", "V", "W"]
 #epochList = [3, 3, 2, 3, 2]
 varFields = ["T", "P", "V"]
-epochList = [3, 2, 1]
+epochList = [20, 20, 20]
 
 print(f"*Fields {varFields} Will Be Model with Epochs {epochList}.")
 
