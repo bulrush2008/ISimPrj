@@ -76,7 +76,7 @@ class Regression(nn.Module):
 
     self.counter += 1
     if(self.counter%10 == 0):  # 对每个算例数据，记录损失值
-      print(f"{self.counter} Cases Trained for {self.varName} ...")
+      print(f"    - {self.counter} Cases Trained for {self.varName} ...")
       pass
 
     # 梯度归零，反向传播，更新学习参数

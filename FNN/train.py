@@ -22,7 +22,7 @@ def train(numOfEpochs:int=5, fields:list=["T"], trainSet:list=["C001"] )->bool:
   iSuccess = False
 
   #----------------------------------------------------------------------------
-  # 数据类的初始化
+  # init of class of database
   filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
   #aLive = filePathH5.exists()
   #print(aLive)
@@ -30,22 +30,26 @@ def train(numOfEpochs:int=5, fields:list=["T"], trainSet:list=["C001"] )->bool:
   fsDataset_train = FSimDataset(filePathH5, trainSet, fields[0])
 
   #----------------------------------------------------------------------------
-  # 生成一个回归模型对象，并执行训练
-  R = Regression(fields[0])
+  # gen a obj as regression, and then train the model
 
-  # train the model
-  epochs = numOfEpochs
-  for i in range(epochs):
-    print(f"Training Epoch {i+1} of {epochs} for {fields[0]}")
-    for inp, label, _ in fsDataset_train:
-      R.train(inp, label)
+  for var in fields:
+    R = Regression(var)
+
+    print(f"Now we train the {var} field:")
+
+    # train the model
+    epochs = numOfEpochs
+    for i in range(epochs):
+      print(f"  - Training Epoch {i+1} of {epochs} for {fields[0]}")
+      for inp, label, _ in fsDataset_train:
+        R.train(inp, label)
+        pass
       pass
-    pass
 
-  #----------------------------------------------------------------------------
-  # 训练完毕，绘制损失函数历史
-  DirPNG = Path("./Pics")
-  R.saveLossHistory2PNG(DirPNG)
+    # draw the history of lss
+    DirPNG = Path("./Pics")
+    R.saveLossHistory2PNG(DirPNG)
+    pass
 
   # ------------- 预测，并与测试集比较 -------------------------
   #fsDataset_test = FSimDataset(filePathH5, listTestCase, varName)
