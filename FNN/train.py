@@ -15,7 +15,7 @@ from Common.Regression  import Regression
 from Common.FSimDataset import FSimDataset
 
 # -----------------------------------------------------------------------------
-def train(numOfEpochs:int=5, fields:list=["T"], trainSet:list=["C001"] )->bool:
+def train(numOfEpochs:int=5, fields:list=["T"], trainSet:list=["C001"], testSet:list=["C002"] )->bool:
   """
   Train the FNN model by a give trainset, in which some cases field included.
   """
@@ -27,12 +27,12 @@ def train(numOfEpochs:int=5, fields:list=["T"], trainSet:list=["C001"] )->bool:
   #aLive = filePathH5.exists()
   #print(aLive)
 
-  fsDataset_train = FSimDataset(filePathH5, trainSet, fields[0])
-
   #----------------------------------------------------------------------------
-  # gen a obj as regression, and then train the model
-
+  # train fields
   for var in fields:
+    fsDataset_train = FSimDataset(filePathH5, trainSet, var)
+
+    # gen a obj as regression, and then train the model
     R = Regression(var)
 
     print(f"Now we train the {var} field:")
@@ -40,7 +40,7 @@ def train(numOfEpochs:int=5, fields:list=["T"], trainSet:list=["C001"] )->bool:
     # train the model
     epochs = numOfEpochs
     for i in range(epochs):
-      print(f"  - Training Epoch {i+1} of {epochs} for {fields[0]}")
+      print(f"  - Training Epoch {i+1} of {epochs} for {var}")
       for inp, label, _ in fsDataset_train:
         R.train(inp, label)
         pass
@@ -51,15 +51,16 @@ def train(numOfEpochs:int=5, fields:list=["T"], trainSet:list=["C001"] )->bool:
     R.saveLossHistory2PNG(DirPNG)
     pass
 
-  # ------------- 预测，并与测试集比较 -------------------------
-  #fsDataset_test = FSimDataset(filePathH5, listTestCase, varName)
+    # 预测，并与测试集比较
+    # predict and compare with the test set
+    fsDataset_test = FSimDataset(filePathH5, testSet, var)
 
-  # for C034
-  #inp, _, coords = fsDataset_test[0]
+    # for CXXX
+    inp, _, coords = fsDataset_test[0]
 
-  # 1-先预测数据，2-再写到 HDF5 文件中
-  # 坐标是可选输入数据
-  #R.write2HDF(inp, Path("./fnn.h5"), coords=coords)
+    # 1-predict first and then write the predicting data to h5 database
+    # coordinates are optional 
+    R.write2HDF(inp, Path("./fnn.h5"), coords=coords)
 
   iSuccess = True
   return iSuccess
