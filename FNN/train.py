@@ -69,7 +69,6 @@ def train(epochList:list, fields:list, trainSet:list, testSet:list )->bool:
     # 1-predict first and then write the predicting data to h5 database
     # coordinates are optional
 
-
     # the coordinates need to write only one time
     if ifield == 0:
       R.write2HDF(inp, Path("./fnn.h5"), coords=coords)

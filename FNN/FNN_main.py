@@ -32,8 +32,12 @@ h5.close()
 # train the fields one has assigned, which must belong in
 # ["P", "T", "U", "V", "W"]
 
-varFields = ["T", "P", "U", "V", "W"]
-epochList = [3, 3, 2, 3, 2]
+#varFields = ["T", "P", "U", "V", "W"]
+#epochList = [3, 3, 2, 3, 2]
+varFields = ["T", "P", "V"]
+epochList = [3, 4, 5]
+
+print(f"*Fields {varFields} Will Be Model with Epochs {epochList}.")
 
 iSuccess = train( epochList = epochList,
                   fields    = varFields ,

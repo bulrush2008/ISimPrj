@@ -292,10 +292,10 @@ class Regression(nn.Module):
   # 打印损失函数
   def saveLossHistory2PNG(self, outDir:Path)->None:
     df = pandas.DataFrame(self.progress, columns=["Loss"])
-    ax = df.plot( title  = f"Loss history of {self.varName}", \
-                  color  = "black",             \
-                  xlabel = "Epochs",            \
-                  ylabel = "Loss Value",        \
+    ax = df.plot( title  = f"Loss history of {self.varName}",
+                  color  = "black",
+                  xlabel = "Number of Trained Cases",
+                  ylabel = "Loss Value",
                   logy   = True)
     outFile = outDir.joinpath(f"lossHistory_{self.varName}.png")
     ax.figure.savefig(outFile)
