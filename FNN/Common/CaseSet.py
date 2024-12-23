@@ -21,7 +21,7 @@ class CaseSet:
     self.blockInfo = []
     self.blockPosi = []
     
-    self._calcBlockPos()
+    self._calcBlockInfo()
 
   def __len__( self ):
     """
@@ -37,7 +37,7 @@ class CaseSet:
       raise IndexError(f"{idx} beyond range.")
     return self.idxList[idx]
 
-  def _calcBlockPos(self):
+  def _calcBlockInfo(self):
     calcPtsNum = lambda l: (l[1]-l[0]+1) * (l[3]-l[2]+1) * (l[5]-l[4]+1)
 
     # for block 0
