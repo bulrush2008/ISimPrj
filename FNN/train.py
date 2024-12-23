@@ -21,8 +21,6 @@ def train(numOfEpochs:int=5, fields:list=["T"], trainSet:list=["C001"] )->bool:
   """
   iSuccess = False
 
-  varName = "P"
-
   #----------------------------------------------------------------------------
   # 数据类的初始化
   filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
@@ -38,7 +36,7 @@ def train(numOfEpochs:int=5, fields:list=["T"], trainSet:list=["C001"] )->bool:
   # train the model
   epochs = numOfEpochs
   for i in range(epochs):
-    print("Training Epoch", i+1, "of", epochs)
+    print(f"Training Epoch {i+1} of {epochs} for {fields[0]}")
     for inp, label, _ in fsDataset_train:
       R.train(inp, label)
       pass
