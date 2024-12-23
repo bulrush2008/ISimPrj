@@ -31,7 +31,7 @@ h5.close()
 #------------------------------------------------------------------------------
 # train the fields one has assigned, which must belong in ["P", "T", "U", "V", "W"]
 
-varfiels = ["T"]
+varfiels = ["T", "P"]
 iSuccess = train( numOfEpochs=1, fields=varfiels , trainSet=trnSet, testSet=tstSet )
 #print("Train Pres Successed? ", iSuccess)
 

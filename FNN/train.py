@@ -29,7 +29,11 @@ def train(numOfEpochs:int=5, fields:list=["T"], trainSet:list=["C001"], testSet:
 
   #----------------------------------------------------------------------------
   # train fields
+
+  ifield = 0
+
   for var in fields:
+    ifield += 1
     fsDataset_train = FSimDataset(filePathH5, trainSet, var)
 
     # gen a obj as regression, and then train the model
@@ -59,9 +63,12 @@ def train(numOfEpochs:int=5, fields:list=["T"], trainSet:list=["C001"], testSet:
     inp, _, coords = fsDataset_test[0]
 
     # 1-predict first and then write the predicting data to h5 database
-    # coordinates are optional 
-    R.write2HDF(inp, Path("./fnn.h5"), coords=coords)
+    # coordinates are optional
+
+    if ifield == 1:
+      R.write2HDF(inp, Path("./fnn.h5"), coords=coords)
+    else:
+      R.write2HDF(inp, Path("./fnn.h5"), coords=None)
 
   iSuccess = True
   return iSuccess
-
