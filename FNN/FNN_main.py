@@ -14,7 +14,7 @@ import h5py
 
 from Common.CaseSet import CaseSet
 
-#from train import train
+from train import train
 
 #------------------------------------------------------------------------------
 # case names list of train set and test set
@@ -31,7 +31,8 @@ h5.close()
 #------------------------------------------------------------------------------
 # train the fields one has assigned, which must belong in ["P", "T", "U", "V", "W"]
 
-#iSuccess = train( numOfEpochs=1 )
+varfiels = ["T"]
+iSuccess = train( numOfEpochs=1, fields=varfiels , trainSet=trnSet )
 #print("Train Pres Successed? ", iSuccess)
 
 #------------------------------------------------------------------------------
