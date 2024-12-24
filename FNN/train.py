@@ -15,7 +15,11 @@ from Common.Regression  import Regression
 from Common.FSimDataset import FSimDataset
 
 # -----------------------------------------------------------------------------
-def train(epochList:dict, fields:list, trainSet:list, testSet:list ):
+def train(  epochList:dict,
+            fields   :list,
+            trainSet :list,
+            testSet  :list,
+            dataPath :Path )->dict:
   """
   Train the FNN model by a give trainset, in which some cases field included.
   - epochList: dict of epochs for each field, such as ["P":1,"T":2]
@@ -25,19 +29,13 @@ def train(epochList:dict, fields:list, trainSet:list, testSet:list ):
   """
 
   #----------------------------------------------------------------------------
-  # init of class of database
-  filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
-  #aLive = filePathH5.exists()
-  #print(aLive)
-
-  #----------------------------------------------------------------------------
   # train fields
 
   # including all trained models
   models = {}
 
   for var in fields:
-    fsDataset_train = FSimDataset(filePathH5, trainSet, var)
+    fsDataset_train = FSimDataset(dataPath, trainSet, var)
 
     # gen a obj as regression, and then train the model
     R = Regression(var)

@@ -26,9 +26,14 @@ caseSet = CaseSet( ratio=ratioTest )
 
 trnSet, tstSet = caseSet.splitSet()
 
-# create a new empty h5 file
+# create a new empty h5 file to save the prediced data
 h5 = h5py.File("./fnn.h5", 'w')
 h5.close()
+
+# path of data used as training and test
+filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
+#aLive = filePathH5.exists()
+#print(aLive)
 
 #------------------------------------------------------------------------------
 # train the fields one has assigned, which must belong in
@@ -45,18 +50,18 @@ print(f"*Fields {varFields} Will Be Model with Epochs {epochList}.")
 models = train( epochList = epochList,
                 fields    = varFields ,
                 trainSet  = trnSet,
-                testSet   = tstSet )
+                testSet   = tstSet,
+                dataPath  = filePathH5 )
 
 #------------------------------------------------------------------------------
 # plot loss history and save
-DirPNG = Path("./Pics")
+dirPNG = Path("./Pics")
 
 ifield = 0
 for var in varFields:
-  models[var].saveLossHistory2PNG(DirPNG)
+  models[var].saveLossHistory2PNG(dirPNG)
 
   # predict and compare with the test set
-  filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
   fsDataset_test = FSimDataset(filePathH5, tstSet, var)
 
   # for CXXX
