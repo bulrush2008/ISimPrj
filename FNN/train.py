@@ -42,8 +42,13 @@ def train(  epochList:dict,
 
     # gen a obj as regression, and then train the model
 
-    # debug: T 的续算
-    var_dict_path = Path("./ModelDict/dict_T.pth")
+    var_dict_path = Path(f"./ModelDict/dict_{var}.pth")
+
+    if not var_dict_path.exists():
+      var_dict_path = None
+      print(f"!Warning: File 'dict_{var}.pth' Not Exist.")
+      pass
+
     R = Regression(var, var_dict_path)
 
     print(f"*Now we are training {var} field:")
