@@ -41,7 +41,10 @@ def train(  epochList:dict,
     fsDataset_train = FSimDataset(dataPath, trainSet, var)
 
     # gen a obj as regression, and then train the model
-    R = Regression(var)
+
+    # debug: T 的续算
+    var_dict_path = Path("./ModelDict/dict_T.pth")
+    R = Regression(var, var_dict_path)
 
     print(f"*Now we are training {var} field:")
 

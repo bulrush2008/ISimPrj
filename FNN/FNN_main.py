@@ -41,7 +41,7 @@ filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
 # train the fields one has assigned, which must belong in
 # ["P", "T", "U", "V", "W"]
 
-epochList = {"T":1, "P":1}
+epochList = {"T":5}
 
 print(f"*Fields Models Will Be Trained with Epochs {epochList}.")
 
