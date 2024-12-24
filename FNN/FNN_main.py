@@ -7,7 +7,7 @@ This is main function to call:
   - save to the database: .h5
 
 @author     @data       @aff        @version
-Xia, S      24.12.19    Simpop.cn   v3.x
+Xia, S      24.12.19    Simpop.cn   v4.x
 """
 
 import h5py
@@ -19,64 +19,70 @@ from Common.CaseSet import CaseSet
 from Common.FSimDataset import FSimDataset
 from train import train
 
-#------------------------------------------------------------------------------
-# case names list of train set and test set
-# split the data, 49 = 39 + 10
-ratioTest = 0.2
-caseSet = CaseSet( ratio=ratioTest )
-
-trnSet, tstSet = caseSet.splitSet()
-
-# create a new empty h5 file to save the prediced data
-outH5Path = Path("./fnn.h5")
-h5 = h5py.File(outH5Path, 'w')
-h5.close()
-
-# path of data used as training and test
-filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
-#aLive = filePathH5.exists()
-#print(aLive)
-
-#------------------------------------------------------------------------------
-# train the fields one has assigned, which must belong in
-# ["P", "T", "U", "V", "W"]
-
-epochList = {"T":5}
-
-print(f"*Fields Models Will Be Trained with Epochs {epochList}.")
-
-models = train( epochList = epochList,
-                trainSet  = trnSet,
-                testSet   = tstSet,
-                dataPath  = filePathH5 )
-
-#------------------------------------------------------------------------------
-dirPNG = Path("./Pics")
-
-ifield = 0
-for var in epochList.keys():
+class FNN(object):
   #----------------------------------------------------------------------------
-  # plot loss history and save
-  models[var].saveLossHistory2PNG(dirPNG)
+  def __init__(self):
+    # case names list of train set and test set
+    # split the data, 49 = 39 + 10
+    ratioTest = 0.2
+    caseSet = CaseSet( ratio=ratioTest )
 
-  #----------------------------------------------------------------------------
-  # predict and compare with the test set
-  fsDataset_test = FSimDataset(filePathH5, tstSet, var)
+    trnSet, tstSet = caseSet.splitSet()
 
-  # for CXXX
-  inp, _, coords = fsDataset_test[0]
+    # create a new empty h5 file to save the prediced data
+    outH5Path = Path("./fnn.h5")
+    h5 = h5py.File(outH5Path, 'w')
+    h5.close()
 
-  #----------------------------------------------------------------------------
-  # the coordinates need to write only one time
-  if ifield == 0:
-    models[var].write2HDF(inp, outH5Path, coords=coords)
-  else:
-    models[var].write2HDF(inp, outH5Path, coords=None)
+    # path of data used as training and test
+    filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
+    #aLive = filePathH5.exists()
+    #print(aLive)
 
-  ifield += 1
+    #--------------------------------------------------------------------------
+    # train the fields one has assigned, which must belong in
+    # ["P", "T", "U", "V", "W"]
 
-  #----------------------------------------------------------------------------
-  # save model parameters
-  model_dicts_name = Path(f"./ModelDict/dict_{var}.pth")
-  torch.save(models[var].model.state_dict(), model_dicts_name)
+    epochList = {"T":5}
+
+    print(f"*Fields Models Will Be Trained with Epochs {epochList}.")
+
+    models = train( epochList = epochList,
+                    trainSet  = trnSet,
+                    testSet   = tstSet,
+                    dataPath  = filePathH5 )
+
+    #--------------------------------------------------------------------------
+    dirPNG = Path("./Pics")
+
+    ifield = 0
+    for var in epochList.keys():
+      #------------------------------------------------------------------------
+      # plot loss history and save
+      models[var].saveLossHistory2PNG(dirPNG)
+
+      #------------------------------------------------------------------------
+      # predict and compare with the test set
+      fsDataset_test = FSimDataset(filePathH5, tstSet, var)
+
+      # for CXXX
+      inp, _, coords = fsDataset_test[0]
+
+      #----------------------------------------------------------------------------
+      # the coordinates need to write only one time
+      if ifield == 0:
+        models[var].write2HDF(inp, outH5Path, coords=coords)
+      else:
+        models[var].write2HDF(inp, outH5Path, coords=None)
+
+      ifield += 1
+
+      #------------------------------------------------------------------------
+      # save model parameters
+      model_dicts_name = Path(f"./ModelDict/dict_{var}.pth")
+      torch.save(models[var].model.state_dict(), model_dicts_name)
+    pass
   pass
+
+if __name__=="__main__":
+  fnn = FNN()
