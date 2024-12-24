@@ -1,7 +1,7 @@
 
 import numpy as np
 
-class CaseSet:
+class CaseSet(object):
   def __init__(self, ratio=0.2):
     # all cases list
     self.idxList = [1,   3,   5,   8,   11,  13,  15,
