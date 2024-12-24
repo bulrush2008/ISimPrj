@@ -11,6 +11,7 @@ Xia, S      24.12.19    Simpop.cn   v3.x
 """
 
 import h5py
+import torch
 
 from pathlib import Path
 
@@ -40,7 +41,7 @@ filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
 # train the fields one has assigned, which must belong in
 # ["P", "T", "U", "V", "W"]
 
-epochList = {"T":2, "P":2, "V":2}
+epochList = {"T":1, "P":1}
 
 print(f"*Fields Models Will Be Trained with Epochs {epochList}.")
 
@@ -54,15 +55,18 @@ dirPNG = Path("./Pics")
 
 ifield = 0
 for var in epochList.keys():
+  #----------------------------------------------------------------------------
   # plot loss history and save
   models[var].saveLossHistory2PNG(dirPNG)
 
+  #----------------------------------------------------------------------------
   # predict and compare with the test set
   fsDataset_test = FSimDataset(filePathH5, tstSet, var)
 
   # for CXXX
   inp, _, coords = fsDataset_test[0]
 
+  #----------------------------------------------------------------------------
   # the coordinates need to write only one time
   if ifield == 0:
     models[var].write2HDF(inp, outH5Path, coords=coords)
@@ -70,4 +74,9 @@ for var in epochList.keys():
     models[var].write2HDF(inp, outH5Path, coords=None)
 
   ifield += 1
+
+  #----------------------------------------------------------------------------
+  # save model parameters
+  model_dicts_name = Path(f"./ModelDict/dict_{var}.pth")
+  torch.save(models[var].model.state_dict(), model_dicts_name)
   pass
