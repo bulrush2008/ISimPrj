@@ -17,7 +17,8 @@ from pathlib import Path
 
 from Common.CaseSet import CaseSet
 from Common.FSimDataset import FSimDataset
-from train import train
+from Common.Regression  import Regression
+#from train import train
 
 class FNN(object):
   #----------------------------------------------------------------------------
@@ -47,10 +48,10 @@ class FNN(object):
 
     print(f"*Fields Models Will Be Trained with Epochs {epochList}.")
 
-    models = train( epochList = epochList,
-                    trainSet  = trnSet,
-                    testSet   = tstSet,
-                    dataPath  = filePathH5 )
+    models = self._train( epochList = epochList,
+                          trainSet  = trnSet,
+                          testSet   = tstSet,
+                          dataPath  = filePathH5 )
 
     #--------------------------------------------------------------------------
     dirPNG = Path("./Pics")
@@ -68,7 +69,7 @@ class FNN(object):
       # for CXXX
       inp, _, coords = fsDataset_test[0]
 
-      #----------------------------------------------------------------------------
+      #------------------------------------------------------------------------
       # the coordinates need to write only one time
       if ifield == 0:
         models[var].write2HDF(inp, outH5Path, coords=coords)
@@ -82,6 +83,62 @@ class FNN(object):
       model_dicts_name = Path(f"./ModelDict/dict_{var}.pth")
       torch.save(models[var].model.state_dict(), model_dicts_name)
     pass
+
+  def _train( self,
+              epochList:dict,
+              trainSet :list,
+              testSet  :list,
+              dataPath :Path )->dict:
+    """
+    Train the FNN model by a give trainset, in which some cases field included.
+    - epochList: dict of epochs for each field, such as ["P":1,"T":2]
+    - fields   : list of variable names, such as ["P", "U"]
+    - trainSet : list of case names in train set, each is a string
+    - testSet  : list of case names in test set, each is a string
+    """
+
+    #----------------------------------------------------------------------------
+    # extract the var names
+    fields = []
+    for key in epochList.keys():
+      fields.append(key)
+      pass
+  
+    # including all trained models
+    models = {}
+
+    # train fields
+    for var in fields:
+      fsDataset_train = FSimDataset(dataPath, trainSet, var)
+
+      # gen a obj as regression, and then train the model
+
+      var_dict_path = Path(f"./ModelDict/dict_{var}.pth")
+
+      if not var_dict_path.exists():
+        var_dict_path = None
+        print(f"!Warning: File 'dict_{var}.pth' Not Exist.")
+        pass
+
+      R = Regression(var, var_dict_path)
+
+      print(f"*Now we are training {var} field:")
+
+      # train the model
+      epochs = epochList[var]
+
+      for i in range(epochs):
+        print(f"  - Training Epoch {i+1} of {epochs} for {var}")
+        for inp, label, _ in fsDataset_train:
+          R.train(inp, label)
+          pass
+        pass
+
+      models[var] = R
+      pass
+
+    # now all variable models have been trained
+    return models
   pass
 
 if __name__=="__main__":
