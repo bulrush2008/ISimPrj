@@ -40,16 +40,11 @@ filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
 # train the fields one has assigned, which must belong in
 # ["P", "T", "U", "V", "W"]
 
-#varFields = ["T", "P", "U", "V", "W"]
-#epochList = [3, 3, 2, 3, 2]
-varFields = ["T", "P", "V"]
-
 epochList = {"T":2, "P":2, "V":2}
 
-print(f"*Fields {varFields} Will Be Model with Epochs {epochList}.")
+print(f"*Fields Models Will Be Trained with Epochs {epochList}.")
 
 models = train( epochList = epochList,
-                fields    = varFields ,
                 trainSet  = trnSet,
                 testSet   = tstSet,
                 dataPath  = filePathH5 )
@@ -58,7 +53,7 @@ models = train( epochList = epochList,
 dirPNG = Path("./Pics")
 
 ifield = 0
-for var in varFields:
+for var in epochList.keys():
   # plot loss history and save
   models[var].saveLossHistory2PNG(dirPNG)
 

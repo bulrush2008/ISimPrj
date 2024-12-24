@@ -16,7 +16,6 @@ from Common.FSimDataset import FSimDataset
 
 # -----------------------------------------------------------------------------
 def train(  epochList:dict,
-            fields   :list,
             trainSet :list,
             testSet  :list,
             dataPath :Path )->dict:
@@ -29,18 +28,22 @@ def train(  epochList:dict,
   """
 
   #----------------------------------------------------------------------------
-  # train fields
-
+  # extract the var names
+  fields = []
+  for key in epochList.keys():
+    fields.append(key)
+  
   # including all trained models
   models = {}
 
+  # train fields
   for var in fields:
     fsDataset_train = FSimDataset(dataPath, trainSet, var)
 
     # gen a obj as regression, and then train the model
     R = Regression(var)
 
-    print(f"*Now we train the {var} field:")
+    print(f"*Now we are training {var} field:")
 
     # train the model
     epochs = epochList[var]
