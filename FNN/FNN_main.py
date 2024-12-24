@@ -12,8 +12,10 @@ Xia, S      24.12.19    Simpop.cn   v3.x
 
 import h5py
 
-from Common.CaseSet import CaseSet
+from pathlib import Path
 
+from Common.CaseSet import CaseSet
+from Common.FSimDataset import FSimDataset
 from train import train
 
 #------------------------------------------------------------------------------
@@ -35,17 +37,39 @@ h5.close()
 #varFields = ["T", "P", "U", "V", "W"]
 #epochList = [3, 3, 2, 3, 2]
 varFields = ["T", "P", "V"]
-epochList = [20, 20, 20]
+
+epochList = {"T":2, "P":2, "V":2}
 
 print(f"*Fields {varFields} Will Be Model with Epochs {epochList}.")
 
-iSuccess = train( epochList = epochList,
-                  fields    = varFields ,
-                  trainSet  = trnSet,
-                  testSet   = tstSet )
+models = train( epochList = epochList,
+                fields    = varFields ,
+                trainSet  = trnSet,
+                testSet   = tstSet )
 
-#print("Train Pres Successed? ", iSuccess)
+#------------------------------------------------------------------------------
+# plot loss history and save
+DirPNG = Path("./Pics")
 
+ifield = 0
+for var in varFields:
+  models[var].saveLossHistory2PNG(DirPNG)
+
+  # predict and compare with the test set
+  filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
+  fsDataset_test = FSimDataset(filePathH5, tstSet, var)
+
+  # for CXXX
+  inp, _, coords = fsDataset_test[0]
+
+  # the coordinates need to write only one time
+  if ifield == 0:
+    models[var].write2HDF(inp, Path("./fnn.h5"), coords=coords)
+  else:
+    models[var].write2HDF(inp, Path("./fnn.h5"), coords=None)
+
+  ifield += 1
+  pass
 #------------------------------------------------------------------------------
 # predict by the trained FNN model and write the data into database
 
