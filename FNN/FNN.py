@@ -18,11 +18,13 @@ from pathlib import Path
 from Common.CaseSet import CaseSet
 from Common.FSimDataset import FSimDataset
 from Common.Regression  import Regression
-#from train import train
 
 class FNN(object):
   #----------------------------------------------------------------------------
   def __init__(self):
+    pass
+
+  def train(self):
     # case names list of train set and test set
     # split the data, 49 = 39 + 10
     ratioTest = 0.2
@@ -84,6 +86,9 @@ class FNN(object):
       torch.save(models[var].model.state_dict(), model_dicts_name)
     pass
 
+  def predict(self):
+    pass
+
   def _train( self,
               epochList:dict,
               trainSet :list,
@@ -97,7 +102,7 @@ class FNN(object):
     - testSet  : list of case names in test set, each is a string
     """
 
-    #----------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     # extract the var names
     fields = []
     for key in epochList.keys():
@@ -143,3 +148,5 @@ class FNN(object):
 
 if __name__=="__main__":
   fnn = FNN()
+
+  fnn.train()
