@@ -12,7 +12,7 @@ from pathlib import Path
 # Regression class: Core of FNN
 class Regression(nn.Module):
   # 初始化 PyTorch 父类
-  def __init__(self, varName:str):
+  def __init__(self, varName:str, dictPath:Path=None):
     super().__init__()
 
     if varName not in ["P", "U", "V", "W", "T"]:
@@ -38,8 +38,12 @@ class Regression(nn.Module):
       nn.Identity()
     )
 
-    # 初始化权重，目前使用 He Kaiming 方法
-    self._initialize_weights()
+    if dictPath is not None:
+      self.model.load_state_dict(torch.load(dictPath))
+      pass
+    else:
+      # 初始化权重，目前使用 He Kaiming 方法
+      self._initialize_weights()
 
     # 回归问题，需要使用 MSE
     self.loss_function = nn.MSELoss()
