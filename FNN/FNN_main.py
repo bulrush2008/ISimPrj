@@ -27,7 +27,8 @@ caseSet = CaseSet( ratio=ratioTest )
 trnSet, tstSet = caseSet.splitSet()
 
 # create a new empty h5 file to save the prediced data
-h5 = h5py.File("./fnn.h5", 'w')
+outH5Path = Path("./fnn.h5")
+h5 = h5py.File(outH5Path, 'w')
 h5.close()
 
 # path of data used as training and test
@@ -54,11 +55,11 @@ models = train( epochList = epochList,
                 dataPath  = filePathH5 )
 
 #------------------------------------------------------------------------------
-# plot loss history and save
 dirPNG = Path("./Pics")
 
 ifield = 0
 for var in varFields:
+  # plot loss history and save
   models[var].saveLossHistory2PNG(dirPNG)
 
   # predict and compare with the test set
@@ -69,14 +70,9 @@ for var in varFields:
 
   # the coordinates need to write only one time
   if ifield == 0:
-    models[var].write2HDF(inp, Path("./fnn.h5"), coords=coords)
+    models[var].write2HDF(inp, outH5Path, coords=coords)
   else:
-    models[var].write2HDF(inp, Path("./fnn.h5"), coords=None)
+    models[var].write2HDF(inp, outH5Path, coords=None)
 
   ifield += 1
   pass
-#------------------------------------------------------------------------------
-# predict by the trained FNN model and write the data into database
-
-
-
