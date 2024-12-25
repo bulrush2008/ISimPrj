@@ -42,7 +42,7 @@ class FNN(object):
     # train the fields one has assigned, which must belong in
     # ["P", "T", "U", "V", "W"]
 
-    fieldList = {"T":1, "P":1, "V":1}
+    fieldList = {"T":1, "V":1, "P":1}
 
     print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
 
@@ -108,7 +108,7 @@ class FNN(object):
       if not var_dict_path.exists():
         var_dict_path = None
         print(f"! Eval Warn: Predict {var} is TRIVAL!")
-        print(f"  -> File 'dict_{var}.pth' Not Exist")
+        print(f"  >>> State Dictionary 'dict_{var}.pth' Not Exist")
 
         #sys.exit()
         pass
@@ -190,8 +190,12 @@ class FNN(object):
   pass
 
 if __name__=="__main__":
+  # create a model to train and predict
   fnn = FNN()
 
+  # Start training the models
+  print(f"---------- Train ----------")
   fnn.train()
 
+  print(f"---------- Eval  ----------")
   fnn.predict()
