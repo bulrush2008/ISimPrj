@@ -59,7 +59,7 @@ class FNN(object):
     #--------------------------------------------------------------------------
     dirPNG = Path("./Pics")
 
-    ifield = 0
+    #ifield = 0
     for var in fieldList.keys():
       #------------------------------------------------------------------------
       # plot loss history and save
@@ -67,10 +67,10 @@ class FNN(object):
 
       #------------------------------------------------------------------------
       # predict and compare with the test set
-      fsDataset_test = FSimDataset(filePathH5, tstSet, var)
+      #fsDataset_test = FSimDataset(filePathH5, tstSet, var)
 
       # for CXXX
-      inp, _, coords = fsDataset_test[0]
+      #inp, _, coords = fsDataset_test[0]
 
       #------------------------------------------------------------------------
       # the coordinates need to write only one time
@@ -79,7 +79,7 @@ class FNN(object):
       #else:
       #  models[var].write2HDF(inp, outH5Path, coords=None)
 
-      ifield += 1
+      #ifield += 1
 
       #------------------------------------------------------------------------
       # save model parameters
