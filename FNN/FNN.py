@@ -22,20 +22,18 @@ from Common.Regression  import Regression
 class FNN(object):
   #----------------------------------------------------------------------------
   def __init__(self):
-    pass
-
-  def train(self):
-    # case names list of train set and test set
-    # split the data, 49 = 39 + 10
+    # split the cases into train and test sets
+    # now: 49 = 39 + 10
     ratioTest = 0.2
     caseSet = CaseSet( ratio=ratioTest )
 
     trnSet, tstSet = caseSet.splitSet()
 
-    # create a new empty h5 file to save the prediced data
-    outH5Path = Path("./fnn.h5")
-    h5 = h5py.File(outH5Path, 'w')
-    h5.close()
+    self.trnSet = trnSet
+    self.tstSet = tstSet
+    pass
+
+  def train(self):
 
     # path of data used as training and test
     filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
@@ -46,11 +44,14 @@ class FNN(object):
     # train the fields one has assigned, which must belong in
     # ["P", "T", "U", "V", "W"]
 
-    epochList = {"T":5}
+    fieldList = {"T":1}
 
-    print(f"*Fields Models Will Be Trained with Epochs {epochList}.")
+    print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
 
-    models = self._train( epochList = epochList,
+    trnSet = self.trnSet
+    tstSet = self.tstSet
+
+    models = self._train( epochList = fieldList,
                           trainSet  = trnSet,
                           testSet   = tstSet,
                           dataPath  = filePathH5 )
@@ -59,7 +60,7 @@ class FNN(object):
     dirPNG = Path("./Pics")
 
     ifield = 0
-    for var in epochList.keys():
+    for var in fieldList.keys():
       #------------------------------------------------------------------------
       # plot loss history and save
       models[var].saveLossHistory2PNG(dirPNG)
@@ -73,10 +74,10 @@ class FNN(object):
 
       #------------------------------------------------------------------------
       # the coordinates need to write only one time
-      if ifield == 0:
-        models[var].write2HDF(inp, outH5Path, coords=coords)
-      else:
-        models[var].write2HDF(inp, outH5Path, coords=None)
+      #if ifield == 0:
+      #  models[var].write2HDF(inp, outH5Path, coords=coords)
+      #else:
+      #  models[var].write2HDF(inp, outH5Path, coords=None)
 
       ifield += 1
 
@@ -87,6 +88,10 @@ class FNN(object):
     pass
 
   def predict(self):
+    # create a new empty h5 file to save the prediced data
+    outH5Path = Path("./fnn.h5")
+    h5 = h5py.File(outH5Path, 'w')
+    h5.close()
     pass
 
   def _train( self,
