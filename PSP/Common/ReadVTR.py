@@ -2,7 +2,7 @@
 import numpy as np
 from pathlib import Path
 
-def ReadVTR(theVTRFile:Path)->np.ndarray:
+def readVTR(theVTRFile:Path)->np.ndarray:
 
   with open(theVTRFile, "rb") as vtr:
     line = vtr.readline() # version
@@ -98,5 +98,6 @@ def ReadVTR(theVTRFile:Path)->np.ndarray:
     numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
     numOfFloats = numOfBytes[0] // 8
     coordsZ = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
+    pass
 
   return fieldP, fieldU, fieldV, fieldW, fieldT, coordsX, coordsY, coordsZ

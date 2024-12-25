@@ -22,9 +22,9 @@ import numpy as np
 
 import h5py
 
-from Common.ReadVTR import ReadVTR
-from Common.ReadVTM import ReadVTM
-from Common.AssertFileExist import AssertFileExist
+from Common.readVTR import readVTR
+from Common.readVTM import readVTM
+from Common.assertFileExist import assertFileExist
 from Common.idxList import idxList, numOfCases
 from Common.paraInList import paraInList, lenParaIn  # parameterization inputs
 
@@ -76,23 +76,23 @@ for iCase in range(numOfCases):
   grpC.create_dataset("InParam", data=paraInList[iCase])
 
   # assertain each vtm file is alive
-  alive = AssertFileExist(filePathVTM)
+  alive = assertFileExist(filePathVTM)
   if not alive:
     raise LookupError(f"{filePathVTM} Does Not Exsit.")
 
   # read the only vtm file in this case
-  numOfBlock, filePathVTR = ReadVTM(filePathVTM, idxList[iCase])
+  numOfBlock, filePathVTR = readVTM(filePathVTM, idxList[iCase])
 
   # For certain case, loop all its vtr files, each of which relates to a block
   for jVTR in range(numOfBlock):
     theVTRFile = casePaths[iCase].joinpath(filePathVTR[jVTR].decode("ASCII"))
 
-    alive = AssertFileExist(theVTRFile)
+    alive = assertFileExist(theVTRFile)
     if not alive:
       raise LookupError(f"{theVTRFile} Does Not Exist.")
 
     fieldP, fieldU, fieldV, fieldW, fieldT, \
-    coordsX, coordsY, coordsZ = ReadVTR(theVTRFile)
+    coordsX, coordsY, coordsZ = readVTR(theVTRFile)
 
     #if iCase==0: print(coordsZ)
 

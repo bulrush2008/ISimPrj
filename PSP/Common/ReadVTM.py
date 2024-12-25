@@ -3,7 +3,7 @@ from Common.idxList import idxList
 
 from pathlib import Path
 
-def ReadVTM(VTMFilePath:Path, idxi:int)->(int, list):
+def readVTM(VTMFilePath:Path, idxi:int)->(int, list):
   VTRFilePath = []
 
   # open and parsing the vtm files. Each case has one vtm file
