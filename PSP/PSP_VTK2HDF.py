@@ -26,9 +26,7 @@ import sys
 
 # register all cases names to a list
 # case indexes
-from idxList import idxList
-# number of cases
-numOfCases = len(idxList)
+from Common.idxList import idxList, numOfCases
 
 commonPath = Path("../FSCases")
 
