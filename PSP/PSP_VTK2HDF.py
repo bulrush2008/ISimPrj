@@ -17,25 +17,24 @@ Xia, S        2024.11.7     Simpop.cn     v1.0
 
 #------------------------------------------------------------------------------
 # Headers
+import sys
+from pathlib import Path
+import numpy as np
 
 from ReadVTM import ReadVTM
 from ReadVTR import ReadVTR
 from AssertFileExist import AssertFileExist
 import h5py
 
-from pathlib import Path
-import numpy as np
-import sys
-
 from Common.idxList import idxList, numOfCases
+from Common.paraInList import paraInList, lenParaIn  # parameterization inputs consist a list
 
 #------------------------------------------------------------------------------
-caseDataPath = Path("../FSCases")
 
-# parameterization inputs consist a list
-from paraInList import paraInList
-numOfCases = len(paraInList)  # also
-#print(numOfCases)
+if numOfCases != lenParaIn:
+  raise ValueError(f"{numOfCases} must equal to {lenParaIn}")
+
+caseDir = Path("../FSCases")
 
 # register each case name to a list of strings
 caseNames = []  # e.g "Case003" or "Case115"
@@ -46,7 +45,7 @@ for i in range(numOfCases):
 # assertain each case's path
 casePaths = []
 for i in range(numOfCases):
-  path = caseDataPath.joinpath(caseNames[i]) 
+  path = caseDir.joinpath(caseNames[i]) 
   casePaths.append(path)
   #print(casePaths[i])
 
