@@ -22,7 +22,7 @@ from Common.Regression  import Regression
 
 class FNN(object):
   #----------------------------------------------------------------------------
-  def __init__(self):
+  def __init__( self ):
     # split the cases into train and test sets
     # now: 49 = 39 + 10
     ratioTest = 0.2
@@ -37,11 +37,10 @@ class FNN(object):
     self.filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
     pass
 
-  def train(self):
+  def train( self ):
     #--------------------------------------------------------------------------
     # train the fields one has assigned, which must belong in
     # ["P", "T", "U", "V", "W"]
-
     fieldList = {"T":1, "V":1, "P":1}
 
     print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
@@ -56,38 +55,21 @@ class FNN(object):
                           testSet  = tstSet,
                           dataPath = filePathH5 )
 
-    #--------------------------------------------------------------------------
     dirPNG = Path("./Pics")
 
-    #ifield = 0
     for var in fieldList.keys():
       #------------------------------------------------------------------------
       # plot loss history and save
       models[var].saveLossHistory2PNG(dirPNG)
 
       #------------------------------------------------------------------------
-      # predict and compare with the test set
-      #fsDataset_test = FSimDataset(filePathH5, tstSet, var)
-
-      # for CXXX
-      #inp, _, coords = fsDataset_test[0]
-
-      #------------------------------------------------------------------------
-      # the coordinates need to write only one time
-      #if ifield == 0:
-      #  models[var].write2HDF(inp, outH5Path, coords=coords)
-      #else:
-      #  models[var].write2HDF(inp, outH5Path, coords=None)
-
-      #ifield += 1
-
-      #------------------------------------------------------------------------
       # save model parameters
       model_dicts_name = Path(f"./ModelDict/dict_{var}.pth")
       torch.save(models[var].model.state_dict(), model_dicts_name)
+      pass
     pass
 
-  def predict(self):
+  def predict( self ):
     # create a new empty h5 file to save the prediced data
     outH5Path = Path("./fnn.h5")
     h5 = h5py.File(outH5Path, 'w')
@@ -194,8 +176,8 @@ if __name__=="__main__":
   fnn = FNN()
 
   # Start training the models
-  print(f"---------- Train ----------")
+  print("---------- Train ----------")
   fnn.train()
 
-  print(f"---------- Eval  ----------")
+  print("---------- Eval  ----------")
   fnn.predict()
