@@ -17,7 +17,7 @@ def cleanBadSpots(field:np.ndarray, gIndexRange:list)->None:
 
   #print(gIndexRange)
   #print(ni,nj,nk)
-  field = np.reshape(field, (ni,nj,nk))
+  field.resize(ni,nj,nk)
 
   # [0,ni-1], [0,nj-1], [0,nk-1]
   field[0,0,0] = field[1,1,1]
@@ -32,6 +32,7 @@ def cleanBadSpots(field:np.ndarray, gIndexRange:list)->None:
   field[0,nj-1,0] = field[1,nj-2,1]
   field[0,nj-1,nk-1] = field[1,nj-2,nk-2]
 
+  field.resize(ni*nj*nk)
   pass
 
 if __name__=="__main__":

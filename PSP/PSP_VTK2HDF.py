@@ -27,6 +27,7 @@ from Common.readVTM import readVTM
 from Common.assertFileExist import assertFileExist
 from Common.idxList import idxList, numOfCases
 from Common.paraInList import paraInList, lenParaIn  # parameterization inputs
+from Common.cleanBadSpots import cleanBadSpots
 
 #------------------------------------------------------------------------------
 # Cases dir and name
@@ -101,7 +102,9 @@ for iCase in range(numOfCases):
       coordsZ,
       gIndexRange ) = readVTR(theVTRFile)
 
-    if iCase==0: print(gIndexRange)
+    #if iCase==0: print(gIndexRange)
+    cleanBadSpots(field=fieldP, gIndexRange=gIndexRange)
+    cleanBadSpots(field=fieldT, gIndexRange=gIndexRange)
 
     # add field data
     grpC.create_dataset("Block-"+"%02d"%jVTR + "-P", data=fieldP)
