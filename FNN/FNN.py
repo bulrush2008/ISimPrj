@@ -50,10 +50,10 @@ class FNN(object):
 
     filePathH5 = self.filePathH5
 
-    models = self._train( epochList = fieldList,
-                          trainSet  = trnSet,
-                          testSet   = tstSet,
-                          dataPath  = filePathH5 )
+    models = self._train( varList  = fieldList,
+                          trainSet = trnSet,
+                          testSet  = tstSet,
+                          dataPath = filePathH5 )
 
     #--------------------------------------------------------------------------
     dirPNG = Path("./Pics")
@@ -94,22 +94,22 @@ class FNN(object):
     pass
 
   def _train( self,
-              epochList:dict,
-              trainSet :list,
-              testSet  :list,
-              dataPath :Path )->dict:
+              varList :dict,
+              trainSet:list,
+              testSet :list,
+              dataPath:Path )->dict:
     """
     Train the FNN model by a give trainset, in which some cases field included.
-    - epochList: dict of epochs for each field, such as ["P":1,"T":2]
-    - fields   : list of variable names, such as ["P", "U"]
-    - trainSet : list of case names in train set, each is a string
-    - testSet  : list of case names in test set, each is a string
+    - varList : dict of epochs for each field, such as ["P":1,"T":2]
+    - trainSet: list of case names in train set, each is a string
+    - testSet : list of case names in test set, each is a string
+    - dataPath: path of data of train set
     """
 
     #--------------------------------------------------------------------------
     # extract the var names
     fields = []
-    for key in epochList.keys():
+    for key in varList.keys():
       fields.append(key)
       pass
   
@@ -134,7 +134,7 @@ class FNN(object):
       print(f"*Now we are training {var} field:")
 
       # train the model
-      epochs = epochList[var]
+      epochs = varList[var]
 
       for i in range(epochs):
         print(f"  - Training Epoch {i+1} of {epochs} for {var}")

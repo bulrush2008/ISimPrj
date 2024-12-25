@@ -11,7 +11,7 @@ from pathlib import Path
 
 # Regression class: Core of FNN
 class Regression(nn.Module):
-  # 初始化 PyTorch 父类
+  # initialize PyTorch pararent class
   def __init__(self, varName:str, dictPath:Path=None):
     super().__init__()
 
