@@ -15,6 +15,9 @@ Get data from the vtk files and write them to hdf5 file, which serve as a
 Xia, S        2024.11.7     Simpop.cn     v1.0
 """
 
+#------------------------------------------------------------------------------
+# Headers
+
 from ReadVTM import ReadVTM
 from ReadVTR import ReadVTR
 from AssertFileExist import AssertFileExist
@@ -24,11 +27,10 @@ from pathlib import Path
 import numpy as np
 import sys
 
-# register all cases names to a list
-# case indexes
 from Common.idxList import idxList, numOfCases
 
-commonPath = Path("../FSCases")
+#------------------------------------------------------------------------------
+caseDataPath = Path("../FSCases")
 
 # parameterization inputs consist a list
 from paraInList import paraInList
@@ -44,7 +46,7 @@ for i in range(numOfCases):
 # assertain each case's path
 casePaths = []
 for i in range(numOfCases):
-  path = commonPath.joinpath(caseNames[i]) 
+  path = caseDataPath.joinpath(caseNames[i]) 
   casePaths.append(path)
   #print(casePaths[i])
 
