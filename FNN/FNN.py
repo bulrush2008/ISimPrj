@@ -31,15 +31,12 @@ class FNN(object):
 
     self.trnSet = trnSet
     self.tstSet = tstSet
+
+    # path of data used as training and possibly test
+    self.filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
     pass
 
   def train(self):
-
-    # path of data used as training and test
-    filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
-    #aLive = filePathH5.exists()
-    #print(aLive)
-
     #--------------------------------------------------------------------------
     # train the fields one has assigned, which must belong in
     # ["P", "T", "U", "V", "W"]
@@ -50,6 +47,8 @@ class FNN(object):
 
     trnSet = self.trnSet
     tstSet = self.tstSet
+
+    filePathH5 = self.filePathH5
 
     models = self._train( epochList = fieldList,
                           trainSet  = trnSet,
