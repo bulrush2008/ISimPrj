@@ -7,7 +7,7 @@ def readVTR(theVTRFile:Path)->tuple:
   """
   read each VTR file, get the field data and coords, and then return
   - theVTRFile: the VTR file's path
-  - return: a tuple including each field and coords, each is of type np.ndarray
+  - return: a tuple including fields, coordinates, grid index range
     ( fieldP: ndarray,
       fieldU: ndarray,
       fieldV: ndarray,
@@ -15,7 +15,9 @@ def readVTR(theVTRFile:Path)->tuple:
       fieldT: ndarray,
       coordsX: ndarray,
       coordsY: ndarray,
-      coordsZ: ndarray)
+      coordsZ: ndarray,
+      gIndexRange: list with 2 dimension
+    )
   """
 
   #----------------------------------------------------------------------------
