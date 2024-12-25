@@ -42,7 +42,7 @@ class FNN(object):
     # train the fields one has assigned, which must belong in
     # ["P", "T", "U", "V", "W"]
 
-    fieldList = {"T":1}
+    fieldList = {"T":1, "P":1, "V":1}
 
     print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
 
@@ -107,13 +107,14 @@ class FNN(object):
 
       if not var_dict_path.exists():
         var_dict_path = None
-        print(f"! Predict {var} is TRIVAL! because:")
+        print(f"! Eval Warn: Predict {var} is TRIVAL!")
         print(f"  -> File 'dict_{var}.pth' Not Exist")
 
         #sys.exit()
         pass
 
       R = Regression(var, var_dict_path)
+      R.model.eval()  # predict model
 
       fsDataset_test = FSimDataset(filePathH5, tstSet, var)
 
@@ -164,7 +165,7 @@ class FNN(object):
 
       if not var_dict_path.exists():
         var_dict_path = None
-        print(f"!Warning: File 'dict_{var}.pth' Not Exist.")
+        print(f"!Train Warn: File 'dict_{var}.pth' Not Exist.")
         pass
 
       R = Regression(var, var_dict_path)
