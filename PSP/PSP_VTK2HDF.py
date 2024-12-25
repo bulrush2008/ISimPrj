@@ -23,24 +23,28 @@ import numpy as np
 
 from ReadVTM import ReadVTM
 from ReadVTR import ReadVTR
-from AssertFileExist import AssertFileExist
 import h5py
 
+from Common.AssertFileExist import AssertFileExist
 from Common.idxList import idxList, numOfCases
-from Common.paraInList import paraInList, lenParaIn  # parameterization inputs consist a list
+from Common.paraInList import paraInList, lenParaIn  # parameterization inputs
 
 #------------------------------------------------------------------------------
+# Cases dir and name
 
+# check the case number
 if numOfCases != lenParaIn:
   raise ValueError(f"{numOfCases} must equal to {lenParaIn}")
 
+# all cases are in the directory:
 caseDir = Path("../FSCases")
 
-# register each case name to a list of strings
-caseNames = []  # e.g "Case003" or "Case115"
+# register all cases name to a list of strings
+caseNames = []  # e.g "C003" or "C115"
 for i in range(numOfCases):
   s = "%03d"%idxList[i]
   caseNames.append("C"+s)
+  #print(caseNames[i])
 
 # assertain each case's path
 casePaths = []
@@ -48,6 +52,9 @@ for i in range(numOfCases):
   path = caseDir.joinpath(caseNames[i]) 
   casePaths.append(path)
   #print(casePaths[i])
+
+#------------------------------------------------------------------------------
+# MatrixData's directory, the data are integrated with HDF5 format
 
 h5Path = Path("../FSCases/FSHDF")
 if not h5Path.exists(): h5Path.mkdir()
