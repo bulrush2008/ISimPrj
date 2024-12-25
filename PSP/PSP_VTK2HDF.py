@@ -41,17 +41,19 @@ caseDir = Path("../FSCases")
 
 # register all cases name to a list of strings
 caseNames = []  # e.g "C003" or "C115"
-for i in range(numOfCases):
-  s = "%03d"%idxList[i]
+for iCase in range(numOfCases):
+  s = "%03d"%idxList[iCase]
   caseNames.append("C"+s)
-  #print(caseNames[i])
+  #print(caseNames[iCase])
+  pass
 
 # assertain each case's path
 casePaths = []
-for i in range(numOfCases):
-  path = caseDir.joinpath(caseNames[i]) 
+for iCase in range(numOfCases):
+  path = caseDir.joinpath(caseNames[iCase]) 
   casePaths.append(path)
-  #print(casePaths[i])
+  #print(casePaths[iCase])
+  pass
 
 #------------------------------------------------------------------------------
 # MatrixData's directory, the data are integrated with HDF5 format
@@ -66,26 +68,26 @@ h5File = h5Path.joinpath("MatrixData.h5")
 hdf = h5py.File(h5File, 'w')
 
 # loop over each case
-for i in range(numOfCases):
-  VTMFileName = Path("case" + "%d"%idxList[i] + "_point.002000.vtm")
-  VTMFilePath = casePaths[i].joinpath(VTMFileName)
+for iCase in range(numOfCases):
+  fileNameVTM = Path("case" + "%d"%idxList[iCase] + "_point.002000.vtm")
+  filePathVTM = casePaths[iCase].joinpath(fileNameVTM)
   #print(caseNames[i])
 
-  grpC = hdf.create_group(caseNames[i])
-  grpC.create_dataset("InParam", data=paraInList[i])
+  grpC = hdf.create_group(caseNames[iCase])
+  grpC.create_dataset("InParam", data=paraInList[iCase])
 
   # assertain each vtm file is alive
-  alive = AssertFileExist(VTMFilePath)
+  alive = AssertFileExist(filePathVTM)
   if not alive:
-    raise LookupError(f"{VTMFilePath} Does Not Exsit.")
+    raise LookupError(f"{filePathVTM} Does Not Exsit.")
     sys.exit(1)
 
   # read the only vtm file in this case
-  numOfBlock, VTRFilePath = ReadVTM(VTMFilePath, idxList[i])
+  numOfBlock, filePathVTR = ReadVTM(filePathVTM, idxList[iCase])
 
   # For certain case, loop all its vtr files, each of which relates to a block
-  for j in range(numOfBlock):
-    theVTRFile = casePaths[i].joinpath(VTRFilePath[j].decode("ASCII"))
+  for jVTR in range(numOfBlock):
+    theVTRFile = casePaths[iCase].joinpath(filePathVTR[jVTR].decode("ASCII"))
 
     alive = AssertFileExist(theVTRFile)
     if not alive:
@@ -98,19 +100,19 @@ for i in range(numOfCases):
     #if i==0: print(coordsZ)
 
     # add field data
-    grpC.create_dataset("Block-"+"%02d"%j + "-P", data=fieldP)
-    grpC.create_dataset("Block-"+"%02d"%j + "-U", data=fieldU)
-    grpC.create_dataset("Block-"+"%02d"%j + "-V", data=fieldV)
-    grpC.create_dataset("Block-"+"%02d"%j + "-W", data=fieldW)
-    grpC.create_dataset("Block-"+"%02d"%j + "-T", data=fieldT)
+    grpC.create_dataset("Block-"+"%02d"%jVTR + "-P", data=fieldP)
+    grpC.create_dataset("Block-"+"%02d"%jVTR + "-U", data=fieldU)
+    grpC.create_dataset("Block-"+"%02d"%jVTR + "-V", data=fieldV)
+    grpC.create_dataset("Block-"+"%02d"%jVTR + "-W", data=fieldW)
+    grpC.create_dataset("Block-"+"%02d"%jVTR + "-T", data=fieldT)
 
     # add coordinates
-    grpC.create_dataset("Block-"+"%02d"%j + "-X", data=coordsX)
-    grpC.create_dataset("Block-"+"%02d"%j + "-Y", data=coordsY)
-    grpC.create_dataset("Block-"+"%02d"%j + "-Z", data=coordsZ)
+    grpC.create_dataset("Block-"+"%02d"%jVTR + "-X", data=coordsX)
+    grpC.create_dataset("Block-"+"%02d"%jVTR + "-Y", data=coordsY)
+    grpC.create_dataset("Block-"+"%02d"%jVTR + "-Z", data=coordsZ)
     pass
 
-  #if i==0: print(grpC.keys())
+  #if iCase==0: print(grpC.keys())
   pass
 #print(hdf.keys())
 
