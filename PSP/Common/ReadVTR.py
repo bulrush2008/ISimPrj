@@ -2,8 +2,16 @@
 import numpy as np
 from pathlib import Path
 
-def readVTR(theVTRFile:Path)->np.ndarray:
+def readVTR(theVTRFile:Path)->tuple:
+#------------------------------------------------------------------------------
+  """
+  read each VTR file, get the field data and coords, and then return
+  - theVTRFile: the VTR file's path
+  - return: a tuple including each field and coords, each is of type np.ndarray
+    (fieldP, fieldU, fieldV, fieldW, fieldT, coordsX, coordsY, coordsZ)
+  """
 
+  #----------------------------------------------------------------------------
   with open(theVTRFile, "rb") as vtr:
     line = vtr.readline() # version
     line = vtr.readline() # type and other
@@ -53,13 +61,14 @@ def readVTR(theVTRFile:Path)->np.ndarray:
     line = vtr.readline() # RectilinearGrid
     line = vtr.readline() # AppendedData ...
 
-    FloatStartSymbol = vtr.read(1) # '_'
+    # float data started with an underline "_"
+    underline = vtr.read(1) 
 
     # ignore the Cellvolume
     numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
     vtr.seek(numOfBytes[0], 1)  # move forward with /numOfBytes/ bytes
 
-    # field pressure
+    # P field
     numOfBytes = np.fromfile(vtr, dtype=np.int32, count=1)  # byte offsets
     numOfFloats = numOfBytes[0] // 8
     fieldP = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
