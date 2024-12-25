@@ -17,7 +17,6 @@ Xia, S        2024.11.7     Simpop.cn     v1.0
 
 #------------------------------------------------------------------------------
 # Headers
-import sys
 from pathlib import Path
 import numpy as np
 
@@ -80,7 +79,6 @@ for iCase in range(numOfCases):
   alive = AssertFileExist(filePathVTM)
   if not alive:
     raise LookupError(f"{filePathVTM} Does Not Exsit.")
-    sys.exit(1)
 
   # read the only vtm file in this case
   numOfBlock, filePathVTR = ReadVTM(filePathVTM, idxList[iCase])
@@ -92,12 +90,11 @@ for iCase in range(numOfCases):
     alive = AssertFileExist(theVTRFile)
     if not alive:
       raise LookupError(f"{theVTRFile} Does Not Exist.")
-      sys.exit(2)
 
     fieldP, fieldU, fieldV, fieldW, fieldT, \
     coordsX, coordsY, coordsZ = ReadVTR(theVTRFile)
 
-    #if i==0: print(coordsZ)
+    #if iCase==0: print(coordsZ)
 
     # add field data
     grpC.create_dataset("Block-"+"%02d"%jVTR + "-P", data=fieldP)
