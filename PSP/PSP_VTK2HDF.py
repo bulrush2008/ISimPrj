@@ -20,10 +20,10 @@ Xia, S        2024.11.7     Simpop.cn     v1.0
 from pathlib import Path
 import numpy as np
 
-from ReadVTM import ReadVTM
-from ReadVTR import ReadVTR
 import h5py
 
+from Common.ReadVTR import ReadVTR
+from Common.ReadVTM import ReadVTM
 from Common.AssertFileExist import AssertFileExist
 from Common.idxList import idxList, numOfCases
 from Common.paraInList import paraInList, lenParaIn  # parameterization inputs
