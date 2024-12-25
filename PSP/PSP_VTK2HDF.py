@@ -56,11 +56,13 @@ for i in range(numOfCases):
 #------------------------------------------------------------------------------
 # MatrixData's directory, the data are integrated with HDF5 format
 
+# MatrixData dir and name
 h5Path = Path("../FSCases/FSHDF")
 if not h5Path.exists(): h5Path.mkdir()
 
 h5File = h5Path.joinpath("MatrixData.h5")
 
+# open the hdf5 file
 hdf = h5py.File(h5File, 'w')
 
 # loop over each case
@@ -75,7 +77,7 @@ for i in range(numOfCases):
   # assertain each vtm file is alive
   alive = AssertFileExist(VTMFilePath)
   if not alive:
-    print(VTMFilePath, " Does Not Exsit.")
+    raise LookupError(f"{VTMFilePath} Does Not Exsit.")
     sys.exit(1)
 
   # read the only vtm file in this case
@@ -87,7 +89,7 @@ for i in range(numOfCases):
 
     alive = AssertFileExist(theVTRFile)
     if not alive:
-      print(f"{theVTRFile} Does Not Exist.")
+      raise LookupError(f"{theVTRFile} Does Not Exist.")
       sys.exit(2)
 
     fieldP, fieldU, fieldV, fieldW, fieldT, \
@@ -106,8 +108,11 @@ for i in range(numOfCases):
     grpC.create_dataset("Block-"+"%02d"%j + "-X", data=coordsX)
     grpC.create_dataset("Block-"+"%02d"%j + "-Y", data=coordsY)
     grpC.create_dataset("Block-"+"%02d"%j + "-Z", data=coordsZ)
+    pass
 
   #if i==0: print(grpC.keys())
+  pass
 #print(hdf.keys())
 
+# close the matrix data file
 hdf.close()
