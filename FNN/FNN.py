@@ -9,6 +9,7 @@ This is main function to call:
 @author     @data       @aff        @version
 Xia, S      24.12.19    Simpop.cn   v4.x
 """
+import sys
 
 import h5py
 import torch
@@ -91,6 +92,43 @@ class FNN(object):
     outH5Path = Path("./fnn.h5")
     h5 = h5py.File(outH5Path, 'w')
     h5.close()
+
+    # predict and compare with the test set
+    filePathH5 = self.filePathH5
+    tstSet = self.tstSet
+
+    fields = ["T", "V", "P", "U", "W"]
+
+    ifield = 0
+    for var in fields:
+      # create a Regression obj as model, from the state_dict
+      # gen a obj as regression, and then train the model
+      var_dict_path = Path(f"./ModelDict/dict_{var}.pth")
+
+      if not var_dict_path.exists():
+        var_dict_path = None
+        print(f"! Predict {var} is TRIVAL! because:")
+        print(f"  -> File 'dict_{var}.pth' Not Exist")
+
+        #sys.exit()
+        pass
+
+      R = Regression(var, var_dict_path)
+
+      fsDataset_test = FSimDataset(filePathH5, tstSet, var)
+
+      # predict for the first case
+      inp, _, coords = fsDataset_test[0]
+
+      # the coordinates need to write only one time
+      if ifield == 0:
+        R.write2HDF(inp, outH5Path, coords=coords)
+      else:
+        R.write2HDF(inp, outH5Path, coords=None)
+        pass
+
+      ifield += 1
+      pass
     pass
 
   def _train( self,
@@ -118,10 +156,10 @@ class FNN(object):
 
     # train fields
     for var in fields:
+      # obj to get the train data set
       fsDataset_train = FSimDataset(dataPath, trainSet, var)
 
       # gen a obj as regression, and then train the model
-
       var_dict_path = Path(f"./ModelDict/dict_{var}.pth")
 
       if not var_dict_path.exists():
@@ -154,3 +192,5 @@ if __name__=="__main__":
   fnn = FNN()
 
   fnn.train()
+
+  fnn.predict()
