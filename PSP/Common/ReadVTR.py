@@ -8,7 +8,14 @@ def readVTR(theVTRFile:Path)->tuple:
   read each VTR file, get the field data and coords, and then return
   - theVTRFile: the VTR file's path
   - return: a tuple including each field and coords, each is of type np.ndarray
-    (fieldP, fieldU, fieldV, fieldW, fieldT, coordsX, coordsY, coordsZ)
+    ( fieldP: ndarray,
+      fieldU: ndarray,
+      fieldV: ndarray,
+      fieldW: ndarray,
+      fieldT: ndarray,
+      coordsX: ndarray,
+      coordsY: ndarray,
+      coordsZ: ndarray)
   """
 
   #----------------------------------------------------------------------------
@@ -19,9 +26,16 @@ def readVTR(theVTRFile:Path)->tuple:
     line = vtr.readline() # Piece Extend
 
     # indexes range of i, j, k, from byte string to integer
+    gIndexRange = []
+
     ista = int(line[17:22]); iend = int(line[22:27])
+    iRange = [ista, iend]; gIndexRange.append(iRange)
+
     jsta = int(line[27:32]); jend = int(line[32:37])
+    jRange = [jsta, jend]; gIndexRange.append(jRange)
+
     ksta = int(line[37:42]); kend = int(line[42:47])
+    kRange = [ksta, kend]; gIndexRange.append(kRange)
 
     line = vtr.readline()
     line = vtr.readline()
@@ -109,4 +123,4 @@ def readVTR(theVTRFile:Path)->tuple:
     coordsZ = np.fromfile(vtr, dtype=np.float64, count=numOfFloats)
     pass
 
-  return fieldP, fieldU, fieldV, fieldW, fieldT, coordsX, coordsY, coordsZ
+  return fieldP, fieldU, fieldV, fieldW, fieldT, coordsX, coordsY, coordsZ, gIndexRange

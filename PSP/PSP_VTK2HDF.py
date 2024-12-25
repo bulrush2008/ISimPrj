@@ -91,10 +91,11 @@ for iCase in range(numOfCases):
     if not alive:
       raise LookupError(f"{theVTRFile} Does Not Exist.")
 
-    fieldP, fieldU, fieldV, fieldW, fieldT, \
-    coordsX, coordsY, coordsZ = readVTR(theVTRFile)
+    fieldP,  fieldU,  fieldV,  fieldW, fieldT, \
+    coordsX, coordsY, coordsZ,                 \
+    gIndexRange = readVTR(theVTRFile)
 
-    #if iCase==0: print(coordsZ)
+    if iCase==0: print(gIndexRange)
 
     # add field data
     grpC.create_dataset("Block-"+"%02d"%jVTR + "-P", data=fieldP)
