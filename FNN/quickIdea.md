@@ -42,3 +42,7 @@
 8, case 中的 block 信息，包括数目，和每个 block 的大小，也都需要归入 CaseSet 中管理。
   + CaseSet 新增信息
   2024.12.23, 16.49
+
+9, write2HDF() 中的 LAMBDA
+  - 补上
+  2024.12.25， 12.00

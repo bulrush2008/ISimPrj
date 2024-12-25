@@ -64,6 +64,10 @@ class Regression(nn.Module):
         nn.init.kaiming_uniform_(m.weight, a=math.sqrt(5))
         if m.bias is not None:
           nn.init.zeros_(m.bias)
+          pass
+        pass
+      pass
+    pass
 
   # forward propagation
   def forward(self, inputs):
