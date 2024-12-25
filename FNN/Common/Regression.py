@@ -40,23 +40,24 @@ class Regression(nn.Module):
 
     if dictPath is not None:
       self.model.load_state_dict(torch.load(dictPath))
-      pass
     else:
-      # 初始化权重，目前使用 He Kaiming 方法
+      # initialize weights，using He Kaiming method now
       self._initialize_weights()
+      pass
 
-    # 回归问题，需要使用 MSE
+    # regressive problem, MSE is proper
     self.loss_function = nn.MSELoss()
     self.optimiser = torch.optim.Adam(self.parameters(), lr=0.01)
 
-    # counter 用来记录训练的次数
+    # counter: record the trained times
     self.counter = 0
-    self.progress = []  # 存储每一步的损失值
+    self.progress = []  # loss of each train process
     pass
 
   def _initialize_weights(self):
     """
-    内部函数，在模型初始化时调用一次，用于配置初始化参数
+    - inner function, call only once at initialization
+    - configure initial model weights
     """
     for m in self.model:
       if isinstance(m, nn.Linear):
@@ -64,26 +65,27 @@ class Regression(nn.Module):
         if m.bias is not None:
           nn.init.zeros_(m.bias)
 
-  # 前向传播
+  # forward propagation
   def forward(self, inputs):
     return self.model(inputs)
 
-  # 训练
+  # train
   def train(self, inputs, targets):
     outputs = self.forward(inputs)
 
-    # 计算损失值
+    # calculate loss
     loss = self.loss_function(outputs, targets)
 
     # each train step, the loss must be added
     self.progress.append(loss.item())
 
     self.counter += 1
-    if(self.counter%10 == 0):  # 对每个算例数据，记录损失值
+    if(self.counter%10 == 0):  # print training info onto screen every 10 cases
       print(f"    - {self.counter} Cases Trained for {self.varName} ...")
       pass
 
-    # 梯度归零，反向传播，更新学习参数
+    # grad must set back to zero
+    # back propagation, and update the learning rate parameter
     self.optimiser.zero_grad()
     loss.backward()
     self.optimiser.step()
@@ -156,7 +158,7 @@ class Regression(nn.Module):
     ista = numbPtsB1; iend = numbPtsB1 + numbPtsB2
     grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
 
-    # 写入坐标
+    # write coordinates
     if coords is not None:
       dsName = "Block-" + "%02d"%idxB + "-X"
       grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
