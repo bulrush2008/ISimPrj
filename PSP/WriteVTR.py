@@ -7,7 +7,7 @@ from pathlib import Path
 import h5py
 import numpy as np
 
-def WriteVTRs(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
+def WriteVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   """
   Write a block's data to a VTR file, according to the input parameter 'idxBlk'.
   The data are from h5 file

@@ -10,7 +10,7 @@ Xia, S        2024.11.8     Simpop.cn     v1.0
 from pathlib import Path
 
 from WriteVTM import WriteVTM
-from WriteVTRs import WriteVTRs
+from WriteVTR import WriteVTR
 
 numOfBlocks = 8
 dirVTM = Path("./FNN_Case_Test")
@@ -33,4 +33,4 @@ alive = dirHDF.exists()
 print("HDF File exists? ", alive)
 
 for idx in range(numOfBlocks):
-  WriteVTRs(idx, dirVTR, dirHDF)
+  WriteVTR(idx, dirVTR, dirHDF)
