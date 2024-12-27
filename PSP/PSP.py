@@ -33,15 +33,13 @@ class PSP(object):
 #==============================================================================
   def __init__(self, mode:str):
   #----------------------------------------------------------------------------
-    if str == "HDF2VTK":
-      self._HDF2VTK()
-    elif str == "VTK2HDF":
-      self._VTK2HDF()
-    else:
+    if mode not in ["HDF2VTK" ,"VTK2HDF"]:
       raise ValueError("Input Must Be Either 'HDF2VTK' Or 'VTK2HDF'")
+
+    self.mode = mode
     pass
 
-  def _HDF2VTK(self):
+  def HDF2VTK(self):
   #----------------------------------------------------------------------------
     """
     Get data from .h5 file, write them to vtm and vtr files, in order to be
@@ -72,10 +70,116 @@ class PSP(object):
       pass
     pass
 
-  def _VTK2HDF(self):
+  def VTK2HDF(self):
   #----------------------------------------------------------------------------
     """
     Get data from the vtk files and write them to hdf5 file, which serve as a
     database.
     """
+    # Cases dir and name
+
+    # check the case number
+    if numOfCases != lenParaIn:
+      raise ValueError(f"{numOfCases} must equal to {lenParaIn}")
+
+    # all cases are in the directory:
+    caseDir = Path("../FSCases")
+
+    # register all cases name to a list of strings
+    caseNames = []  # e.g "C003" or "C115"
+    for iCase in range(numOfCases):
+      s = "%03d"%idxList[iCase]
+      caseNames.append("C"+s)
+      #print(caseNames[iCase])
+      pass
+
+    # assertain each case's path
+    casePaths = []
+    for iCase in range(numOfCases):
+      path = caseDir.joinpath(caseNames[iCase]) 
+      casePaths.append(path)
+      #print(casePaths[iCase])
+      pass
+
+    # MatrixData's directory, the data are integrated with HDF5 format
+
+    # MatrixData dir and name
+    h5Path = Path("../FSCases/FSHDF")
+    if not h5Path.exists(): h5Path.mkdir()
+
+    h5File = h5Path.joinpath("MatrixData.h5")
+
+    # open the hdf5 file
+    hdf = h5py.File(h5File, 'w')
+
+    # loop over each case
+    for iCase in range(numOfCases):
+      fileNameVTM = Path("case" + "%d"%idxList[iCase] + "_point.002000.vtm")
+      filePathVTM = casePaths[iCase].joinpath(fileNameVTM)
+      #print(caseNames[i])
+
+      grpC = hdf.create_group(caseNames[iCase])
+      grpC.create_dataset("InParam", data=paraInList[iCase])
+
+      # assertain each vtm file is alive
+      alive = assertFileExist(filePathVTM)
+      if not alive:
+        raise LookupError(f"{filePathVTM} Does Not Exsit.")
+
+      # read the only vtm file in this case
+      numOfBlock, filePathVTR = readVTM(filePathVTM, idxList[iCase])
+
+      # For certain case, loop all its vtr files, each of which relates to a block
+      for jVTR in range(numOfBlock):
+        theVTRFile = casePaths[iCase].joinpath(filePathVTR[jVTR].decode("ASCII"))
+
+        alive = assertFileExist(theVTRFile)
+        if not alive:
+          raise LookupError(f"{theVTRFile} Does Not Exist.")
+
+        ( fieldP,
+          fieldU,
+          fieldV,
+          fieldW,
+          fieldT,
+          coordsX,
+          coordsY,
+          coordsZ,
+          gIndexRange ) = readVTR(theVTRFile)
+
+        #if iCase==0: print(gIndexRange)
+        cleanBadSpots(field=fieldP, gIndexRange=gIndexRange)
+        cleanBadSpots(field=fieldT, gIndexRange=gIndexRange)
+
+        # add field data
+        grpC.create_dataset("Block-"+"%02d"%jVTR + "-P", data=fieldP)
+        grpC.create_dataset("Block-"+"%02d"%jVTR + "-U", data=fieldU)
+        grpC.create_dataset("Block-"+"%02d"%jVTR + "-V", data=fieldV)
+        grpC.create_dataset("Block-"+"%02d"%jVTR + "-W", data=fieldW)
+        grpC.create_dataset("Block-"+"%02d"%jVTR + "-T", data=fieldT)
+
+        # add coordinates
+        grpC.create_dataset("Block-"+"%02d"%jVTR + "-X", data=coordsX)
+        grpC.create_dataset("Block-"+"%02d"%jVTR + "-Y", data=coordsY)
+        grpC.create_dataset("Block-"+"%02d"%jVTR + "-Z", data=coordsZ)
+        pass
+
+      #if iCase==0: print(grpC.keys())
+      pass
+    #print(hdf.keys())
+
+    # close the matrix data file
+    hdf.close()
     pass
+
+if __name__=="__main__":
+  prompt = input("Input Your Command, Either 'VTK2HDF' Or 'HDF2VTK':\n")
+
+  psp = PSP( prompt )
+
+  if prompt == 'VTK2HDF':
+    print("We are writing HDF5 database from vtk files ...")
+    psp.VTK2HDF()
+  else:
+    print("We are writing VTK files from HDF5 database ...")
+    psp.HDF2VTK()
