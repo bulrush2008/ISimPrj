@@ -9,8 +9,8 @@ Xia, S        2024.11.8     Simpop.cn     v1.0
 
 from pathlib import Path
 
-from writeVTM import writeVTM
-from writeVTR import writeVTR
+from Common.writeVTM import writeVTM
+from Common.writeVTR import writeVTR
 
 numOfBlocks = 8
 dirVTM = Path("./FNN_Case_Test")
