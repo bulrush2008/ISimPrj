@@ -9,15 +9,20 @@ This is main function to call:
 @author     @data       @aff        @version
 Xia, S      24.12.27    Simpop.cn   v2.x
 """
+import sys
+
+import h5py
+import torch
 
 from pathlib import Path
 
 from Common.CaseSet import CaseSet
+from Common.FSimDataset import FSimDataset
+from Common.Regression  import Regression
 
 class GAN(object):
-#==============================================================================
-  def __init__(self):
   #----------------------------------------------------------------------------
+  def __init__( self ):
     # split the cases into train and test sets
     # now: 49 = 39 + 10
     ratioTest = 0.2
@@ -32,12 +37,12 @@ class GAN(object):
     self.filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
     pass
 
-  def train(self):
-  #----------------------------------------------------------------------------
+  def train( self ):
+    #--------------------------------------------------------------------------
     # train the fields one has assigned, which must be in
-    # ["P", "T", "U", "V", "W"], and
+    # ["P", "T", "U", "V", "W"]
     # the order in list does not matter
-    fieldList = {"T":5}
+    fieldList = {"T":1}
 
     print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
 
@@ -52,6 +57,10 @@ class GAN(object):
                           dataPath = filePathH5 )
 
     dirPNG = Path("./Pics")
+    if not dirPNG.exists(): dirPNG.mkdir(parents=True)
+
+    dirModel = Path("./ModelDict")
+    if not dirModel.exists(): dirModel.mkdir(parents=True)
 
     for var in fieldList.keys():
       #------------------------------------------------------------------------
@@ -60,14 +69,55 @@ class GAN(object):
 
       #------------------------------------------------------------------------
       # save model parameters
-      model_dicts_name = Path(f"./ModelDict/dict_{var}.pth")
+      model_dicts_name = dirModel.joinpath(f"dict_{var}.pth")
       torch.save(models[var].model.state_dict(), model_dicts_name)
       pass
     pass
 
-  def predict(self):
-  #----------------------------------------------------------------------------
-    pass  # member func predict end
+  def predict( self ):
+    # create a new empty h5 file to save the prediced data
+    outH5Path = Path("./fnn.h5")
+    h5 = h5py.File(outH5Path, 'w')
+    h5.close()
+
+    # predict and compare with the test set
+    filePathH5 = self.filePathH5
+    tstSet = self.tstSet
+
+    fields = ["T", "V", "P", "U", "W"]
+
+    ifield = 0
+    for var in fields:
+      # create a Regression obj as model, from the state_dict
+      # gen a obj as regression, and then train the model
+      var_dict_path = Path(f"./ModelDict/dict_{var}.pth")
+
+      if not var_dict_path.exists():
+        var_dict_path = None
+        print(f"! Eval Warn: Predict {var} is TRIVAL!")
+        print(f"  >>> State Dictionary 'dict_{var}.pth' Not Exist")
+
+        #sys.exit()
+        pass
+
+      R = Regression(var, var_dict_path)
+      R.model.eval()  # predict model
+
+      fsDataset_test = FSimDataset(filePathH5, tstSet, var)
+
+      # predict for the first case
+      inp, _, coords = fsDataset_test[0]
+
+      # the coordinates need to write only one time
+      if ifield == 0:
+        R.write2HDF(inp, outH5Path, coords=coords)
+      else:
+        R.write2HDF(inp, outH5Path, coords=None)
+        pass
+
+      ifield += 1
+      pass
+    pass
 
   def _train( self,
               varList :dict,
@@ -82,19 +132,54 @@ class GAN(object):
     - dataPath: path of data of train set
     """
 
+    #--------------------------------------------------------------------------
     # extract the var names
     fields = []
     for key in varList.keys():
       fields.append(key)
       pass
-
+  
     # including all trained models
     models = {}
 
-    pass  # private member func '_train()' ends
-  pass  # class GAN end
+    # train fields
+    for var in fields:
+      # obj to get the train data set
+      fsDataset_train = FSimDataset(dataPath, trainSet, var)
+
+      # gen a obj as regression, and then train the model
+      var_dict_path = Path(f"./ModelDict/dict_{var}.pth")
+
+      if not var_dict_path.exists():
+        var_dict_path = None
+        print(f"Train from ZERO for {var}")
+      else:
+        print(f"Train from dict_{var}.pth")
+        pass
+
+      R = Regression(var, var_dict_path)
+
+      print(f"*Now we are training {var} field:")
+
+      # train the model
+      epochs = varList[var]
+
+      for i in range(epochs):
+        print(f"  - Training Epoch {i+1} of {epochs} for {var}")
+        for inp, label, _ in fsDataset_train:
+          R.train(inp, label)
+          pass
+        pass
+
+      models[var] = R
+      pass
+
+    # now all variable models have been trained
+    return models
+  pass
 
 if __name__=="__main__":
+#=============================================================================
   # create a model to train and predict
   gan = GAN()
 
@@ -104,5 +189,3 @@ if __name__=="__main__":
 
   print("---------- Eval  ----------")
   gan.predict()
-
-
