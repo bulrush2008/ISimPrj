@@ -57,6 +57,10 @@ class FNN(object):
                           dataPath = filePathH5 )
 
     dirPNG = Path("./Pics")
+    if not dirPNG.exists(): dirPNG.mkdir(parents=True)
+
+    dirModel = Path("./ModelDict")
+    if not dirModel.exists(): dirModel.mkdir(parents=True)
 
     for var in fieldList.keys():
       #------------------------------------------------------------------------
@@ -65,7 +69,7 @@ class FNN(object):
 
       #------------------------------------------------------------------------
       # save model parameters
-      model_dicts_name = Path(f"./ModelDict/dict_{var}.pth")
+      model_dicts_name = dirModel.joinpath(f"dict_{var}.pth")
       torch.save(models[var].model.state_dict(), model_dicts_name)
       pass
     pass
