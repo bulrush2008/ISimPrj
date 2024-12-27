@@ -1,7 +1,7 @@
 
 from pathlib import Path
 
-def WriteVTM(numOfBlocks:int, fileVTM:Path)->Path:
+def writeVTM(numOfBlocks:int, fileVTM:Path)->Path:
   """
   Write the VTM file, each concerned with a Case.
   In this file, it include info:

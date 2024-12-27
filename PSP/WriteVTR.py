@@ -7,7 +7,7 @@ from pathlib import Path
 import h5py
 import numpy as np
 
-def WriteVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
+def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   """
   Write a block's data to a VTR file, according to the input parameter 'idxBlk'.
   The data are from h5 file
@@ -44,12 +44,12 @@ def WriteVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   jSta = 1; jEnd = lenY#; print(jSta, jEnd)
   kSta = 1; kEnd = lenZ#; print(kSta, kEnd)
 
-  extent = str("%5d"%iSta)  \
-         + str("%5d"%iEnd)  \
-         + str("%5d"%jSta)  \
-         + str("%5d"%jEnd)  \
-         + str("%5d"%kSta)  \
-         + str("%5d"%kEnd)
+  extent  = str("%5d"%iSta)  \
+          + str("%5d"%iEnd)  \
+          + str("%5d"%jSta)  \
+          + str("%5d"%jEnd)  \
+          + str("%5d"%kSta)  \
+          + str("%5d"%kEnd)
 
   #print(extent, type(extent))
 
