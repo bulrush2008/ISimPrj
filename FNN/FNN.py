@@ -90,14 +90,13 @@ class FNN(object):
     for var in fields:
       # create a Regression obj as model, from the state_dict
       # gen a obj as regression, and then train the model
-      var_dict_path = Path(f"./ModelDict/dict_{var}.pth")
+      stateDictsPath = Path("StateDicts")
+      var_dict_path = stateDictsPath.joinpath(f"dict_{var}.pth")
 
       if not var_dict_path.exists():
         var_dict_path = None
         print(f"! Eval Warn: Predict {var} is TRIVAL!")
         print(f"  >>> State Dictionary 'dict_{var}.pth' Not Exist")
-
-        #sys.exit()
         pass
 
       R = Regression(var, var_dict_path)
