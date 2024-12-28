@@ -45,6 +45,9 @@ class FSimDataset(Dataset):
     inp = torch.FloatTensor(inp)  # torch.FloatTensor
 
     data = []
+
+    # 字典，三个键值："x","y","z"
+    # 每个键后面，都连接这个二维列表数据，分别表示 8 个 block 的坐标数据
     coords = {}
 
     coords["x"] = []  # 2d list

@@ -96,19 +96,27 @@ class Regression(nn.Module):
     pass
 
   def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
+  #----------------------------------------------------------------------------
+    # h5 文件已经在外部打开，这里只需要创建一个组，用来管理模型的预测数据即可
     grpName = "FNN_Out" # a case data is a group
 
+    # 以附加的方式打开
     h5 = h5py.File(dirFileHDF, 'a')
 
+    # 不知道某变量流场是否已经写入，需要检测、区分
     if grpName in h5:
       grp = h5[grpName]
     else:
       grp = h5.create_group(grpName)
       pass
 
+    # 根据参数化输入，预测流场
     # the predicted data should be detached and converted to numpy format
     output = self.forward(inp).detach().numpy()
 
+    # 对任一变量，输出数据包含了所有 block 的数据u，这里需要对不同的 block 予以分割，以便显示
+
+    # 每个 block 的大小
     ptsB1 = [2,27,2,52,2,12]
     numbPtsB1 = (ptsB1[1]-ptsB1[0]+1) * (ptsB1[3]-ptsB1[2]+1) * (ptsB1[5]-ptsB1[4]+1)
 
