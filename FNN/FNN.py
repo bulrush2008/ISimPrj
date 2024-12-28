@@ -42,7 +42,7 @@ class FNN(object):
     # train the fields one has assigned, which must be in
     # ["P", "T", "U", "V", "W"]
     # the order in list does not matter
-    fieldList = {"T":5}
+    fieldList = {"T":2}
 
     print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
 
@@ -59,7 +59,7 @@ class FNN(object):
     dirPNG = Path("./Pics")
     if not dirPNG.exists(): dirPNG.mkdir(parents=True)
 
-    dirModel = Path("./ModelDict")
+    dirModel = Path("./StateDicts")
     if not dirModel.exists(): dirModel.mkdir(parents=True)
 
     for var in fieldList.keys():
@@ -148,7 +148,7 @@ class FNN(object):
       fsDataset_train = FSimDataset(dataPath, trainSet, var)
 
       # gen a obj as regression, and then train the model
-      var_dict_path = Path(f"./ModelDict/dict_{var}.pth")
+      var_dict_path = Path(f"./StateDicts/dict_{var}.pth")
 
       if not var_dict_path.exists():
         var_dict_path = None
