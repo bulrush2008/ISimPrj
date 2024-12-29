@@ -42,7 +42,7 @@ class FNN(object):
     # train the fields one has assigned, which must be in
     # ["P", "T", "U", "V", "W"]
     # the order in list does not matter
-    fieldList = {"T":2}
+    fieldList = {"T":2, "V":2, "P":1, "U":1, "W":1}
 
     print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
 

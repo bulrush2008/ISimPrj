@@ -63,17 +63,17 @@ class FSimDataset(Dataset):
       # coordx
       key = "Block-"+ "%02d"%blk + "-X"
       crd = list(hdf[cid][key][:])
-      coords["x"].append(crd)
+      coords["x"] += crd
 
       # coordy
       key = "Block-"+ "%02d"%blk + "-Y"
       crd = list(hdf[cid][key][:])
-      coords["y"].append(crd)
+      coords["y"] += crd
 
       # coordz
       key = "Block-"+ "%02d"%blk + "-Z"
       crd = list(hdf[cid][key][:])
-      coords["z"].append(crd)
+      coords["z"] += crd
       pass
 
     return inp, torch.FloatTensor(data), coords

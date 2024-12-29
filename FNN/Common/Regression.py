@@ -120,8 +120,14 @@ class Regression(nn.Module):
 
     # write coordinates it necessary
     if coords is not None:
-      dsName = "Coords"
-      #grp.create_dataset(dsName, data=coords, dtype=np.float64)
+      dsName = "Coords-X"
+      grp.create_dataset(dsName, data=coords["x"], dtype=np.float64)
+
+      dsName = "Coords-Y"
+      grp.create_dataset(dsName, data=coords["y"], dtype=np.float64)
+
+      dsName = "Coords-Z"
+      grp.create_dataset(dsName, data=coords["z"], dtype=np.float64)
       pass
 
     h5.close()
