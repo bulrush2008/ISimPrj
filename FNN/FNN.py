@@ -97,6 +97,8 @@ class FNN(object):
         var_dict_path = None
         print(f"! Eval Warn: Predict {var} is TRIVAL!")
         print(f"  >>> State Dictionary 'dict_{var}.pth' Not Exist")
+      else:
+        print(f">>> Hi, Now We are Predicting Field {var}!")
         pass
 
       R = Regression(var, var_dict_path)
