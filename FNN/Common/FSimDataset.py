@@ -50,6 +50,8 @@ class FSimDataset(Dataset):
     # 每个键后面，都连接这个二维列表数据，分别表示 8 个 block 的坐标数据
     coords = {}
 
+    # coords["x"] 将会包含所有的 block 的 x 坐标值，
+    # coords["y"] 和 coords["z"] 同样如此
     coords["x"] = []  # 2d list
     coords["y"] = []  # ..
     coords["z"] = []  # ..
