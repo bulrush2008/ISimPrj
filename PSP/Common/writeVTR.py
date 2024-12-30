@@ -14,7 +14,7 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   """
   h5 = h5py.File(dirHDF, 'r')
 
-  # take "C001" as an example. Other case can be selected too. 
+  # One group saves data of one case 
   grpName = "FNN_Out"
 
   # first to read X/Y/Z, giving dims
@@ -22,8 +22,6 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   # X
   datasetName = "Block-" + "%02d"%idxBlk + "-X"
   coordsX = h5[grpName][datasetName][:]
-
-  #print("------- The block idx: ", idxBlk)
 
   lenX = len(coordsX)#; print("lenX = ", lenX)
 
@@ -84,7 +82,7 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
 
   # write P/U/V/W/T field and X/Y/Z
 
-  # for P
+  # header - for P
   OffsetP = 0 # the first variable, no offsets
   bStr1 = b'      <DataArray type="Float64" Name="P" NumberOfComponents="1" format="appended" offset="'
   bStr2 = str("%10d"%OffsetP).encode("utf-8")
@@ -93,7 +91,7 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   #print(bStrs)
   vtr.write(bStrs)
 
-  # for U
+  # header - for U
   bStr1 = b'      <DataArray type="Float64" Name="U" NumberOfComponents="1" format="appended" offset="'
 
   OffsetU = OffsetP + lenX*lenY*lenZ * 8 + 4  # P before
@@ -103,7 +101,7 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   bStrs = bStr1 + bStr2 + bStr3
   vtr.write(bStrs)
 
-  # for V
+  # header - for V
   bStr1 = b'      <DataArray type="Float64" Name="V" NumberOfComponents="1" format="appended" offset="'
 
   OffsetV = OffsetU * 2 # P/U before
@@ -112,7 +110,7 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   bStrs = bStr1 + bStr2 + bStr3
   vtr.write(bStrs)
 
-  # for W
+  # header - for W
   bStr1 = b'      <DataArray type="Float64" Name="W" NumberOfComponents="1" format="appended" offset="'
   OffsetW = OffsetU * 3 # P/U/V before
   bStr2 = str("%10d"%OffsetW).encode("utf-8")
@@ -120,7 +118,7 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   bStrs = bStr1 + bStr2 + bStr3
   vtr.write(bStrs)
 
-  # for T
+  # header - for T
   bStr1 = b'      <DataArray type="Float64" Name="T" NumberOfComponents="1" format="appended" offset="'
   OffsetT = OffsetU * 4 # P/U/V/W before
   bStr2 = str("%10d"%OffsetT).encode("utf-8")
@@ -130,10 +128,10 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
 
   vtr.write(b'    </PointData>\n')
 
-  # coordinates are necessary
+  # headers for coordinates,  they are necessary!
   vtr.write(b'    <Coordinates>\n')
 
-  # for X
+  # header - X
   bStr1 = b'      <DataArray type="Float64" Name="Xcenter" NumberOfComponents="1" format="appended" offset="'
 
   OffsetX = OffsetU * 5 # P/U/V/W/T before
@@ -142,7 +140,7 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   bStrs = bStr1 + bStr2 + bStr3
   vtr.write(bStrs)
 
-  # for Y
+  # header - Y
   bStr1 = b'      <DataArray type="Float64" Name="Ycenter" NumberOfComponents="1" format="appended" offset="'
   OffsetY = OffsetX + lenX*8 + 4 # P/U/V/W/T/X before
   bStr2 = str("%10d"%OffsetY).encode("utf-8")
@@ -150,7 +148,7 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   bStrs = bStr1 + bStr2 + bStr3
   vtr.write(bStrs)
 
-  # for Z
+  # header - Z
   bStr1 = b'      <DataArray type="Float64" Name="Zcenter" NumberOfComponents="1" format="appended" offset="'
   OffsetZ = OffsetY + lenY*8 + 4 # P/U/V/W/T/X/Y before
   bStr2 = str("%10d"%OffsetZ).encode("utf-8")
@@ -162,6 +160,9 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   vtr.write(b'  </Piece>\n')
   vtr.write(b'  </RectilinearGrid>\n')
   vtr.write(b'  <AppendedData encoding="raw">\n')
+
+  #----------------------------------------------------------------------------
+  # write data
 
   # add '_' denoting the starting floats data
   vtr.write(b'_')
