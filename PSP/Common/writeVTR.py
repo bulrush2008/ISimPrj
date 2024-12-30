@@ -7,11 +7,18 @@ from pathlib import Path
 import h5py
 import numpy as np
 
-def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
+def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, numCoordsEachBlk:list)->None:
   """
   Write a block's data to a VTR file, according to the input parameter 'idxBlk'.
   The data are from h5 file
+
+  idxBlk: block index
+  dirVTR: directory of the VTR file
+  dirHDF: directory of source data with HDF5 format
+  numCoordsEachBlk: number of coordinates of 3 axises for each vtr/block
   """
+
+  # open the file of source data
   h5 = h5py.File(dirHDF, 'r')
 
   # One group saves data of one case 
@@ -20,10 +27,9 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path)->None:
   # first to read X/Y/Z, giving dims
 
   # X
-  datasetName = "Block-" + "%02d"%idxBlk + "-X"
-  coordsX = h5[grpName][datasetName][:]
-
-  lenX = len(coordsX)#; print("lenX = ", lenX)
+  iSta = numCoordsEachBlk[idxBlk][0]
+  iEnd = numCoordsEachBlk[idxBlk][1]
+  lenX = iEnd - iSta + 1
 
   # Y
   datasetName = "Block-" + "%02d"%idxBlk + "-Y"

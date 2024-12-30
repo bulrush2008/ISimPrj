@@ -65,8 +65,30 @@ class PSP(object):
     alive = dirHDF.exists()
     print("HDF File exists? ", alive)
 
+    numCoordsEachBlk = [[2,27,2,52,2,12],
+                        [2,27,2,52,2,13],
+                        [2,27,2,53,2,12],
+                        [2,27,2,53,2,13],
+                        [2,28,2,52,2,12],
+                        [2,28,2,52,2,13],
+                        [2,28,2,53,2,12],
+                        [2,28,2,53,2,13]]
+
+    # def a lambda func, used just in this routine
+    calcPtsNum = lambda l: (l[1]-l[0]+1) * (l[3]-l[2]+1) * (l[5]-l[4]+1)
+
+    # certain block's left and right edge in the data array
+    # data[... numPtsL, ..., numPtsR, ...]
+    # so data[numPtsL:numPtsR] is the slice we need
+    numPtsL = 0
+    numptsR = 0
+
     for idx in range(numOfBlocks):
-      writeVTR(idx, dirVTR, dirHDF)
+      numPtsR = calcPtsNum(numCoordsEachBlk[idx]) + numPtsL
+
+      writeVTR(idx, dirVTR, dirHDF, numPtsL, numptsR)
+
+      numPtsL = numptsR
       pass
     pass
 
