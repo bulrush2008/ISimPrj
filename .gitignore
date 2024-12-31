@@ -2,7 +2,6 @@ FSCases
 FSCases.zip
 PSP/FNN
 PSP/MatrixData.h5
-PSP/__pycache__
 PSP/Common/__pycache__
 PSP/FNN_Case_Test
 FNN/__pycache__
@@ -10,7 +9,7 @@ FNN/fnn.h5
 FNN/Common/__pycache__
 FNN/Pics
 FNN/StateDicts
-GAN/ModelDict
+GAN/StateDicts
 GAN/Pics
 GAN/fnn.h5
 GAN/Common/__pycache__
