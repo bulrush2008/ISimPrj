@@ -7,7 +7,7 @@ This is main function to call:
   - save to the database: .h5
 
 @author     @data       @aff        @version
-Xia, S      2024.12.31  Simpop.cn   v2.x
+Xia, S      24.12.27    Simpop.cn   v2.x
 """
 import sys
 
@@ -42,7 +42,7 @@ class GAN(object):
     # train the fields one has assigned, which must be in
     # ["P", "T", "U", "V", "W"]
     # the order in list does not matter
-    fieldList = {"T":2}
+    fieldList = {"T":1}
 
     print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
 
@@ -59,7 +59,7 @@ class GAN(object):
     dirPNG = Path("./Pics")
     if not dirPNG.exists(): dirPNG.mkdir(parents=True)
 
-    dirModel = Path("./StateDicts")
+    dirModel = Path("./ModelDict")
     if not dirModel.exists(): dirModel.mkdir(parents=True)
 
     for var in fieldList.keys():
@@ -90,15 +90,14 @@ class GAN(object):
     for var in fields:
       # create a Regression obj as model, from the state_dict
       # gen a obj as regression, and then train the model
-      stateDictsPath = Path("StateDicts")
-      var_dict_path = stateDictsPath.joinpath(f"dict_{var}.pth")
+      var_dict_path = Path(f"./ModelDict/dict_{var}.pth")
 
       if not var_dict_path.exists():
         var_dict_path = None
         print(f"! Eval Warn: Predict {var} is TRIVAL!")
         print(f"  >>> State Dictionary 'dict_{var}.pth' Not Exist")
-      else:
-        print(f">>> Hi, Now We are Predicting Field {var}!")
+
+        #sys.exit()
         pass
 
       R = Regression(var, var_dict_path)
@@ -149,7 +148,7 @@ class GAN(object):
       fsDataset_train = FSimDataset(dataPath, trainSet, var)
 
       # gen a obj as regression, and then train the model
-      var_dict_path = Path(f"./StateDicts/dict_{var}.pth")
+      var_dict_path = Path(f"./ModelDict/dict_{var}.pth")
 
       if not var_dict_path.exists():
         var_dict_path = None
@@ -180,6 +179,7 @@ class GAN(object):
   pass
 
 if __name__=="__main__":
+#=============================================================================
   # create a model to train and predict
   gan = GAN()
 

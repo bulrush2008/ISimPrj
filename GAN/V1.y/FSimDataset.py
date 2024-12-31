@@ -45,10 +45,11 @@ class FSimDataset(Dataset):
     inp = torch.FloatTensor(inp)  # torch.FloatTensor
 
     data = []
+    coords = {}
 
-    # coords["x"] 将会包含所有的 block 的 x 坐标值，
-    # coords["y"] 和 coords["z"] 同样如此
-    coords = {"x":[], "y":[], "z":[]}
+    coords["x"] = []  # 2d list
+    coords["y"] = []  # ..
+    coords["z"] = []  # ..
 
     for blk in range(8):
       key = "Block-"+ "%02d"%blk + "-" + self.varName
@@ -59,17 +60,17 @@ class FSimDataset(Dataset):
       # coordx
       key = "Block-"+ "%02d"%blk + "-X"
       crd = list(hdf[cid][key][:])
-      coords["x"] += crd
+      coords["x"].append(crd)
 
       # coordy
       key = "Block-"+ "%02d"%blk + "-Y"
       crd = list(hdf[cid][key][:])
-      coords["y"] += crd
+      coords["y"].append(crd)
 
       # coordz
       key = "Block-"+ "%02d"%blk + "-Z"
       crd = list(hdf[cid][key][:])
-      coords["z"] += crd
+      coords["z"].append(crd)
       pass
 
     return inp, torch.FloatTensor(data), coords

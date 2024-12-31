@@ -96,207 +96,41 @@ class Regression(nn.Module):
     pass
 
   def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
+  #----------------------------------------------------------------------------
+    # h5 文件已经在外部打开，这里只需要创建一个组，用来管理模型的预测数据即可
     grpName = "FNN_Out" # a case data is a group
 
+    # 以附加的方式打开
     h5 = h5py.File(dirFileHDF, 'a')
 
+    # 不知道某变量流场是否已经写入，需要检测、区分
     if grpName in h5:
-      grp = h5[grpName]
+      grp = h5[grpName] # if the group existed
     else:
-      grp = h5.create_group(grpName)
+      grp = h5.create_group(grpName)  # if not, created it
       pass
 
+    # 根据参数化输入，预测流场
     # the predicted data should be detached and converted to numpy format
     output = self.forward(inp).detach().numpy()
 
-    ptsB1 = [2,27,2,52,2,12]
-    numbPtsB1 = (ptsB1[1]-ptsB1[0]+1) * (ptsB1[3]-ptsB1[2]+1) * (ptsB1[5]-ptsB1[4]+1)
+    # write data into h5 database directly
+    dsName = f"{self.varName}"
+    grp.create_dataset(dsName, data=output, dtype=np.float64)
 
-    ptsB2 = [2,27,2,52,2,13]
-    numbPtsB2 = (ptsB2[1]-ptsB2[0]+1) * (ptsB2[3]-ptsB2[2]+1) * (ptsB2[5]-ptsB2[4]+1)
-
-    ptsB3 = [2,27,2,53,2,12]
-    numbPtsB3 = (ptsB3[1]-ptsB3[0]+1) * (ptsB3[3]-ptsB3[2]+1) * (ptsB3[5]-ptsB3[4]+1)
-
-    ptsB4 = [2,27,2,53,2,13]
-    numbPtsB4 = (ptsB4[1]-ptsB4[0]+1) * (ptsB4[3]-ptsB4[2]+1) * (ptsB4[5]-ptsB4[4]+1)
-
-    ptsB5 = [2,28,2,52,2,12]
-    numbPtsB5 = (ptsB5[1]-ptsB5[0]+1) * (ptsB5[3]-ptsB5[2]+1) * (ptsB5[5]-ptsB5[4]+1)
-
-    ptsB6 = [2,28,2,52,2,13]
-    numbPtsB6 = (ptsB6[1]-ptsB6[0]+1) * (ptsB6[3]-ptsB6[2]+1) * (ptsB6[5]-ptsB6[4]+1)
-
-    ptsB7 = [2,28,2,53,2,12]
-    numbPtsB7 = (ptsB7[1]-ptsB7[0]+1) * (ptsB7[3]-ptsB7[2]+1) * (ptsB7[5]-ptsB7[4]+1)
-
-    ptsB8 = [2,28,2,53,2,13]
-    numbPtsB8 = (ptsB8[1]-ptsB8[0]+1) * (ptsB8[3]-ptsB8[2]+1) * (ptsB8[5]-ptsB8[4]+1)
-
-    numbAll = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 \
-            + numbPtsB5 + numbPtsB6 + numbPtsB7 + numbPtsB8
-
-    # for block 1
-    idxB = 0
-    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
-
-    ista = 0; iend = numbPtsB1
-    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
-
-    # 写入坐标
+    # write coordinates it necessary
     if coords is not None:
-      dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
+      dsName = "Coords-X"
+      grp.create_dataset(dsName, data=coords["x"], dtype=np.float64)
 
-      dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
+      dsName = "Coords-Y"
+      grp.create_dataset(dsName, data=coords["y"], dtype=np.float64)
 
-      dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
+      dsName = "Coords-Z"
+      grp.create_dataset(dsName, data=coords["z"], dtype=np.float64)
       pass
 
-    # for block 2
-    idxB = 1
-    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
-
-    ista = numbPtsB1; iend = numbPtsB1 + numbPtsB2
-    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
-
-    # write coordinates
-    if coords is not None:
-      dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
-      pass
-
-    # for block 3
-    idxB = 2
-    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
-
-    ista = numbPtsB1 + numbPtsB2; iend = numbPtsB1 + numbPtsB2 + numbPtsB3
-    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
-
-    # 写入坐标
-    if coords is not None:
-      dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
-      pass
-
-    # for block 4
-    idxB = 3
-    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
-
-    ista = numbPtsB1 + numbPtsB2 + numbPtsB3
-    iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
-
-    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
-
-    # 写入坐标
-    if coords is not None:
-      dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
-      pass
-
-    # for block 5
-    idxB = 4
-    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
-
-    ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4
-    iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
-
-    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
-
-    # 写入坐标
-    if coords is not None:
-      dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
-      pass
-
-    # for block 6
-    idxB = 5
-    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
-
-    ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5
-    iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
-
-    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
-
-    # 写入坐标
-    if coords is not None:
-      dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
-      pass
-
-    # for block 7
-    idxB = 6
-    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
-
-    ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6
-    iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
-
-    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
-
-    # 写入坐标
-    if coords is not None:
-      dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
-      pass
-
-    # for block 8
-    idxB = 7
-    dsName = "Block-" + "%02d"%idxB + "-" + self.varName
-
-    ista = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7
-    iend = numbPtsB1 + numbPtsB2 + numbPtsB3 + numbPtsB4 + numbPtsB5 + numbPtsB6 + numbPtsB7 + numbPtsB8
-
-    grp.create_dataset(dsName, data=output[ista:iend], dtype=np.float64)
-
-    # 写入坐标
-    if coords is not None:
-      dsName = "Block-" + "%02d"%idxB + "-X"
-      grp.create_dataset(dsName, data=coords["x"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Y"
-      grp.create_dataset(dsName, data=coords["y"][idxB], dtype=np.float64)
-
-      dsName = "Block-" + "%02d"%idxB + "-Z"
-      grp.create_dataset(dsName, data=coords["z"][idxB], dtype=np.float64)
-      pass
+    h5.close()
     pass
 
   # 打印损失函数
