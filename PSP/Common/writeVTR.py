@@ -7,7 +7,7 @@ from pathlib import Path
 import h5py
 import numpy as np
 
-def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, numCoordsEachBlk:list)->None:
+def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, dataBounds:dict)->None:
   """
   Write a block's data to a VTR file, according to the input parameter 'idxBlk'.
   The data are from h5 file
@@ -27,26 +27,25 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, numCoordsEachBlk:list)->None:
   # first to read X/Y/Z, giving dims
 
   # X
-  iSta = numCoordsEachBlk[idxBlk][0]
-  iEnd = numCoordsEachBlk[idxBlk][1]
-  lenX = iEnd - iSta + 1
+  iSta = dataBounds["X"][0]
+  iEnd = dataBounds["X"][1]
+  lenX = iEnd - iSta
 
   # Y
-  datasetName = "Block-" + "%02d"%idxBlk + "-Y"
-  coordsY = h5[grpName][datasetName][:]
-
-  lenY = len(coordsY)#; print("lenY = ", lenY)
+  iSta = dataBounds["Y"][0]
+  iEnd = dataBounds["Y"][1]
+  lenY = iEnd - iSta
 
   # Z
-  datasetName = "Block-" + "%02d"%idxBlk + "-Z"
-  coordsZ = h5[grpName][datasetName][:]
 
-  lenZ = len(coordsZ)#; print("lenZ = ", lenZ)
+  iSta = dataBounds["Z"][0]
+  iEnd = dataBounds["Z"][1]
+  lenZ = iEnd - iSta
 
   # define the dims: start and final index
-  iSta = 1; iEnd = lenX#; print(iSta, iEnd)
-  jSta = 1; jEnd = lenY#; print(jSta, jEnd)
-  kSta = 1; kEnd = lenZ#; print(kSta, kEnd)
+  iSta = 1; iEnd = lenX
+  jSta = 1; jEnd = lenY
+  kSta = 1; kEnd = lenZ
 
   extent  = str("%5d"%iSta)  \
           + str("%5d"%iEnd)  \
@@ -173,10 +172,13 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, numCoordsEachBlk:list)->None:
   # add '_' denoting the starting floats data
   vtr.write(b'_')
 
-  # write pressure field "P"
-  datasetName = "Block-" + "%02d"%idxBlk + "-P"
+  iSta = dataBounds["Var"][0]
+  iEnd = dataBounds["Var"][1]
 
-  fieldP = h5[grpName][datasetName][:]  # "[:]" is necessary
+  # write pressure field "P"
+  datasetName = "P"
+
+  fieldP = h5[grpName][datasetName][iSta:iEnd]
   numOfBytes = np.int32((len(fieldP)*8))
 
   # write the byte offsets and float loop data
@@ -184,18 +186,18 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, numCoordsEachBlk:list)->None:
   fieldP.tofile(vtr)
 
   # write U field "U"
-  datasetName = "Block-" + "%02d"%idxBlk + "-U"
+  datasetName = "U"
 
-  fieldU = h5[grpName][datasetName][:]
+  fieldU = h5[grpName][datasetName][iSta:iEnd]
   numOfBytes = np.int32(len(fieldU)*8)
 
   numOfBytes.tofile(vtr)
   fieldU.tofile(vtr)
 
   # write pressure field "V"
-  datasetName = "Block-" + "%02d"%idxBlk + "-V"
+  datasetName = "V"
 
-  fieldV = h5[grpName][datasetName][:]  # "[:]" is necessary
+  fieldV = h5[grpName][datasetName][iSta:iEnd]
   numOfBytes = np.int32((len(fieldV)*8))
 
   # write the byte offsets and float loop data
@@ -203,9 +205,9 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, numCoordsEachBlk:list)->None:
   fieldV.tofile(vtr)
 
   # write pressure field "W"
-  datasetName = "Block-" + "%02d"%idxBlk + "-W"
+  datasetName = "W"
 
-  fieldW = h5[grpName][datasetName][:]  # "[:]" is necessary
+  fieldW = h5[grpName][datasetName][iSta:iEnd]
   numOfBytes = np.int32((len(fieldW)*8))
 
   # write the byte offsets and float loop data
@@ -213,9 +215,9 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, numCoordsEachBlk:list)->None:
   fieldW.tofile(vtr)
 
   # write pressure field "T"
-  datasetName = "Block-" + "%02d"%idxBlk + "-T"
+  datasetName = "T"
 
-  fieldT = h5[grpName][datasetName][:]  # "[:]" is necessary
+  fieldT = h5[grpName][datasetName][iSta:iEnd]
   numOfBytes = np.int32((len(fieldT)*8))
 
   # write the byte offsets and float loop data
@@ -223,27 +225,33 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, numCoordsEachBlk:list)->None:
   fieldT.tofile(vtr)
 
   # write coords X
-  datasetName = "Block-" + "%02d"%idxBlk + "-X"
+  datasetName = "Coords-X"
 
-  coordsX = h5[grpName][datasetName][:]
+  iSta = dataBounds["X"][0]
+  iEnd = dataBounds["X"][1]
+  coordsX = h5[grpName][datasetName][iSta:iEnd]
   numOfBytes = np.int32(len(coordsX)*8)
 
   numOfBytes.tofile(vtr)
   coordsX.tofile(vtr)
 
   # write coords Y
-  datasetName = "Block-" + "%02d"%idxBlk + "-Y"
+  datasetName = "Coords-Y"
 
-  coordsY = h5[grpName][datasetName][:]
+  iSta = dataBounds["Y"][0]
+  iEnd = dataBounds["Y"][1]
+  coordsY = h5[grpName][datasetName][iSta:iEnd]
   numOfBytes = np.int32(len(coordsY)*8)
 
   numOfBytes.tofile(vtr)
   coordsY.tofile(vtr)
 
   # write coords Z
-  datasetName = "Block-" + "%02d"%idxBlk + "-Z"
+  datasetName = "Coords-Z"
 
-  coordsZ = h5[grpName][datasetName][:]
+  iSta = dataBounds["Z"][0]
+  iEnd = dataBounds["Z"][1]
+  coordsZ = h5[grpName][datasetName][iSta:iEnd]
   numOfBytes = np.int32(len(coordsZ)*8)
 
   numOfBytes.tofile(vtr)

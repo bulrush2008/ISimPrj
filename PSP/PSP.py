@@ -66,6 +66,7 @@ class PSP(object):
     alive = dirHDF.exists()
     print("HDF File exists? ", alive)
 
+    # certain block's left and right edge in the data array
     numCoordsEachBlk = [[2,27,2,52,2,12],
                         [2,27,2,52,2,13],
                         [2,27,2,53,2,12],
@@ -75,14 +76,9 @@ class PSP(object):
                         [2,28,2,53,2,12],
                         [2,28,2,53,2,13]]
 
-    # certain block's left and right edge in the data array
-    # data[... numPtsL, ..., numPtsR, ...]
-    # so data[numPtsL:numPtsR] is the slice we need
-
     positions = splitData(numCoordsEachBlk)
 
     for idx in range(numOfBlocks):
-
       vFL = positions["Var"][idx]
       vFR = positions["Var"][idx+1]
 
@@ -95,11 +91,11 @@ class PSP(object):
       zFL = positions["Z"][idx]
       zFR = positions["Z"][idx+1]
 
-      dataBound = [vFL, vFR, xFL, xFR, yFL, yFR, zFL, zFR]
-
-      writeVTR(idx, dirVTR, dirHDF, dataBound)
-
-      numPtsL = numptsR
+      dataBounds = {"Var":[vFL, vFR], "X":[xFL, xFR], "Y":[yFL, yFR], "Z":[zFL, zFR]}
+      writeVTR( idxBlk    = idx,
+                dirVTR    = dirVTR,
+                dirHDF    = dirHDF,
+                dataBounds= dataBounds )
       pass
     pass
 
