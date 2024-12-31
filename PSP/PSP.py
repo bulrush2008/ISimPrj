@@ -28,6 +28,7 @@ from Common.assertFileExist import assertFileExist
 from Common.idxList import idxList, numOfCases
 from Common.paraInList import paraInList, lenParaIn
 from Common.cleanBadSpots import cleanBadSpots
+from Common.splitData import splitData
 
 class PSP(object):
 #==============================================================================
@@ -74,19 +75,29 @@ class PSP(object):
                         [2,28,2,53,2,12],
                         [2,28,2,53,2,13]]
 
-    # def a lambda func, used just in this routine
-    calcPtsNum = lambda l: (l[1]-l[0]+1) * (l[3]-l[2]+1) * (l[5]-l[4]+1)
-
     # certain block's left and right edge in the data array
     # data[... numPtsL, ..., numPtsR, ...]
     # so data[numPtsL:numPtsR] is the slice we need
-    numPtsL = 0
-    numptsR = 0
+
+    positions = splitData(numCoordsEachBlk)
 
     for idx in range(numOfBlocks):
-      numPtsR = calcPtsNum(numCoordsEachBlk[idx]) + numPtsL
 
-      writeVTR(idx, dirVTR, dirHDF, numPtsL, numptsR)
+      vFL = positions["Var"][idx]
+      vFR = positions["Var"][idx+1]
+
+      xFL = positions["X"][idx]
+      xFR = positions["X"][idx+1]
+
+      yFL = positions["Y"][idx]
+      yFR = positions["Y"][idx+1]
+
+      zFL = positions["Z"][idx]
+      zFR = positions["Z"][idx+1]
+
+      dataBound = [vFL, vFR, xFL, xFR, yFL, yFR, zFL, zFR]
+
+      writeVTR(idx, dirVTR, dirHDF, dataBound)
 
       numPtsL = numptsR
       pass

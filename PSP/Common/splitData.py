@@ -19,7 +19,7 @@ def splitData(infoBlk:list)->list:
   """
   f = lambda l: (l[1]-l[0]+1, l[3]-l[2]+1, l[5]-l[4]+1)
 
-  posi = {"Var":[], "X":[], "Y":[], "Z":[]}
+  posi = {"Var":[0], "X":[0], "Y":[0], "Z":[0]}
 
   numBlks = len(infoBlk)  # 8 blocks
   print(numBlks)
