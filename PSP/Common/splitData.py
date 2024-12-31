@@ -11,15 +11,13 @@ Split data from the total in h5 file, for a certain block.
                         [2,28,2,53,2,13]]
 """
 
-def splitData(idxBlk:int, infoBlk:list)->list:
+def splitData(infoBlk:list)->list:
   """
-  idxBlk: block index
   infoBlk: information including all block's x/y/z dims
 
   return: a position list, including data array index positions of var, X, Y, Z
   """
   f = lambda l: (l[1]-l[0]+1, l[3]-l[2]+1, l[5]-l[4]+1)
-  g = lambda t: t[0]*t[1]*t[2]
 
   posi = {"Var":[], "X":[], "Y":[], "Z":[]}
 
@@ -42,7 +40,7 @@ def splitData(idxBlk:int, infoBlk:list)->list:
 
     vf += x*y*z
 
-    posi["Var"].append(xf*yf*zf)
+    posi["Var"].append(vf)
     pass
 
   return posi
@@ -57,7 +55,7 @@ if __name__=="__main__":
                       [2,28,2,53,2,12],
                       [2,28,2,53,2,13]]
 
-  p = splitData(1, numCoordsEachBlk)
+  p = splitData(numCoordsEachBlk)
 
   print(p)
 
