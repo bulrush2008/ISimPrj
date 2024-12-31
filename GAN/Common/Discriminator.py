@@ -2,6 +2,7 @@
 import torch
 import torch.nn as nn
 import pandas
+import math
 
 from pathlib import Path
 
@@ -31,6 +32,9 @@ class Discriminator(nn.Module):
 
       nn.Linear(100,1),
     )
+
+    # initialize weights，using He Kaiming method now
+    self._initialize_weights()
 
     # create a loss function
     self.loss_function = nn.BCELoss()
@@ -82,7 +86,22 @@ class Discriminator(nn.Module):
     outFile = outDir.joinpath(f"D_lossHistory_{self.varName}.png")
     ax.figure.savefig(outFile)
     pass
-  pass
+
+  def _initialize_weights(self):
+    """
+    - inner function, call only once at initialization
+    - configure initial model weights
+    """
+    for m in self.model:
+      if isinstance(m, nn.Linear):
+        nn.init.kaiming_uniform_(m.weight, a=math.sqrt(5))
+        if m.bias is not None:
+          nn.init.zeros_(m.bias)
+          pass
+        pass
+      pass  # for-loop end
+    pass  # func '_initialize_weights' end
+  pass  # Class End
 
 if __name__=="__main__":
   d = Discriminator(varName="T")
