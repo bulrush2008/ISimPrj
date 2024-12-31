@@ -1,28 +1,19 @@
 """
-Split data from the total in h5 file, for a certain block.
-
-    numCoordsEachBlk = [[2,27,2,52,2,12],
-                        [2,27,2,52,2,13],
-                        [2,27,2,53,2,12],
-                        [2,27,2,53,2,13],
-                        [2,28,2,52,2,12],
-                        [2,28,2,52,2,13],
-                        [2,28,2,53,2,12],
-                        [2,28,2,53,2,13]]
+give the data bounds for a certain block
 """
 
 def splitData(infoBlk:list)->list:
   """
   infoBlk: information including all block's x/y/z dims
-
   return: a position list, including data array index positions of var, X, Y, Z
   """
   f = lambda l: (l[1]-l[0]+1, l[3]-l[2]+1, l[5]-l[4]+1)
 
+  # records the bounds for each field var and X/Y/Z
+  # and return
   posi = {"Var":[0], "X":[0], "Y":[0], "Z":[0]}
 
   numBlks = len(infoBlk)  # 8 blocks
-  print(numBlks)
 
   vf = xf = yf = zf = 0
 

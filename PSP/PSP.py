@@ -12,7 +12,7 @@ The only main class in PSP module
   displayed by Paraview
 
 @author       @date         @aff          @version
-Xia, S        2024.12.27    Simpop.cn     v3.x
+Xia, S        2024.12.27    Simpop.cn     v4.x
 """
 
 from pathlib import Path
@@ -49,13 +49,11 @@ class PSP(object):
     numOfBlocks = 8
     dirVTM = Path("./FNN_Case_Test")
     if not dirVTM.exists(): dirVTM.mkdir()
-    #if dirVTM.exists(): dirVTM.rmdir() # 删除一个空目录
 
     fileVTM = dirVTM.joinpath("t01.vtm")
 
     # write the vtm file and return the path of vtr files
     dirVTR = writeVTM(numOfBlocks, fileVTM)
-    #print(dirVTR)
 
     dirVTR = dirVTM.joinpath(dirVTR)
     print(dirVTR)
@@ -76,6 +74,7 @@ class PSP(object):
                         [2,28,2,53,2,12],
                         [2,28,2,53,2,13]]
 
+    # positions is a dictionary
     positions = splitData(numCoordsEachBlk)
 
     for idx in range(numOfBlocks):
@@ -92,6 +91,7 @@ class PSP(object):
       zFR = positions["Z"][idx+1]
 
       dataBounds = {"Var":[vFL, vFR], "X":[xFL, xFR], "Y":[yFL, yFR], "Z":[zFL, zFR]}
+
       writeVTR( idxBlk    = idx,
                 dirVTR    = dirVTR,
                 dirHDF    = dirHDF,
@@ -105,12 +105,11 @@ class PSP(object):
     Get data from the vtk files and write them to hdf5 file, which serve as a
     database.
     """
-    # Cases dir and name
-
     # check the case number
     if numOfCases != lenParaIn:
       raise ValueError(f"{numOfCases} must equal to {lenParaIn}")
 
+    # Cases dir and name
     # all cases are in the directory:
     caseDir = Path("../FSCases")
 
