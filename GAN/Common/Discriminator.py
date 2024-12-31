@@ -1,7 +1,8 @@
 
+import torch
 import torch.nn as nn
 
-class Discriminator(object):
+class Discriminator(nn.Module):
   def __init__(self):
     # init by parent init method
     super().__init__()
@@ -10,15 +11,15 @@ class Discriminator(object):
     self.model = nn.Sequential(
       nn.Linear(125557,1000),
       nn.LeakyReLU(0.02),
-      nn.LayerNorm(),
+      nn.LayerNorm(1000),
 
       nn.Linear(1000,300),
       nn.LeakyReLU(0.02),
-      nn.LayerNorm(),
+      nn.LayerNorm(300),
 
       nn.Linear(300,100),
       nn.LeakyReLU(0.02),
-      nn.LayerNorm(),
+      nn.LayerNorm(100),
 
       nn.Linear(100,1),
     )
@@ -27,7 +28,7 @@ class Discriminator(object):
     self.loss_function = nn.BCELoss()
 
     # create optimizer, Adam method adopted
-    self.optimiser = torch.optim.Adam(self.parameter(), lr=0.0001)
+    self.optimiser = torch.optim.Adam(self.parameters(), lr=0.0001)
 
     # counter and accumulator for progress
     self.counter = 0
@@ -65,4 +66,8 @@ class Discriminator(object):
 
   def plot_progress(self):
     pass
+  pass
+
+if __name__=="__main__":
+  d = Discriminator()
   pass
