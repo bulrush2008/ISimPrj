@@ -1,11 +1,19 @@
 
 import torch
 import torch.nn as nn
+import pandas
+
+from pathlib import Path
 
 class Discriminator(nn.Module):
-  def __init__(self):
+  def __init__(self, varName:str):
     # init by parent init method
     super().__init__()
+
+    if varName not in ["P", "U", "V", "W", "T"]:
+      raise ValueError("Error in D: Var Name in [P,U,V,W,T]")
+
+    self.varName = varName
 
     # define neural network layers
     self.model = nn.Sequential(
@@ -64,10 +72,18 @@ class Discriminator(nn.Module):
     self.optimiser.step()
     pass
 
-  def plot_progress(self):
+  def saveLossHistory2PNG(self, outDir:Path)->None:
+    df = pandas.DataFrame(self.progress, columns=["Loss"])
+    ax = df.plot( title  = f"D-Loss history of {self.varName}",
+                  color  = "black",
+                  xlabel = "Number of Trained Cases",
+                  ylabel = "Loss Value",
+                  logy   = True)
+    outFile = outDir.joinpath(f"D_lossHistory_{self.varName}.png")
+    ax.figure.savefig(outFile)
     pass
   pass
 
 if __name__=="__main__":
-  d = Discriminator()
+  d = Discriminator(varName="T")
   pass
