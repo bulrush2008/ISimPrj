@@ -43,7 +43,7 @@ class GAN(object):
     # train the fields one has assigned, which must be in
     # ["P", "T", "U", "V", "W"]
     # the order in list does not matter
-    fieldList = {"T":2}
+    fieldList = {"T":1, "P":1}
 
     print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
 
@@ -161,7 +161,8 @@ class GAN(object):
       if varG_dict_path.exists() and varD_dict_path.exists():
         print(f"Train from G_Dict_{var}.pth & D_Dict_{var}.pth")
       else:
-        var_dict_path = None
+        varG_dict_path = None
+        varD_dict_path = None
         print(f"Train from ZERO for {var}")
         pass
 
