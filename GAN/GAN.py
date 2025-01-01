@@ -82,7 +82,7 @@ class GAN(object):
 
   def predict( self ):
     # create a new empty h5 file to save the prediced data
-    outH5Path = Path("./fnn.h5")
+    outH5Path = Path("./gan.h5")
     h5 = h5py.File(outH5Path, 'w')
     h5.close()
 
