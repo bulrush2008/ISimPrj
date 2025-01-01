@@ -10,5 +10,5 @@ FNN/Pics
 FNN/StateDicts
 GAN/StateDicts
 GAN/Pics
-GAN/fnn.h5
+GAN/gan.h5
 GAN/Common/__pycache__
