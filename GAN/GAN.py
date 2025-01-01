@@ -162,24 +162,24 @@ class GAN(object):
       G = Generation(var, var_dict_path)
       D = Discriminator(var)
 
-      print(f"*Now we are training {var} field:")
+      print(f"*GAN: Now we are training {var} field:")
 
       # train the model
       epochs = varList[var]
 
       for i in range(epochs):
         print(f"  - Training Epoch {i+1} of {epochs} for {var}")
-        for inp, label, _ in fsDataset_train:
+        for inp, fld, _ in fsDataset_train:
           # train discriminatro on True
-          D.train(label, torch.FloatTensor([1.0]))
+          D.train(fld, torch.FloatTensor([1.0]))
 
           # train discriminator on False
           D.train(G.forward(inp).detach(), torch.FloatTensor([0.0]))
 
           # train generator
           G.train(D, inp, torch.FloatTensor([1.0]))
-          pass
-        pass
+          pass  # Tranverse all fields in 1 epoch
+        pass  # All Epochs Finished
 
       models[var] = G
       pass

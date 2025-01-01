@@ -37,7 +37,7 @@ class Discriminator(nn.Module):
     self._initialize_weights()
 
     # create a loss function
-    self.loss_function = nn.BCELoss()
+    self.loss_function = nn.MSELoss()
 
     # create optimizer, Adam method adopted
     self.optimiser = torch.optim.Adam(self.parameters(), lr=0.0001)
