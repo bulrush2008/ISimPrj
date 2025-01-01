@@ -61,13 +61,10 @@ class Discriminator(nn.Module):
 
     # increase counter and accumulate error every 10
     self.counter += 1
+    self.progress.append(loss.item()) # item() 用于取元素
 
     if self.counter%10 == 0:
-      self.progress.append(loss.item()) # item() 用于取元素
-      pass
-
-    if self.counter%1000 == 0:
-      print("Counter = ", self.counter)
+      print(f"    D- {self.counter} Cases Trained for {self.varName} ...")
       pass
 
     # zero gradient, perform a backward pass, update weights

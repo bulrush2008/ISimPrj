@@ -19,6 +19,7 @@ from pathlib import Path
 from Common.CaseSet import CaseSet
 from Common.FSimDataset import FSimDataset
 from Common.Generation  import Generation
+from Common.Discriminator import Discriminator
 
 class GAN(object):
   #----------------------------------------------------------------------------
@@ -159,6 +160,7 @@ class GAN(object):
         pass
 
       G = Generation(var, var_dict_path)
+      D = Discriminator(var)
 
       print(f"*Now we are training {var} field:")
 
@@ -168,7 +170,14 @@ class GAN(object):
       for i in range(epochs):
         print(f"  - Training Epoch {i+1} of {epochs} for {var}")
         for inp, label, _ in fsDataset_train:
-          G.train(inp, label)
+          # train discriminatro on True
+          D.train(label, torch.FloatTensor([1.0]))
+
+          # train discriminator on False
+          D.train(G.forward(inp).detach(), torch.FloatTensor([0.0]))
+
+          # train generator
+          G.train(D, inp, torch.FloatTensor([1.0]))
           pass
         pass
 
