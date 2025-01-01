@@ -71,14 +71,19 @@ class Generation(nn.Module):
 
   # forward propagation
   def forward(self, inputs):
+    # simply run the model
     return self.model(inputs)
 
   # train
-  def train(self, inputs, targets):
-    outputs = self.forward(inputs)
+  def train(self, D, inputs, targets):
+    # calculate the output of the network
+    g_output = self.forward(inputs)
+
+    # pass onto Discriminator
+    d_output = D.forward(g_output)
 
     # calculate loss
-    loss = self.loss_function(outputs, targets)
+    loss = self.loss_function(d_output, targets)
 
     # each train step, the loss must be added
     self.progress.append(loss.item())
