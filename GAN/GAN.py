@@ -18,7 +18,7 @@ from pathlib import Path
 
 from Common.CaseSet import CaseSet
 from Common.FSimDataset import FSimDataset
-from Common.Regression  import Regression
+from Common.Generation  import Generation
 
 class GAN(object):
   #----------------------------------------------------------------------------
@@ -88,7 +88,7 @@ class GAN(object):
 
     ifield = 0
     for var in fields:
-      # create a Regression obj as model, from the state_dict
+      # create a Generation object as model, from the state_dict
       # gen a obj as regression, and then train the model
       stateDictsPath = Path("StateDicts")
       var_dict_path = stateDictsPath.joinpath(f"dict_{var}.pth")
@@ -101,8 +101,8 @@ class GAN(object):
         print(f">>> Hi, Now We are Predicting Field {var}!")
         pass
 
-      R = Regression(var, var_dict_path)
-      R.model.eval()  # predict model
+      G = Generation(var, var_dict_path)
+      G.model.eval()  # predict model
 
       fsDataset_test = FSimDataset(filePathH5, tstSet, var)
 
@@ -111,9 +111,9 @@ class GAN(object):
 
       # the coordinates need to write only one time
       if ifield == 0:
-        R.write2HDF(inp, outH5Path, coords=coords)
+        G.write2HDF(inp, outH5Path, coords=coords)
       else:
-        R.write2HDF(inp, outH5Path, coords=None)
+        G.write2HDF(inp, outH5Path, coords=None)
         pass
 
       ifield += 1
@@ -158,7 +158,7 @@ class GAN(object):
         print(f"Train from dict_{var}.pth")
         pass
 
-      R = Regression(var, var_dict_path)
+      G = Generation(var, var_dict_path)
 
       print(f"*Now we are training {var} field:")
 
@@ -168,11 +168,11 @@ class GAN(object):
       for i in range(epochs):
         print(f"  - Training Epoch {i+1} of {epochs} for {var}")
         for inp, label, _ in fsDataset_train:
-          R.train(inp, label)
+          G.train(inp, label)
           pass
         pass
 
-      models[var] = R
+      models[var] = G
       pass
 
     # now all variable models have been trained

@@ -10,7 +10,7 @@ import numpy as np
 from pathlib import Path
 
 # Regression class: Core of FNN
-class Regression(nn.Module):
+class Generation(nn.Module):
   # initialize PyTorch pararent class
   def __init__(self, varName:str, dictPath:Path=None):
     super().__init__()
@@ -144,4 +144,8 @@ class Regression(nn.Module):
     outFile = outDir.joinpath(f"lossHistory_{self.varName}.png")
     ax.figure.savefig(outFile)
     pass
+  pass
+
+if __name__=="__main__":
+  g = Generation("T")
   pass
