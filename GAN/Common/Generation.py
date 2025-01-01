@@ -146,7 +146,7 @@ class Generation(nn.Module):
                   xlabel = "Number of Trained Cases",
                   ylabel = "Loss Value",
                   logy   = True)
-    outFile = outDir.joinpath(f"lossHistory_{self.varName}.png")
+    outFile = outDir.joinpath(f"G_LossHistory_{self.varName}.png")
     ax.figure.savefig(outFile)
     pass
   pass
