@@ -7,7 +7,7 @@ import math
 from pathlib import Path
 
 class Discriminator(nn.Module):
-  def __init__(self, varName:str):
+  def __init__(self, varName:str, dictPath:Path=None):
     # init by parent init method
     super().__init__()
 
@@ -33,8 +33,12 @@ class Discriminator(nn.Module):
       nn.Linear(100,1),
     )
 
-    # initialize weights，using He Kaiming method now
-    self._initialize_weights()
+    if dictPath is not None:
+      self.model.load_state_dict(torch.load(dictPath))
+    else:
+      # initialize weights，using He Kaiming method now
+      self._initialize_weights()
+      pass
 
     # create a loss function
     self.loss_function = nn.MSELoss()

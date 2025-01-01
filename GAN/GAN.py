@@ -66,13 +66,17 @@ class GAN(object):
     for var in fieldList.keys():
       #------------------------------------------------------------------------
       # G & D: plot loss history and save
-      models[var][0].saveLossHistory2PNG(dirPNG)
-      models[var][1].saveLossHistory2PNG(dirPNG)
+      models[var][0].saveLossHistory2PNG(dirPNG)  # G
+      models[var][1].saveLossHistory2PNG(dirPNG)  # D
 
       #------------------------------------------------------------------------
       # save model parameters
+      # G
       model_dicts_name = dirModel.joinpath(f"G_Dict_{var}.pth")
       torch.save(models[var][0].model.state_dict(), model_dicts_name)
+      # D
+      model_dicts_name = dirModel.joinpath(f"D_Dict_{var}.pth")
+      torch.save(models[var][1].model.state_dict(), model_dicts_name)
       pass
     pass
 
@@ -93,7 +97,7 @@ class GAN(object):
       # create a Generation object as model, from the state_dict
       # gen a obj as regression, and then train the model
       stateDictsPath = Path("StateDicts")
-      var_dict_path = stateDictsPath.joinpath(f"dict_{var}.pth")
+      var_dict_path = stateDictsPath.joinpath(f"G_Dict_{var}.pth")
 
       if not var_dict_path.exists():
         var_dict_path = None
@@ -151,17 +155,18 @@ class GAN(object):
       fsDataset_train = FSimDataset(dataPath, trainSet, var)
 
       # gen a obj as regression, and then train the model
-      var_dict_path = Path(f"./StateDicts/dict_{var}.pth")
+      varG_dict_path = Path(f"./StateDicts/G_Dict_{var}.pth")
+      varD_dict_path = Path(f"./StateDicts/G_Dict_{var}.pth")
 
-      if not var_dict_path.exists():
+      if varG_dict_path.exists() and varD_dict_path.exists():
+        print(f"Train from G_Dict_{var}.pth & D_Dict_{var}.pth")
+      else:
         var_dict_path = None
         print(f"Train from ZERO for {var}")
-      else:
-        print(f"Train from dict_{var}.pth")
         pass
 
-      G = Generation(var, var_dict_path)
-      D = Discriminator(var)
+      G = Generation(var, varG_dict_path)
+      D = Discriminator(var, varD_dict_path)
 
       print(f"*GAN: Now we are training {var} field:")
 

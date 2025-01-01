@@ -141,7 +141,7 @@ class Generation(nn.Module):
   # 打印损失函数
   def saveLossHistory2PNG(self, outDir:Path)->None:
     df = pandas.DataFrame(self.progress, columns=["Loss"])
-    ax = df.plot( title  = f"Loss history of {self.varName}",
+    ax = df.plot( title  = f"G-Loss history of {self.varName}",
                   color  = "black",
                   xlabel = "Number of Trained Cases",
                   ylabel = "Loss Value",
