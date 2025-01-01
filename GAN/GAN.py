@@ -65,13 +65,14 @@ class GAN(object):
 
     for var in fieldList.keys():
       #------------------------------------------------------------------------
-      # plot loss history and save
-      models[var].saveLossHistory2PNG(dirPNG)
+      # G & D: plot loss history and save
+      models[var][0].saveLossHistory2PNG(dirPNG)
+      models[var][1].saveLossHistory2PNG(dirPNG)
 
       #------------------------------------------------------------------------
       # save model parameters
-      model_dicts_name = dirModel.joinpath(f"dict_{var}.pth")
-      torch.save(models[var].model.state_dict(), model_dicts_name)
+      model_dicts_name = dirModel.joinpath(f"G_Dict_{var}.pth")
+      torch.save(models[var][0].model.state_dict(), model_dicts_name)
       pass
     pass
 
@@ -127,7 +128,7 @@ class GAN(object):
               testSet :list,
               dataPath:Path )->dict:
     """
-    Train the FNN model by a give trainset, in which some cases field included.
+    Train the GAN model by a give trainset, in which some cases field included.
     - varList : dict of epochs for each field, such as ["P":1,"T":2]
     - trainSet: list of case names in train set, each is a string
     - testSet : list of case names in test set, each is a string
@@ -181,7 +182,7 @@ class GAN(object):
           pass  # Tranverse all fields in 1 epoch
         pass  # All Epochs Finished
 
-      models[var] = G
+      models[var] = [G,D]
       pass
 
     # now all variable models have been trained
