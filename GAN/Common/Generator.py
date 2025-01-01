@@ -10,7 +10,7 @@ import numpy as np
 from pathlib import Path
 
 # Regression class: Core of FNN
-class Generation(nn.Module):
+class Generator(nn.Module):
   # initialize PyTorch pararent class
   def __init__(self, varName:str, dictPath:Path=None):
     super().__init__()

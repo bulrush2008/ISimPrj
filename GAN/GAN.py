@@ -18,7 +18,7 @@ from pathlib import Path
 
 from Common.CaseSet import CaseSet
 from Common.FSimDataset import FSimDataset
-from Common.Generation  import Generation
+from Common.Generator import Generator
 from Common.Discriminator import Discriminator
 
 class GAN(object):
@@ -94,7 +94,7 @@ class GAN(object):
 
     ifield = 0
     for var in fields:
-      # create a Generation object as model, from the state_dict
+      # create a Generator object as model, from the state_dict
       # gen a obj as regression, and then train the model
       stateDictsPath = Path("StateDicts")
       var_dict_path = stateDictsPath.joinpath(f"G_Dict_{var}.pth")
@@ -107,7 +107,7 @@ class GAN(object):
         print(f">>> Hi, Now We are Predicting Field {var}!")
         pass
 
-      G = Generation(var, var_dict_path)
+      G = Generator(var, var_dict_path)
       G.model.eval()  # predict model
 
       fsDataset_test = FSimDataset(filePathH5, tstSet, var)
@@ -156,7 +156,7 @@ class GAN(object):
 
       # gen a obj as regression, and then train the model
       varG_dict_path = Path(f"./StateDicts/G_Dict_{var}.pth")
-      varD_dict_path = Path(f"./StateDicts/G_Dict_{var}.pth")
+      varD_dict_path = Path(f"./StateDicts/D_Dict_{var}.pth")
 
       if varG_dict_path.exists() and varD_dict_path.exists():
         print(f"Train from G_Dict_{var}.pth & D_Dict_{var}.pth")
@@ -166,7 +166,7 @@ class GAN(object):
         print(f"Train from ZERO for {var}")
         pass
 
-      G = Generation(var, varG_dict_path)
+      G = Generator(var, varG_dict_path)
       D = Discriminator(var, varD_dict_path)
 
       print(f"*GAN: Now we are training {var} field:")
