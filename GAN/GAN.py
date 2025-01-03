@@ -169,13 +169,13 @@ class GAN(object):
       G = Generator(var, varG_dict_path)
       D = Discriminator(var, varD_dict_path)
 
-      print(f"*GAN: Now we are training {var} field:")
+      print(f"*GAN: Now we are training {var:>3}:")
 
       # train the model
       epochs = varList[var]
 
       for i in range(epochs):
-        print(f"  - Training Epoch {i+1} of {epochs} for {var}")
+        print(f"  - Training Epoch {i+1:5d} of {epochs:5d}")
         for inp, fld, _ in fsDataset_train:
           # train discriminatro on True
           D.train(fld, torch.FloatTensor([1.0]))

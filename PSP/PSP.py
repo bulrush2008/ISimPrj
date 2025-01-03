@@ -60,7 +60,7 @@ class PSP(object):
 
     if not dirVTR.exists(): dirVTR.mkdir(parents=True)
 
-    dirHDF = Path("../FNN").joinpath("fnn.h5")
+    dirHDF = Path("../GAN").joinpath("gan.h5")
     alive = dirHDF.exists()
     print("HDF File exists? ", alive)
 

@@ -68,7 +68,7 @@ class Discriminator(nn.Module):
     self.progress.append(loss.item()) # item() 用于取元素
 
     if self.counter%10 == 0:
-      print(f"    D- {self.counter} Cases Trained for {self.varName} ...")
+      print(f"    D- {self.counter:5d} Cases Trained ...")
       pass
 
     # zero gradient, perform a backward pass, update weights
