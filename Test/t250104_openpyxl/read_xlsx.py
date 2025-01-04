@@ -14,6 +14,8 @@ l = df.iloc[20:145,1:4].values.tolist()
 
 length = len(l); print(length)
 
+print(l)
+
 # 将数据保存为 CSV 文件
 #csv_file = 'data.csv'
 #df.to_csv(csv_file, index=False)
