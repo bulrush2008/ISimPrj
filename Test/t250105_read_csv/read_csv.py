@@ -18,13 +18,13 @@ with open('./inp.csv', mode='r', encoding='utf-8') as csv_file:
         value = row[1]
         
         # 尝试将值转换为浮点数或整数
-        try:
-            value = float(value)
-            if value.is_integer():
-                value = int(value)
-        except ValueError:
-            # 如果转换失败，保持为字符串
-            pass
+        #try:
+        #    value = float(value)
+        #    if value.is_integer():
+        #        value = int(value)
+        #except ValueError:
+        #    # 如果转换失败，保持为字符串
+        #    pass
         
         # 将键值对存入字典
         data_dict[key] = value
