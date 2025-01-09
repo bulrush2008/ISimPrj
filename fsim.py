@@ -1,12 +1,12 @@
 
 import csv
 
-def read_csv():
+def read_csv(file:str):
 # 初始化一个空字典来存储数据
   data_dict = {}
 
   # 打开 CSV 文件
-  with open('./fsim.inp', mode='r', encoding='utf-8') as csv_file:
+  with open(file, mode='r', encoding='utf-8') as csv_file:
     # 创建 CSV 读取器
     csv_reader = csv.reader(csv_file)
 
@@ -22,10 +22,13 @@ def read_csv():
       # 将键值对存入字典
       data_dict[key] = value
       pass
+    pass
+
   return data_dict
 
 # this the main function of FSimPrj
 
-data_csv = read_csv()
+file = r"./fsim.inp"
+data_csv = read_csv(file)
 
 print(data_csv)
