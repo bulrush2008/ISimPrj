@@ -1,4 +1,4 @@
-FastSim
+Intelligent Sim: iSim，i for Intelligent, Instant and Interconnected
 	- h5 file save data in its 'DataSet' object. One can read it and return data
   	of numpy format
 		2024.12.9
