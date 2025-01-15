@@ -40,7 +40,15 @@ class PSP(object):
     self.mode = mode
     pass
 
-  def HDF2VTK(self):
+  def act(self):
+    mode = self.mode
+
+    if mode == "VTK2HDF":
+      self._VTK2HDF()
+    elif mode == "HDF2VTK":
+      self._HDF2VTK()
+
+  def _HDF2VTK(self):
   #----------------------------------------------------------------------------
     """
     Get data from .h5 file, write them to vtm and vtr files, in order to be
@@ -99,7 +107,7 @@ class PSP(object):
       pass
     pass
 
-  def VTK2HDF(self):
+  def _VTK2HDF(self):
   #----------------------------------------------------------------------------
     """
     Get data from the vtk files and write them to hdf5 file, which serve as a
@@ -201,13 +209,18 @@ class PSP(object):
     pass
 
 if __name__=="__main__":
-  prompt = input("Input Your Command, Either 'VTK2HDF' Or 'HDF2VTK':\n")
+  import sys
 
-  psp = PSP( prompt )
+  action = sys.argv[1]
+  psp = PSP( action )
 
-  if prompt == 'VTK2HDF':
-    print("We are writing HDF5 database from vtk files ...")
-    psp.VTK2HDF()
+  if action == "VTK2HDF":
+    print("Now We Convert All Cases to MatrixData.")
+  elif action == "HDF2VTK":
+    print("Now We Convert Predicting Field to VTK data from HDF Format.")
   else:
-    print("We are writing VTK files from HDF5 database ...")
-    psp.HDF2VTK()
+    raise ("'VTK2HDF' or 'HDF2VTK' Are the Only Two Legal Input.")
+    sys.exit()
+    pass
+
+  psp.act()
