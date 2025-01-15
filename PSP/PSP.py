@@ -219,8 +219,6 @@ if __name__=="__main__":
   elif action == "HDF2VTK":
     print("Now We Convert Predicting Field to VTK data from HDF Format.")
   else:
-    raise ("'VTK2HDF' or 'HDF2VTK' Are the Only Two Legal Input.")
-    sys.exit()
-    pass
+    raise ValueError("'VTK2HDF' or 'HDF2VTK' Are the Only Two Legal Input.")
 
   psp.act()
