@@ -1,6 +1,4 @@
 
-from Common.idxList import idxList
-
 from pathlib import Path
 
 def readVTM(VTMFilePath:Path, idxi:int)->tuple:

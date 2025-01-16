@@ -12,7 +12,7 @@ The only main class in PSP module
   displayed by Paraview
 
 @author       @date         @aff          @version
-Xia, S        2024.12.27    Simpop.cn     v4.x
+Xia, S        2025.1.16     Simpop.cn     v5.x
 """
 
 from pathlib import Path
@@ -25,8 +25,8 @@ from Common.writeVTR import writeVTR
 from Common.readVTR import readVTR
 from Common.readVTM import readVTM
 from Common.assertFileExist import assertFileExist
-from Common.idxList import idxList, numOfCases
-from Common.paraInList import paraInList, lenParaIn
+from Common.caseList import PSP_read_csv
+from Common.paramInps import paramInpDict, lenParamInp
 from Common.cleanBadSpots import cleanBadSpots
 from Common.splitData import splitData
 
@@ -113,28 +113,25 @@ class PSP(object):
     Get data from the vtk files and write them to hdf5 file, which serve as a
     database.
     """
+    inpCSV = Path("./PSP.inp")
+
+    caseList = PSP_read_csv(inpCSV)
+
+    numOfCases = len(caseList)
+
     # check the case number
-    if numOfCases != lenParaIn:
-      raise ValueError(f"{numOfCases} must equal to {lenParaIn}")
+    if numOfCases != lenParamInp:
+      raise ValueError(f"{numOfCases} must equal to {lenParamInp}")
 
     # Cases dir and name
     # all cases are in the directory:
     caseDir = Path("../FSCases")
 
-    # register all cases name to a list of strings
-    caseNames = []  # e.g "C003" or "C115"
-    for iCase in range(numOfCases):
-      s = "%03d"%idxList[iCase]
-      caseNames.append("C"+s)
-      #print(caseNames[iCase])
-      pass
-
     # assertain each case's path
     casePaths = []
-    for iCase in range(numOfCases):
-      path = caseDir.joinpath(caseNames[iCase]) 
+    for case in caseList:
+      path = caseDir.joinpath(case) 
       casePaths.append(path)
-      #print(casePaths[iCase])
       pass
 
     # MatrixData's directory, the data are integrated with HDF5 format
@@ -149,13 +146,14 @@ class PSP(object):
     hdf = h5py.File(h5File, 'w')
 
     # loop over each case
-    for iCase in range(numOfCases):
-      fileNameVTM = Path("case" + "%d"%idxList[iCase] + "_point.002000.vtm")
+    #for iCase in range(numOfCases):
+    for iCase, case in enumerate(caseList):
+      fileNameVTM = Path("case" + "%d"%(iCase+1) + "_point.002000.vtm")
       filePathVTM = casePaths[iCase].joinpath(fileNameVTM)
       #print(caseNames[i])
 
-      grpC = hdf.create_group(caseNames[iCase])
-      grpC.create_dataset("InParam", data=paraInList[iCase])
+      grpC = hdf.create_group(case)
+      grpC.create_dataset("InParam", data=paramInpDict[case])
 
       # assertain each vtm file is alive
       alive = assertFileExist(filePathVTM)
@@ -163,7 +161,7 @@ class PSP(object):
         raise LookupError(f"{filePathVTM} Does Not Exsit.")
 
       # read the only vtm file in this case
-      numOfBlock, filePathVTR = readVTM(filePathVTM, idxList[iCase])
+      numOfBlock, filePathVTR = readVTM(filePathVTM, iCase+1)
 
       # For certain case, loop all its vtr files, each of which relates to a block
       for jVTR in range(numOfBlock):
@@ -183,7 +181,6 @@ class PSP(object):
           coordsZ,
           gIndexRange ) = readVTR(theVTRFile)
 
-        #if iCase==0: print(gIndexRange)
         cleanBadSpots(field=fieldP, gIndexRange=gIndexRange)
         cleanBadSpots(field=fieldT, gIndexRange=gIndexRange)
 
@@ -199,8 +196,6 @@ class PSP(object):
         grpC.create_dataset("Block-"+"%02d"%jVTR + "-Y", data=coordsY)
         grpC.create_dataset("Block-"+"%02d"%jVTR + "-Z", data=coordsZ)
         pass
-
-      #if iCase==0: print(grpC.keys())
       pass
     #print(hdf.keys())
 
