@@ -113,7 +113,7 @@ class PSP(object):
     Get data from the vtk files and write them to hdf5 file, which serve as a
     database.
     """
-    inpCSV = Path("./PSP.inp")
+    inpCSV = inpPath
 
     caseList = PSP_read_csv(inpCSV)
 
@@ -137,7 +137,7 @@ class PSP(object):
     # MatrixData's directory, the data are integrated with HDF5 format
 
     # MatrixData dir and name
-    h5Path = Path("../FSCases/FSHDF")
+    h5Path = outPath
     if not h5Path.exists(): h5Path.mkdir()
 
     h5File = h5Path.joinpath("MatrixData.h5")
