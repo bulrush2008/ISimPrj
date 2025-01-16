@@ -32,12 +32,14 @@ from Common.splitData import splitData
 
 class PSP(object):
 #==============================================================================
-  def __init__(self, mode:str):
+  def __init__(self, mode:str, inpFile:Path, outDir:Path):
   #----------------------------------------------------------------------------
     if mode not in ["HDF2VTK" ,"VTK2HDF"]:
       raise ValueError("Input Must Be Either 'HDF2VTK' Or 'VTK2HDF'")
 
     self.mode = mode
+    self.inpF = inpFile
+    self.outD = outDir
     pass
 
   def act(self):
@@ -46,7 +48,9 @@ class PSP(object):
     if mode == "VTK2HDF":
       self._VTK2HDF()
     elif mode == "HDF2VTK":
-      self._HDF2VTK()
+      inpF = self.inpF
+      outPath = self.outD
+      self._HDF2VTK(inpPath=inpF,outPath=outDir)
 
   def _HDF2VTK(self):
   #----------------------------------------------------------------------------
@@ -207,8 +211,12 @@ if __name__=="__main__":
   import sys
 
   action = sys.argv[1]
-  psp = PSP( action )
+  inpDir = Path(sys.argv[2])
+  outDir = Path(sys.argv[3])
 
+  psp = PSP( mode=action, inpFile=inpDir, outDir=outDir)
+
+  # 仅打印提示i信息
   if action == "VTK2HDF":
     print("Now We Convert All Cases to MatrixData.")
   elif action == "HDF2VTK":
@@ -216,4 +224,5 @@ if __name__=="__main__":
   else:
     raise ValueError("'VTK2HDF' or 'HDF2VTK' Are the Only Two Legal Input.")
 
+  # 执行动作
   psp.act()
