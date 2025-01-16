@@ -1,24 +1,19 @@
 """
 read list of case names from 'PSP/PSP.inp'
 """
-import csv
+import json
 from pathlib import Path
 
-def PSP_read_csv(csvfile:Path):
-  inp = open(csvfile, mode='r', encoding="utf-8")
-  csvObj = csv.reader(inp)
+def PSP_read_json(jsonFile:Path):
+  with open(jsonFile, 'r') as inp:
+    data = json.load(inp)
 
-  caseList = []
-  for row in csvObj:
-    caseList.append(row[0])
-
-  inp.close()
-  #numOfCases = len(caseList)
+  caseList = data["case"]
   return caseList
 
 if __name__=="__main__":
-  csvfile = Path("../PSP.inp")
-  caseList = PSP_read_csv(csvfile=csvfile)
+  jsonFile = Path("../PSP.json")
+  caseList = PSP_read_json(jsonFile=jsonFile)
 
   print(len(caseList))
 

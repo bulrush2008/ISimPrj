@@ -25,7 +25,7 @@ from Common.writeVTR import writeVTR
 from Common.readVTR import readVTR
 from Common.readVTM import readVTM
 from Common.assertFileExist import assertFileExist
-from Common.caseList import PSP_read_csv
+from Common.caseList import PSP_read_json
 from Common.paramInps import paramInpDict, lenParamInp
 from Common.cleanBadSpots import cleanBadSpots
 from Common.splitData import splitData
@@ -112,15 +112,15 @@ class PSP(object):
       pass
     pass
 
-  def _VTK2HDF(self, inpPath:Path=Path("./PSP.inp"), outPath:Path=Path("../FSCases/FSHDF")):
+  def _VTK2HDF(self, inpPath:Path=Path("./PSP.json"), outPath:Path=Path("../FSCases/FSHDF")):
   #----------------------------------------------------------------------------
     """
     Get data from the vtk files and write them to hdf5 file, which serve as a
     database.
     """
-    inpCSV = inpPath
+    inpJSON = inpPath
 
-    caseList = PSP_read_csv(inpCSV)
+    caseList = PSP_read_json(inpJSON)
 
     numOfCases = len(caseList)
 
