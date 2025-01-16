@@ -12,6 +12,7 @@ def PSP_read_csv(csvfile:Path):
   for row in csvObj:
     caseList.append(row[0])
 
+  inp.close()
   #numOfCases = len(caseList)
   return caseList
 

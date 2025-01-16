@@ -202,7 +202,6 @@ class PSP(object):
         grpC.create_dataset("Block-"+"%02d"%jVTR + "-Z", data=coordsZ)
         pass
       pass
-    #print(hdf.keys())
 
     # close the matrix data file
     hdf.close()
@@ -214,10 +213,6 @@ if __name__=="__main__":
   action = sys.argv[1]
   inpDir = Path(sys.argv[2])
   outDir = Path(sys.argv[3])
-
-  #print(sys.argv)
-  #print(inpDir)
-  #print(outDir)
 
   psp = PSP( mode=action, inpFile=inpDir, outDir=outDir)
 
