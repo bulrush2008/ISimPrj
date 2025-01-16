@@ -1,0 +1,9 @@
+{
+  "model": "FNN",
+  "vars": [
+    "T",
+    "V"
+  ],
+  "epochs": 500,
+  "ratio": 0.2
+}
