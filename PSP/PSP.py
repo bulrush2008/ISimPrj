@@ -107,7 +107,7 @@ class PSP(object):
       pass
     pass
 
-  def _VTK2HDF(self):
+  def _VTK2HDF(self, inpPath:Path=Path("./PSP.inp"), outPath:Path=Path("../FSCases/FSHDF")):
   #----------------------------------------------------------------------------
     """
     Get data from the vtk files and write them to hdf5 file, which serve as a
