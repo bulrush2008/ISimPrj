@@ -46,11 +46,12 @@ class PSP(object):
     mode = self.mode
 
     if mode == "VTK2HDF":
-      self._VTK2HDF()
-    elif mode == "HDF2VTK":
       inpF = self.inpF
       outPath = self.outD
-      self._HDF2VTK(inpPath=inpF,outPath=outDir)
+
+      self._VTK2HDF(inpPath=inpF,outPath=outPath)
+    elif mode == "HDF2VTK":
+      self._HDF2VTK()
 
   def _HDF2VTK(self):
   #----------------------------------------------------------------------------
@@ -142,7 +143,7 @@ class PSP(object):
 
     # MatrixData dir and name
     h5Path = outPath
-    if not h5Path.exists(): h5Path.mkdir()
+    if not h5Path.exists(): h5Path.mkdir(parents=True)
 
     h5File = h5Path.joinpath("MatrixData.h5")
 
@@ -213,6 +214,10 @@ if __name__=="__main__":
   action = sys.argv[1]
   inpDir = Path(sys.argv[2])
   outDir = Path(sys.argv[3])
+
+  #print(sys.argv)
+  #print(inpDir)
+  #print(outDir)
 
   psp = PSP( mode=action, inpFile=inpDir, outDir=outDir)
 
