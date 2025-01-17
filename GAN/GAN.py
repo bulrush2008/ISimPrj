@@ -36,6 +36,7 @@ class GAN(object):
     caseSet = CaseSet( ratio=ratioTest )
 
     trnSet, tstSet = caseSet.splitSet()
+    #print(len(trnSet)); sys.exit()
 
     self.trnSet = trnSet
     self.tstSet = tstSet
