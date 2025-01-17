@@ -19,6 +19,8 @@ from pathlib import Path
 import numpy as np
 import h5py
 
+import json
+
 from Common.writeVTM import writeVTM
 from Common.writeVTR import writeVTR
 from Common.splitData import splitData
@@ -26,6 +28,12 @@ class PSP(object):
 #==============================================================================
   def __init__(self):
   #----------------------------------------------------------------------------
+    with open("./PSP_2VTK.json", 'r') as inp:
+      data = json.load(inp)
+      pass
+
+    self.vtm_path = data["vtkDir"]
+    self.hdf_path = data["h5Dir"]
     pass
 
   def act(self):
@@ -38,7 +46,7 @@ class PSP(object):
     displayed by Paraview
     """
     numOfBlocks = 8
-    dirVTM = Path("./Case_Test")
+    dirVTM = Path(self.vtm_path)
     if not dirVTM.exists(): dirVTM.mkdir()
 
     fileVTM = dirVTM.joinpath("t01.vtm")
@@ -52,7 +60,8 @@ class PSP(object):
     if not dirVTR.exists(): dirVTR.mkdir(parents=True)
 
     #dirHDF = Path("../GAN").joinpath("gan.h5")
-    dirHDF = Path("../FNN").joinpath("fnn.h5")
+    #dirHDF = Path("../FNN").joinpath("fnn.h5")
+    dirHDF = Path(self.hdf_path)
     alive = dirHDF.exists()
     print("HDF File exists? ", alive)
 
