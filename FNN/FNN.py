@@ -7,9 +7,10 @@ This is main function to call:
   - save to the database: .h5
 
 @author     @data       @aff        @version
-Xia, S      24.12.19    Simpop.cn   v4.x
+Xia, S      2025.1.17   Simpop.cn   v5.x
 """
 import sys
+import json
 
 import h5py
 import torch
@@ -24,8 +25,13 @@ class FNN(object):
   #----------------------------------------------------------------------------
   def __init__( self ):
     # split the cases into train and test sets
-    # now: 49 = 39 + 10
-    ratioTest = 0.2
+    # now: 125 = 100 + 25
+    with open("./FNN.json", 'r') as inp:
+      data = json.load(inp)
+      pass
+
+    ratioTest = data["test_ratio"]  # e.g. 0.2
+    #print(ratioTest); sys.exit()
     caseSet = CaseSet( ratio=ratioTest )
 
     trnSet, tstSet = caseSet.splitSet()
@@ -34,7 +40,9 @@ class FNN(object):
     self.tstSet = tstSet
 
     # path of data used as training and possibly test
-    self.filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
+    matrix_data_path = data["train_data"]
+    #print(matrix_data_path); sys.exit()
+    self.filePathH5 = Path(matrix_data_path)
     pass
 
   def train( self ):
