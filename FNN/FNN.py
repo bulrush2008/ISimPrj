@@ -43,6 +43,8 @@ class FNN(object):
     matrix_data_path = data["train_data"]
     #print(matrix_data_path); sys.exit()
     self.filePathH5 = Path(matrix_data_path)
+
+    self.fieldList = data["vars"]
     pass
 
   def train( self ):
@@ -50,7 +52,8 @@ class FNN(object):
     # train the fields one has assigned, which must be in
     # ["P", "T", "U", "V", "W"]
     # the order in list does not matter
-    fieldList = {"T":1, "V":1}
+    #fieldList = {"T":1, "V":1}
+    fieldList = self.fieldList
 
     print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
 
