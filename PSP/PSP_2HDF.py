@@ -18,38 +18,39 @@ Xia, S        2025.1.17     Simpop.cn     v5.x
 from pathlib import Path
 import numpy as np
 import h5py
+import json
 
 from Common.readVTR import readVTR
 from Common.readVTM import readVTM
 from Common.assertFileExist import assertFileExist
-from Common.caseList import PSP_read_json
 from Common.paramInps import paramInpDict, lenParamInp
 from Common.cleanBadSpots import cleanBadSpots
 from Common.splitData import splitData
 
 class PSP(object):
 #==============================================================================
-  def __init__(self, inpFile:Path=None, outDir:Path=None):
+  def __init__(self):
   #----------------------------------------------------------------------------
-    self.inpF = inpFile
-    self.outD = outDir
+    with open("PSP_2HDF.json", 'r') as inp:
+      data = json.load(inp)
+      pass
+
+    self.vtk_path = data["vtkDir"]
+    self.caseList = data["case"]
+    self.hdf_path = data["matrixDataDir"]
+    self.hdf_file = data["matrixDataFile"]
     pass
 
   def act(self):
-    inpF = self.inpF
-    outPath = self.outD
+    self._VTK2HDF()
 
-    self._VTK2HDF(inpPath=inpF,outPath=outPath)
-
-  def _VTK2HDF(self, inpPath:Path=Path("./PSP.json"), outPath:Path=Path("../FSCases/FSHDF")):
+  def _VTK2HDF(self):
   #----------------------------------------------------------------------------
     """
     Get data from the vtk files and write them to hdf5 file, which serve as a
     database.
     """
-    inpJSON = inpPath
-
-    caseList = PSP_read_json(inpJSON)
+    caseList = self.caseList
 
     numOfCases = len(caseList)
 
@@ -59,7 +60,7 @@ class PSP(object):
 
     # Cases dir and name
     # all cases are in the directory:
-    caseDir = Path("../FSCases")
+    caseDir = Path(self.vtk_path)
 
     # assertain each case's path
     casePaths = []
@@ -69,12 +70,11 @@ class PSP(object):
       pass
 
     # MatrixData's directory, the data are integrated with HDF5 format
-
     # MatrixData dir and name
-    h5Path = outPath
+    h5Path = Path(self.hdf_path)
     if not h5Path.exists(): h5Path.mkdir(parents=True)
 
-    h5File = h5Path.joinpath("MatrixData.h5")
+    h5File = h5Path.joinpath(self.hdf_file)
 
     # open the hdf5 file
     hdf = h5py.File(h5File, 'w')
@@ -137,14 +137,8 @@ class PSP(object):
     pass
 
 if __name__=="__main__":
-  import sys
 
-  inpDir = Path(sys.argv[1])
-  outDir = Path(sys.argv[2])
-
-  print(sys.argv)
-
-  psp = PSP(inpFile=inpDir, outDir=outDir)
+  psp = PSP()
 
   # 仅打印提示i信息
   print("Now We Convert All Cases to MatrixData.")
