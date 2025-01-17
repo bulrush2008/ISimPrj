@@ -7,9 +7,10 @@ This is main function to call:
   - save to the database: .h5
 
 @author     @data       @aff        @version
-Xia, S      2024.12.31  Simpop.cn   v2.x
+Xia, S      2025.1.17   Simpop.cn   v3.x
 """
 import sys
+import json
 
 import h5py
 import torch
@@ -25,8 +26,13 @@ class GAN(object):
   #----------------------------------------------------------------------------
   def __init__( self ):
     # split the cases into train and test sets
-    # now: 49 = 39 + 10
-    ratioTest = 0.2
+    # now: 125 = 100 + 25
+    with open("./GAN.json", 'r') as inp:
+      data = json.load(inp)
+      pass
+
+    ratioTest = data["test_ratio"]  # e.g. 0.2
+    #print(ratioTest); sys.exit()
     caseSet = CaseSet( ratio=ratioTest )
 
     trnSet, tstSet = caseSet.splitSet()
@@ -35,7 +41,11 @@ class GAN(object):
     self.tstSet = tstSet
 
     # path of data used as training and possibly test
-    self.filePathH5 = Path("../FSCases/FSHDF/MatrixData.h5")
+    self.filePathH5 = Path(data["train_data"])
+    #print(self.filePathH5); sys.exit()
+
+    self.fieldList = data["vars"]
+    #print(self.fieldList); sys.exit()
     pass
 
   def train( self ):
@@ -43,7 +53,8 @@ class GAN(object):
     # train the fields one has assigned, which must be in
     # ["P", "T", "U", "V", "W"]
     # the order in list does not matter
-    fieldList = {"T":1, "P":1}
+    #fieldList = {"T":1, "P":1}
+    fieldList = self.fieldList
 
     print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
 
