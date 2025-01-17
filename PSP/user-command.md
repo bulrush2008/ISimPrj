@@ -2,4 +2,4 @@
   python ./PSP_2HDF.py "./PSP_2HDF.json" "../FSCases/FSHDF"
 
 2, output HDF data to VTK
-  python ./PSP.PY "HDF2VTK" None None
+  python ./PSP_2VTK.py
