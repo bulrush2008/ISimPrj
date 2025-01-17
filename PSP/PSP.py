@@ -32,7 +32,7 @@ from Common.splitData import splitData
 
 class PSP(object):
 #==============================================================================
-  def __init__(self, mode:str, inpFile:Path, outDir:Path):
+  def __init__(self, mode:str=None, inpFile:Path=None, outDir:Path=None):
   #----------------------------------------------------------------------------
     if mode not in ["HDF2VTK" ,"VTK2HDF"]:
       raise ValueError("Input Must Be Either 'HDF2VTK' Or 'VTK2HDF'")
@@ -60,7 +60,7 @@ class PSP(object):
     displayed by Paraview
     """
     numOfBlocks = 8
-    dirVTM = Path("./FNN_Case_Test")
+    dirVTM = Path("./Case_Test")
     if not dirVTM.exists(): dirVTM.mkdir()
 
     fileVTM = dirVTM.joinpath("t01.vtm")
@@ -73,7 +73,8 @@ class PSP(object):
 
     if not dirVTR.exists(): dirVTR.mkdir(parents=True)
 
-    dirHDF = Path("../GAN").joinpath("gan.h5")
+    #dirHDF = Path("../GAN").joinpath("gan.h5")
+    dirHDF = Path("../FNN").joinpath("fnn.h5")
     alive = dirHDF.exists()
     print("HDF File exists? ", alive)
 
@@ -213,6 +214,8 @@ if __name__=="__main__":
   action = sys.argv[1]
   inpDir = Path(sys.argv[2])
   outDir = Path(sys.argv[3])
+
+  print(sys.argv)
 
   psp = PSP( mode=action, inpFile=inpDir, outDir=outDir)
 
