@@ -31,7 +31,6 @@ class FNN(object):
       pass
 
     ratioTest = data["test_ratio"]  # e.g. 0.2
-    #print(ratioTest); sys.exit()
     caseSet = CaseSet( ratio=ratioTest )
 
     trnSet, tstSet = caseSet.splitSet()
@@ -41,10 +40,11 @@ class FNN(object):
 
     # path of data used as training and possibly test
     matrix_data_path = data["train_data"]
-    #print(matrix_data_path); sys.exit()
     self.filePathH5 = Path(matrix_data_path)
 
     self.fieldList = data["vars"]
+
+    self.eval_file = data["eval_file"]
     pass
 
   def train( self ):
@@ -87,7 +87,8 @@ class FNN(object):
 
   def predict( self ):
     # create a new empty h5 file to save the prediced data
-    outH5Path = Path("./fnn.h5")
+    #outH5Path = Path("./fnn.h5")
+    outH5Path = Path(self.eval_file)
     h5 = h5py.File(outH5Path, 'w')
     h5.close()
 
