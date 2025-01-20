@@ -113,6 +113,7 @@ class CaseSet(object):
       theCase = "C" + "%03d"%(self.idxList[i])
       tstSet.append(theCase)
 
+    # type: list of strings
     return trnSet, tstSet
 
 if __name__=="__main__":

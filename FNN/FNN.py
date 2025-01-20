@@ -31,7 +31,7 @@ class FNN(object):
       pass
 
     ratioTest = data["test_ratio"]  # e.g. 0.2
-    caseSet = CaseSet( ratio=ratioTest )
+    caseSet = CaseSet(ratio=ratioTest)
 
     trnSet, tstSet = caseSet.splitSet()
 
@@ -87,13 +87,12 @@ class FNN(object):
 
   def predict( self ):
     # create a new empty h5 file to save the prediced data
-    #outH5Path = Path("./fnn.h5")
-    outH5Path = Path(self.eval_file)
+    outH5Path = Path(self.eval_file)  # now called "./fnn.h5"
     h5 = h5py.File(outH5Path, 'w')
     h5.close()
 
     # predict and compare with the test set
-    filePathH5 = self.filePathH5
+    filePathH5 = self.filePathH5  # 'MatrixData.h5'
     tstSet = self.tstSet
 
     fields = ["T", "V", "P", "U", "W"]
@@ -114,8 +113,9 @@ class FNN(object):
         pass
 
       R = Regression(var, var_dict_path)
-      R.model.eval()  # predict model
+      R.model.eval()  # only to predict
 
+      # create a dataset obj
       fsDataset_test = FSimDataset(filePathH5, tstSet, var)
 
       # predict for the first case
