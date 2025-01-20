@@ -97,7 +97,7 @@ class CaseSet(object):
     """
     numbOfTrnSet = np.int64( self.size * (1.0-self.ratio) )
 
-    # 1984 is a seed, other ints also OK
+    # 1984 is a seed
     np.random.seed(1984)
     permut = np.random.permutation( self.size )
 
