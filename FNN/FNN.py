@@ -97,6 +97,11 @@ class FNN(object):
 
     fields = ["T", "V", "P", "U", "W"]
 
+    """
+    2025.1.20，新的修改思路
+    先实现，再修改！
+    """
+
     ifield = 0
     for var in fields:
       # create a Regression obj as model, from the state_dict
