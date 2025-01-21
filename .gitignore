@@ -4,12 +4,11 @@ PSP/FNN
 PSP/Common/__pycache__
 PSP/Case_Test
 FNN/__pycache__
-FNN/fnn*.h5
 FNN/Common/__pycache__
 FNN/Pics
 FNN/StateDicts
 GAN/StateDicts
 GAN/Pics
-GAN/gan.h5
 GAN/Common/__pycache__
-Eval/
+Eval/FNN*
+Eval/fnn*
