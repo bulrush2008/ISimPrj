@@ -100,3 +100,7 @@
   - 是否需要 coords, field 分别写入？
   - 将 R.writeHDF，收回到本层级写入
   2025.1.20, 17:29
+
+22, 改变 loss-history 的横坐标
+  - 将 epoch 作为 loss history 的横轴
+  2025.1.21, 9:23
