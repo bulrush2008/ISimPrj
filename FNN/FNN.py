@@ -125,7 +125,7 @@ class FNN(object):
       #print(f"Test Cases are \n {tstSet}")
 
       # predict for the first case
-      inp, _, coords = fsDataset_test[6]
+      inp, _, coords = fsDataset_test[24]
 
       # the coordinates need to write only one time
       if ifield == 0:

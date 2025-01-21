@@ -6,5 +6,5 @@
   },
   "test_ratio": 0.2,
   "train_data": "../FSCases/FSHDF/MatrixData.h5",
-  "eval_file": "./fnn.h5"
+  "eval_file": "../Eval/fnn_t24_C093.h5"
 }
