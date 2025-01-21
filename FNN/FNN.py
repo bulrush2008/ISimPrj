@@ -122,9 +122,10 @@ class FNN(object):
 
       # create a dataset obj
       fsDataset_test = FSimDataset(filePathH5, tstSet, var)
+      #print(f"Test Cases are \n {tstSet}")
 
       # predict for the first case
-      inp, _, coords = fsDataset_test[0]
+      inp, _, coords = fsDataset_test[6]
 
       # the coordinates need to write only one time
       if ifield == 0:
