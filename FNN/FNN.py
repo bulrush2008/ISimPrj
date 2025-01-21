@@ -111,10 +111,10 @@ class FNN(object):
 
       if not var_dict_path.exists():
         var_dict_path = None
-        print(f"! Eval Warn: Predict {var} is TRIVAL!")
-        print(f"  >>> State Dictionary 'dict_{var}.pth' Not Exist")
+        print(f">>> Predicting Field {var}: TRIVAL!")
+        #print(f"  - State Dictionary 'dict_{var}.pth' Not Exist")
       else:
-        print(f">>> Hi, Now We are Predicting Field {var}!")
+        print(f">>> Predicting Field {var}!")
         pass
 
       R = Regression(var, var_dict_path)
@@ -201,8 +201,8 @@ if __name__=="__main__":
   fnn = FNN()
 
   # Start training the models
-  print("---------- Train ----------")
-  fnn.train()
+  #print("---------- Train ----------")
+  #fnn.train()
 
   print("---------- Eval  ----------")
   fnn.predict()
