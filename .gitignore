@@ -4,7 +4,7 @@ PSP/FNN
 PSP/Common/__pycache__
 PSP/Case_Test
 FNN/__pycache__
-FNN/fnn.h5
+FNN/fnn*.h5
 FNN/Common/__pycache__
 FNN/Pics
 FNN/StateDicts
