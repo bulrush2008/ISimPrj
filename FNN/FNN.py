@@ -104,8 +104,7 @@ class FNN(object):
 
     ifield = 0
     for var in fields:
-      # create a Regression obj as model, from the state_dict
-      # gen a obj as regression, and then train the model
+      # check if the state dicts existed
       stateDictsPath = Path("StateDicts")
       var_dict_path = stateDictsPath.joinpath(f"dict_{var}.pth")
 
@@ -117,6 +116,7 @@ class FNN(object):
         print(f">>> Predicting Field {var}!")
         pass
 
+      # create a Regression obj as model to do predicting
       R = Regression(var, var_dict_path)
       R.model.eval()  # only to predict
 
