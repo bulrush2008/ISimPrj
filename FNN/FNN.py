@@ -201,9 +201,22 @@ if __name__=="__main__":
   # create a model to train and predict
   fnn = FNN()
 
-  # Start training the models
-  #print("---------- Train ----------")
-  #fnn.train()
+  args = sys.argv
+  num_args = len(args)
 
-  print("---------- Eval  ----------")
-  fnn.predict()
+  Train = False; Predict= False
+
+  for arg in args:
+    if arg == "--train"  : Train   = True
+    if arg == "--predict": Predict = True
+
+  if Train:
+    print("---------- Train ----------")
+    fnn.train()
+
+  if Predict:
+    print("---------- Eval  ----------")
+    fnn.predict()
+
+  if not Train and not Predict:
+    print("Trival, FNN Did Nothing.")
