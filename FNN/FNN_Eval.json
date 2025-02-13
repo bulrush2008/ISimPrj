@@ -1,14 +1,7 @@
 {
-  "model": "FNN",
-  "vars": {
-    "T": 1,
-    "U": 1,
-    "V": 1,
-    "W": 1,
-    "P": 1
-  },
-  "test_ratio": 0.2,
+  "model": "FNN_Eval",
   "train_data": "../FSCases/FSHDF/MatrixData.h5",
+  "test_ratio": 0.2,
   "eval_inp": [458.15, 1.84143565, 208333.3333],
   "eval_file": "../Eval/fnn_t24_C093.h5"
 }
