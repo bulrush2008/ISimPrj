@@ -3,11 +3,10 @@
 This is main function to call:
   - split the data into train and test sets
   - train,
-  - predict,
-  - save to the database: .h5
+  - predict, and save into the database: .h5
 
 @author     @data       @aff        @version
-Xia, S      2025.1.17   Simpop.cn   v5.x
+Xia, S      2025.2.13   Simpop.cn   v5.x
 """
 import sys
 import json
@@ -97,11 +96,6 @@ class FNN(object):
 
     fields = ["T", "V", "P", "U", "W"]
 
-    """
-    2025.1.20，新的修改思路
-    先实现，再修改！
-    """
-
     ifield = 0
     for var in fields:
       # check if the state dicts existed
@@ -111,7 +105,6 @@ class FNN(object):
       if not var_dict_path.exists():
         var_dict_path = None
         print(f">>> Predicting Field {var}: TRIVAL!")
-        #print(f"  - State Dictionary 'dict_{var}.pth' Not Exist")
       else:
         print(f">>> Predicting Field {var}!")
         pass
