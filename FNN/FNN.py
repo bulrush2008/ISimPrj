@@ -44,6 +44,17 @@ class FNN(object):
     self.fieldList = data["vars"]
 
     self.eval_file = data["eval_file"]
+
+    # this input is real
+    # but should be normalized, before feed into the NN model
+    inp = data["eval_inp"]
+
+    inp[0] = (inp[0] - 400.0) / 100.0
+    inp[1] = inp[1] - 1.5
+    inp[2] = inp[2] / 1000000.0
+    #print("eval_inp = ", inp)
+
+    self.inp = inp
     pass
 
   def train( self ):
@@ -118,7 +129,17 @@ class FNN(object):
       #print(f"Test Cases are \n {tstSet}")
 
       # predict for the first case
-      inp, _, coords = fsDataset_test[24]
+      inp_, _, coords = fsDataset_test[24]
+
+      # from user input, and already be normalized
+      inp = torch.FloatTensor(self.inp) # convert to torch.FloatTensor
+
+      #------- debug sta ----------
+      #print(f"inp from test case : {inp_}")
+      #print(f"inp from user input: {inp}")
+
+      #sys.exit("now in debugging")
+      #------- debug end ----------
 
       # the coordinates need to write only one time
       if ifield == 0:

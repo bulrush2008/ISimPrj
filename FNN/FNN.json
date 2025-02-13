@@ -9,5 +9,6 @@
   },
   "test_ratio": 0.2,
   "train_data": "../FSCases/FSHDF/MatrixData.h5",
+  "eval_inp": [458.15, 1.84143565, 208333.3333],
   "eval_file": "../Eval/fnn_t24_C093.h5"
 }
