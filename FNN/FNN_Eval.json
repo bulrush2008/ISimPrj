@@ -2,6 +2,6 @@
   "model": "FNN_Eval",
   "train_data": "../FSCases/FSHDF/MatrixData.h5",
   "test_ratio": 0.2,
-  "eval_inp": [458.15, 1.84143565, 208333.3333],
-  "eval_file": "../Eval/fnn_t24_C093.h5"
+  "eval_inp": [478.15,	1.84143565,	291666.6667],
+  "eval_file": "../Eval/fnn_t09_C070_v.h5"
 }
