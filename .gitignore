@@ -12,3 +12,4 @@ GAN/Pics
 GAN/Common/__pycache__
 Eval/FNN*
 Eval/fnn*
+Eval/Comparison/*.png
