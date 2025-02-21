@@ -1,4 +1,4 @@
 {
-  "h5Dir": "../Eval/fnn_t09_C070_v.h5",
-  "vtkDir": "../Eval/FNN_C070_v"
+  "h5Dir": "../Eval/gan_t09_C070.h5",
+  "vtkDir": "../Eval/GAN_C070"
 }

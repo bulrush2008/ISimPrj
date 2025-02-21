@@ -3,5 +3,5 @@
   "train_data": "../FSCases/FSHDF/MatrixData.h5",
   "test_ratio": 0.2,
   "eval_inp": [478.15,	1.84143565,	291666.6667],
-  "eval_file": "../Eval/gan_C070.h5"
+  "eval_file": "../Eval/gan_t09_C070.h5"
 }
