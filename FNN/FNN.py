@@ -23,16 +23,21 @@ if __name__=="__main__":
   for arg in args:
     if arg == "--train"  : Train   = True
     if arg == "--predict": Predict = True
+    pass
 
   if Train:
     print("---------- Train ----------")
     fnn_train = FNN_Train()
     fnn_train.train()
+    pass
 
   if Predict:
     print("---------- Eval  ----------")
     fnn_eval = FNN_Eval()
     fnn_eval.predict()
+    pass
 
   if not Train and not Predict:
     print("Trival, FNN Did Nothing.")
+    pass
+  pass # end "if __name__==..."
