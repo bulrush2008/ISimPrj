@@ -134,7 +134,7 @@ class FNN_Train(object):
         pass
 
       models[var] = R
-      pass
+      pass  # end all var-models training
 
     # now all variable models have been trained
     return models
