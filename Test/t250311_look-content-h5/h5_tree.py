@@ -27,5 +27,8 @@ def print_hdf5_tree(file, indent=0, last=True, header=''):
             print_hdf5_tree(obj, indent+1, is_last, header + connector)
 
 # 使用示例
-with h5py.File(Path('./temp.h5'), 'r') as f:
+
+path = Path("D:/Development/ISimPrj/Eval/fnn_t24_C093.h5")
+
+with h5py.File(path, 'r') as f:
     print_hdf5_tree(f)
