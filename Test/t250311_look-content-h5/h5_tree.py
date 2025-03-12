@@ -28,7 +28,8 @@ def print_hdf5_tree(file, indent=0, last=True, header=''):
 
 # 使用示例
 
-path = Path("D:/Development/ISimPrj/Eval/fnn_t24_C093.h5")
+#path = Path("D:/Development/ISimPrj/Eval/fnn_t24_C093.h5")
+path=Path("D:/Development/ISimPrj/FSCases/FSHDF/MatrixData.h5")
 
 with h5py.File(path, 'r') as f:
     print_hdf5_tree(f)

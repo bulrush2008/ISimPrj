@@ -88,8 +88,16 @@ class PSP(object):
       filePathVTM = casePaths[iCase].joinpath(fileNameVTM)
       #print(caseNames[i])
 
+      # each group 'grpC' represents a case
+      # each case including 3 sub-groups
+      #   - input parameters
+      #   - coordinates
+      #   - fields, each field as a variable
       grpC = hdf.create_group(case)
-      grpC.create_dataset("InParam", data=paramInpDict[case])
+
+      # input_parameters as a sub-group
+      sub_grp_inp = grpC.create_group("param_inp")
+      sub_grp_inp.create_dataset("InParam", data=paramInpDict[case])
 
       # assertain each vtm file is alive
       alive = assertFileExist(filePathVTM)
