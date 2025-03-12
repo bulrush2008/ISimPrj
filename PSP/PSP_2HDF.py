@@ -49,8 +49,8 @@ class PSP(object):
   def _VTK2HDF(self):
   #----------------------------------------------------------------------------
     """
-    Get data from the vtk files and write them to hdf5 file, which serve as a
-    database.
+    - Get data from the vtk files and,
+    - write them to hdf5 file, serving as a database.
     """
     caseList = self.caseList
 
@@ -67,7 +67,7 @@ class PSP(object):
     # assertain each case's path
     casePaths = []
     for case in caseList:
-      path = caseDir.joinpath(case) 
+      path = caseDir.joinpath(case)
       casePaths.append(path)
       pass
 
