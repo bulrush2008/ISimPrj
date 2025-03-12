@@ -109,6 +109,8 @@ class PSP(object):
 
       # For certain case, loop all its vtr files, each of which relates to a block
       for jVTR in range(numOfBlock):
+        sub_grp_blk = grpC.create_group(f"blk-{jVTR:03d}")
+
         theVTRFile = casePaths[iCase].joinpath(filePathVTR[jVTR].decode("ASCII"))
 
         alive = assertFileExist(theVTRFile)
@@ -129,16 +131,16 @@ class PSP(object):
         cleanBadSpots(field=fieldT, gIndexRange=gIndexRange)
 
         # add field data
-        grpC.create_dataset("Block-"+"%02d"%jVTR + "-P", data=fieldP)
-        grpC.create_dataset("Block-"+"%02d"%jVTR + "-U", data=fieldU)
-        grpC.create_dataset("Block-"+"%02d"%jVTR + "-V", data=fieldV)
-        grpC.create_dataset("Block-"+"%02d"%jVTR + "-W", data=fieldW)
-        grpC.create_dataset("Block-"+"%02d"%jVTR + "-T", data=fieldT)
+        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-P", data=fieldP)
+        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-U", data=fieldU)
+        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-V", data=fieldV)
+        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-W", data=fieldW)
+        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-T", data=fieldT)
 
         # add coordinates
-        grpC.create_dataset("Block-"+"%02d"%jVTR + "-X", data=coordsX)
-        grpC.create_dataset("Block-"+"%02d"%jVTR + "-Y", data=coordsY)
-        grpC.create_dataset("Block-"+"%02d"%jVTR + "-Z", data=coordsZ)
+        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-X", data=coordsX)
+        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-Y", data=coordsY)
+        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-Z", data=coordsZ)
         pass
       pass
 
