@@ -12,7 +12,7 @@ The only main class in PSP module
   displayed by Paraview
 
 @author       @date         @aff          @version
-Xia, S        2025.1.17     Simpop.cn     v5.x
+Xia, S        2025.1.17     Simpop.cn     v6.x
 """
 
 from pathlib import Path
