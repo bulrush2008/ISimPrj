@@ -131,6 +131,10 @@ class FNN_Train(object):
         for inp, label, _ in fsDataset_train:
           R.train(inp, label)
           pass
+
+        #TODO: calc the mse both for train and test sets
+        # R.MSE(train_set)
+        # R.MSE(test_set)
         pass
 
       models[var] = R

@@ -11,8 +11,10 @@ from pathlib import Path
 
 # Regression class: Core of FNN
 class Regression(nn.Module):
+#===============================================================================
   # initialize PyTorch pararent class
   def __init__(self, varName:str, dictPath:Path=None):
+  #-----------------------------------------------------------------------------
     super().__init__()
 
     if varName not in ["P", "U", "V", "W", "T"]:
@@ -55,6 +57,7 @@ class Regression(nn.Module):
     pass
 
   def _initialize_weights(self):
+  #-----------------------------------------------------------------------------
     """
     - inner function, call only once at initialization
     - configure initial model weights
@@ -71,10 +74,17 @@ class Regression(nn.Module):
 
   # forward propagation
   def forward(self, inputs):
+  #-----------------------------------------------------------------------------
     return self.model(inputs)
 
-  # train
   def train(self, inputs, targets):
+  #-----------------------------------------------------------------------------
+    """
+    - 神经网络，根据输入和标签，进行训练
+
+    - inputs : 神经网络的输入
+    - targets: 神经网络的教师标签
+    """
     outputs = self.forward(inputs)
 
     # calculate loss
@@ -96,7 +106,11 @@ class Regression(nn.Module):
     pass
 
   def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
-  #----------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------
+    """
+    - 将预测数据，写入 HDF 数据库
+    - 如有必要，会写入坐标
+    """
     # h5 文件已经在外部打开，这里只需要创建一个组，用来管理模型的预测数据即可
     grpName = "FNN_Out" # a case data is a group
 
@@ -133,8 +147,11 @@ class Regression(nn.Module):
     h5.close()
     pass
 
-  # 打印损失函数
   def saveLossHistory2PNG(self, outDir:Path)->None:
+  #-----------------------------------------------------------------------------
+    """
+    - 打印损失函数
+    """
     df = pandas.DataFrame(self.progress, columns=["Loss"])
     ax = df.plot( title  = f"Loss history of {self.varName}",
                   color  = "black",
