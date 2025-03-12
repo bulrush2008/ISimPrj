@@ -96,8 +96,8 @@ class PSP(object):
       grpC = hdf.create_group(case)
 
       # input_parameters as a sub-group
-      sub_grp_inp = grpC.create_group("param_inp")
-      sub_grp_inp.create_dataset("InParam", data=paramInpDict[case])
+      sub_grp_inp = grpC.create_group("input")
+      sub_grp_inp.create_dataset("inp", data=paramInpDict[case])
 
       # assertain each vtm file is alive
       alive = assertFileExist(filePathVTM)
@@ -109,7 +109,7 @@ class PSP(object):
 
       # For certain case, loop all its vtr files, each of which relates to a block
       for jVTR in range(numOfBlock):
-        sub_grp_blk = grpC.create_group(f"blk-{jVTR:03d}")
+        sub_grp_blk = grpC.create_group(f"block{jVTR:03d}")
 
         theVTRFile = casePaths[iCase].joinpath(filePathVTR[jVTR].decode("ASCII"))
 
@@ -131,16 +131,16 @@ class PSP(object):
         cleanBadSpots(field=fieldT, gIndexRange=gIndexRange)
 
         # add field data
-        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-P", data=fieldP)
-        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-U", data=fieldU)
-        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-V", data=fieldV)
-        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-W", data=fieldW)
-        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-T", data=fieldT)
+        sub_grp_blk.create_dataset("P", data=fieldP)
+        sub_grp_blk.create_dataset("U", data=fieldU)
+        sub_grp_blk.create_dataset("V", data=fieldV)
+        sub_grp_blk.create_dataset("W", data=fieldW)
+        sub_grp_blk.create_dataset("T", data=fieldT)
 
         # add coordinates
-        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-X", data=coordsX)
-        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-Y", data=coordsY)
-        sub_grp_blk.create_dataset("Block-"+"%02d"%jVTR + "-Z", data=coordsZ)
+        sub_grp_blk.create_dataset("X", data=coordsX)
+        sub_grp_blk.create_dataset("Y", data=coordsY)
+        sub_grp_blk.create_dataset("Z", data=coordsZ)
         pass
       pass
 
