@@ -2,7 +2,9 @@
 import numpy as np
 
 class CaseSet(object):
+#===============================================================================
   def __init__(self, ratio=0.2):
+  #-----------------------------------------------------------------------------
     # all cases list
     self.idxList = list(range(1,126)) # [1,2,3,..., 124,125]
     
@@ -32,6 +34,7 @@ class CaseSet(object):
     return self.idxList[idx]
 
   def _calcBlockInfo(self):
+  #-----------------------------------------------------------------------------
     calcPtsNum = lambda l: (l[1]-l[0]+1) * (l[3]-l[2]+1) * (l[5]-l[4]+1)
 
     # for block 0
@@ -92,8 +95,11 @@ class CaseSet(object):
     pass
 
   def splitSet(self):
+  #-----------------------------------------------------------------------------
     """
-    Split the caseSet into train and test sets
+    - 用于测试本文件内的类或函数
+
+    - Split the caseSet into train and test sets
     """
     numbOfTrnSet = np.int64( self.size * (1.0-self.ratio) )
 
