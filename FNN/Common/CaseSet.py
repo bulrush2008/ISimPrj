@@ -20,12 +20,14 @@ class CaseSet(object):
     self._calcBlockInfo()
 
   def __len__( self ):
+  #-----------------------------------------------------------------------------
     """
     Now len[obj] is ok
     """
     return self.size
 
   def __getitem__(self, idx):
+  #-----------------------------------------------------------------------------
     """
     so you use the class as: obj[idx]
     """
