@@ -8,7 +8,7 @@ class CaseSet(object):
     # all cases list
     self.idxList = list(range(1,126)) # [1,2,3,..., 124,125]
     
-    self.size = len(self.idxList)
+    #self.size = len(self.idxList)
     self.ratio = ratio
 
     # info of each case
@@ -19,17 +19,17 @@ class CaseSet(object):
     
     self._calcBlockInfo()
 
-  def __len__( self ):
+  def __len__(self):
   #-----------------------------------------------------------------------------
     """
-    Now len[obj] is ok
+    - Now len(obj) returns the size of cases list
     """
-    return self.size
+    return len(self.idxList)
 
   def __getitem__(self, idx):
   #-----------------------------------------------------------------------------
     """
-    so you use the class as: obj[idx]
+    - so you can use the class as: obj[idx]
     """
     if idx >= self.size:
       raise IndexError(f"{idx} beyond range.")
@@ -103,11 +103,11 @@ class CaseSet(object):
 
     - Split the caseSet into train and test sets
     """
-    numbOfTrnSet = np.int64( self.size * (1.0-self.ratio) )
+    numbOfTrnSet = np.int64(len(self) * (1.0-self.ratio))
 
     # 1984 is a seed
     np.random.seed(1984)
-    permut = np.random.permutation( self.size )
+    permut = np.random.permutation(len(self))
 
     # give the case names list in train set
     trnSet = []
