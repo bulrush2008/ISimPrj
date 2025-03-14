@@ -3,6 +3,15 @@ import numpy as np
 
 class CaseSet(object):
 #===============================================================================
+  """
+  - 记录所有数据的宏观信息：
+    - 数目，以及
+    - “测试/训练比”等
+  - 记录每例数据的信息：
+    - number of blocks per case
+    - info of each block
+  """
+
   def __init__(self, ratio=0.2):
   #-----------------------------------------------------------------------------
     # all cases list
@@ -33,6 +42,7 @@ class CaseSet(object):
     """
     if idx >= self.size:
       raise IndexError(f"{idx} beyond range.")
+
     return self.idxList[idx]
 
   def _calcBlockInfo(self):
@@ -125,6 +135,7 @@ class CaseSet(object):
     return trnSet, tstSet
 
 if __name__=="__main__":
+#===============================================================================
 
   cases = CaseSet( ratio=0.2 )
 
