@@ -9,9 +9,12 @@ import numpy as np
 
 from pathlib import Path
 
-# Regression class: Core of FNN
 class Regression(nn.Module):
 #===============================================================================
+  """
+  - Regression class: Core of FNN
+  - 方法类
+  """
   # initialize PyTorch pararent class
   def __init__(self, varName:str, dictPath:Path=None):
   #-----------------------------------------------------------------------------
