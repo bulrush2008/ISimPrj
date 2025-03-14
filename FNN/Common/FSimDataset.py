@@ -1,11 +1,12 @@
 
-from torch.utils.data import Dataset
+#from torch.utils.data import Dataset
 from pathlib import Path
 
 import torch
 import h5py
 
-class FSimDataset(Dataset):
+#class FSimDataset(Dataset):
+class FSimDataset(object):
 #===============================================================================
   """
   - 数据类
