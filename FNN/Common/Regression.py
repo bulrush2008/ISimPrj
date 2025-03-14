@@ -72,7 +72,6 @@ class Regression(nn.Module):
       pass
     pass
 
-  # forward propagation
   def forward(self, inputs):
   #-----------------------------------------------------------------------------
     return self.model(inputs)
