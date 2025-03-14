@@ -21,8 +21,14 @@ from Common.FSimDataset import FSimDataset
 from Common.Regression  import Regression
 
 class FNN_Eval(object):
-  #----------------------------------------------------------------------------
+#===============================================================================
+  """
+  - 应用任务类
+
+  - 调用方法类和数据类，实现特定的应用任务
+  """
   def __init__( self ):
+  #-----------------------------------------------------------------------------
     # split the cases into train and test sets
     # now: 125 = 100 + 25
     with open("./FNN_Eval.json", 'r') as inp:
@@ -54,7 +60,7 @@ class FNN_Eval(object):
     pass  # end __init__
 
   def predict( self ):
-    #--------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------
     # create a new empty h5 file to save the prediced data
     outH5Path = Path(self.eval_file)  # now called "./fnn.h5"
     h5 = h5py.File(outH5Path, 'w')

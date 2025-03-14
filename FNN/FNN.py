@@ -14,7 +14,10 @@ from FNN_Train import FNN_Train
 from FNN_Eval import FNN_Eval
 
 if __name__=="__main__":
-
+#===============================================================================
+  """
+  - 主函数
+  """
   args = sys.argv
   num_args = len(args)
 

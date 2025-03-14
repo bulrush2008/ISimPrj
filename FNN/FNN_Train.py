@@ -21,8 +21,14 @@ from Common.FSimDataset import FSimDataset
 from Common.Regression  import Regression
 
 class FNN_Train(object):
-  #----------------------------------------------------------------------------
+#===============================================================================
+  """
+  - 应用任务类
+
+  - 调用方法类和数据类，实现特定的应用任务
+  """
   def __init__( self ):
+  #-----------------------------------------------------------------------------
     # split the cases into train and test sets
     # now: 125 = 100 + 25
     with open("./FNN_Train.json", 'r') as inp:
@@ -45,7 +51,7 @@ class FNN_Train(object):
     pass
 
   def train( self ):
-    #--------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------
     # train the fields one has assigned, which must be in
     # ["P", "T", "U", "V", "W"]
     # the order in list does not matter
@@ -86,6 +92,7 @@ class FNN_Train(object):
               trainSet:list,
               testSet :list,
               dataPath:Path )->dict:
+  #-----------------------------------------------------------------------------
     """
     Train the FNN model by a give trainset, in which some cases field included.
     - varList : dict of epochs for each field, such as ["P":1,"T":2]
@@ -94,7 +101,6 @@ class FNN_Train(object):
     - dataPath: path of data of train set
     """
 
-    #--------------------------------------------------------------------------
     # extract the var names
     fields = []
     for key in varList.keys():
