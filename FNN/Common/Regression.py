@@ -179,15 +179,9 @@ class Regression(nn.Module):
     """
     output = self.forward(inp).detach().numpy()
 
-    #size = len(output)
-
-    #e = 0.0
     a = output; b = target.numpy()
-
-    #for i in range(size):
-    #  e += abs(a[i]-b[i])
-    #  pass
-    e = sum(abs(a-b))
+    #e = sum(abs(a-b))
+    e = max(abs(a-b))
 
     return e
   pass  # end class Regression

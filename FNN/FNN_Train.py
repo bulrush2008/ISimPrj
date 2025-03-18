@@ -150,31 +150,19 @@ class FNN_Train(object):
         #   test data set
 
         # for the train set
-        ic_train = 0
         e_train = 0.0
         for inp, field, _ in fsDataset_train:
-          e_train += R.calc_Field_MSE(inp, field)
-          ic_train += 1
+          e_train = max(e_train, R.calc_Field_MSE(inp, field))
           pass
-
-        e_train /= ic_train
 
         # for the test set
-        ic_test = 0
         e_test = 0.0
         for inp, field, _ in fsDataset_test:
-          e_test += R.calc_Field_MSE(inp, field)
-          ic_test += 1
+          e_test = max(e_test, R.calc_Field_MSE(inp, field))
           pass
-
-        e_test /= ic_test
 
         self.e_hist["train"].append(e_train)
         self.e_hist["test"].append(e_test)
-
-        #TODO: calc the mse both for train and test sets
-        # R.MSE(train_set)
-        # R.MSE(test_set)
         pass
 
       models[var] = R
@@ -183,17 +171,26 @@ class FNN_Train(object):
     # now all variable models have been trained
     return models
 
-  def write_e_hists(self):
+  def write_e_hists(self, time:str):
   #-----------------------------------------------------------------------------
     """
     save the e_hist into a png file
+
+    - time: string 变量，充当本次打印图片的时间戳
     """
     fig, ax = plt.subplots(1,1)
-    x = self.e_hist["train"]
-    y = self.e_hist["test"]
-    ax.plot(x)
-    ax.plot(y)
 
-    fig.savefig("./Pics/error_estimation.png")
+    y1 = self.e_hist["train"]
+    y2 = self.e_hist["test"]
+
+    x = list(range(1,len(y1)+1))
+
+    ax.plot(x, y1)
+    ax.plot(x, y2)
+
+    # log-y
+    ax.set_yscale("log")
+
+    fig.savefig(f"./Pics/errorsL1-{time}.png")
     pass
   pass  # end class

@@ -27,7 +27,8 @@ for j in range(100):
   #  pass
 
   r3 = abs(r1 - r2)
-  e = sum(r3)
+  #e = sum(r3)
+  e = max(r3)
   print(f"e = {e}")
   pass
 
