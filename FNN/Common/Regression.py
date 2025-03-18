@@ -101,7 +101,7 @@ class Regression(nn.Module):
 
     self.counter += 1
     if(self.counter%10 == 0):  # print training info onto screen every 10 cases
-      print(f"    - {self.counter} Cases Trained ...")
+      print(f"    - {self.counter:5d} Cases Trained ...")
       pass
 
     # grad must set back to zero

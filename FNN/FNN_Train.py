@@ -191,10 +191,10 @@ class FNN_Train(object):
     # log-y
     ax.set_yscale("log")
     ax.set_xlabel("Epochs")
-    ax.set_ylabel("L1 norm")
+    ax.set_ylabel("Linf norm")
 
     ax.legend()
 
-    fig.savefig(f"./Pics/errorsL1-{time}.png")
+    fig.savefig(f"./Pics/errorsLinf_{time}.png")
     pass
   pass  # end class
