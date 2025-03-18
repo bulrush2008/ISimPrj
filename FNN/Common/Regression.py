@@ -175,9 +175,18 @@ class Regression(nn.Module):
 
     - dataset: list of strings, containing the cases name of train/test dataset
     """
+    print(self.varName)
+    print(dataset)
     pass
+
+  def print_error_func(self):
+  #-----------------------------------------------------------------------------
+    pass  # end func print_error_func
   pass  # end class Regression
 
 if __name__=="__main__":
 #===============================================================================
+  R = Regression("T")
+
+  R.calc_dataset_error(['c1', 'case2'])
   pass
