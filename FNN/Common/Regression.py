@@ -179,7 +179,8 @@ class Regression(nn.Module):
     """
     output = self.forward(inp).detach().numpy()
 
-    a = output; b = target.numpy()
+    # a/b both of type torch.FloatTensor
+    a = output; b = target.detach().numpy()
     #e = sum(abs(a-b))
     e = max(abs(a-b))
 
