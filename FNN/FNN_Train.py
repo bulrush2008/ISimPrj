@@ -50,7 +50,7 @@ class FNN_Train(object):
     self.fieldList = data["vars"]
     pass
 
-  def train( self ):
+  def train(self):
   #-----------------------------------------------------------------------------
     # train the fields one has assigned, which must be in
     # ["P", "T", "U", "V", "W"]
