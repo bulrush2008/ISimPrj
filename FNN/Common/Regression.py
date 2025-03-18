@@ -168,25 +168,23 @@ class Regression(nn.Module):
     ax.figure.savefig(outFile)
     pass  # end funcsaveLossHistory2PNG
 
-  def calc_dataset_error(self, dataset:list):
+  def calc_Field_MSE(self, inp, target):
   #-----------------------------------------------------------------------------
     """
-    Calculate the errors either for train or test data set.add
+    Calculate error each case between prediction and real.
+    Function's two input parameters are same with 'self.train(...)'
 
-    - dataset: list of strings, containing the cases name of train/test dataset
+    - inp: input parameters
+    - target: data of the real field of each case
     """
     print(self.varName)
     print(dataset)
     pass
-
-  def print_error_func(self):
-  #-----------------------------------------------------------------------------
-    pass  # end func print_error_func
   pass  # end class Regression
 
 if __name__=="__main__":
 #===============================================================================
   R = Regression("T")
 
-  R.calc_dataset_error(['c1', 'case2'])
+  #R.calc_dataset_error(['c1', 'case2'])
   pass
