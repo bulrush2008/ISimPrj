@@ -141,7 +141,7 @@ class FNN_Train(object):
       epochs = varList[var]
 
       for i in range(epochs):
-        print(f"  - Training Epoch {i+1} of {epochs} for {var}")
+        print(f"  > Training Epoch {i+1} of {epochs} for {var}")
         for inp, label, _ in fsDataset_train:
           R.train(inp, label)
           pass
