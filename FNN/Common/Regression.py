@@ -168,7 +168,7 @@ class Regression(nn.Module):
     ax.figure.savefig(outFile)
     pass  # end funcsaveLossHistory2PNG
 
-  def calc_Field_MSE(self, inp, target):
+  def calc_Field_MSE(self, inp, target)->np.float64:
   #-----------------------------------------------------------------------------
     """
     Calculate error each case between prediction and real.
@@ -177,14 +177,21 @@ class Regression(nn.Module):
     - inp: input parameters
     - target: data of the real field of each case
     """
-    print(self.varName)
-    print(dataset)
-    pass
+    output = self.forward(inp).detach().numpy()
+
+    size = len(output)
+
+    e = 0.0
+    a = output; b = target
+
+    for i in range(size):
+      e += abs(a[i]-b[i])
+      pass
+
+    return e
   pass  # end class Regression
 
 if __name__=="__main__":
 #===============================================================================
   R = Regression("T")
-
-  #R.calc_dataset_error(['c1', 'case2'])
   pass
