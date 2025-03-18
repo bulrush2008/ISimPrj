@@ -13,6 +13,7 @@ import json
 
 import h5py
 import torch
+import matplotlib.pyplot as plt
 
 from pathlib import Path
 
@@ -48,6 +49,8 @@ class FNN_Train(object):
     self.filePathH5 = Path(matrix_data_path)
 
     self.fieldList = data["vars"]
+
+    self.e_hist = {"train":[], "test":[]}
     pass
 
   def train(self):
@@ -113,7 +116,12 @@ class FNN_Train(object):
     # train fields
     for var in fields:
       # obj to get the train data set
+      # train set serves as (1) train & (2) error estimation
       fsDataset_train = FSimDataset(dataPath, trainSet, var)
+
+      # obj to get the test data set
+      # test set servers only as erro estimation
+      fsDataset_test = FSimDataset(dataPath, testSet, var)
 
       # gen a obj as regression, and then train the model
       var_dict_path = Path(f"./StateDicts/dict_{var}.pth")
@@ -138,6 +146,32 @@ class FNN_Train(object):
           R.train(inp, label)
           pass
 
+        # we need calculate field error to do estimation for both train and
+        #   test data set
+
+        # for the train set
+        ic_train = 0
+        e_train = 0.0
+        for inp, field, _ in fsDataset_train:
+          e_train += R.calc_Field_MSE(inp, field)
+          ic_train += 1
+          pass
+
+        e_train /= ic_train
+
+        # for the test set
+        ic_test = 0
+        e_test = 0.0
+        for inp, field, _ in fsDataset_test:
+          e_test += R.calc_Field_MSE(inp, field)
+          ic_test += 1
+          pass
+
+        e_test /= ic_test
+
+        self.e_hist["train"].append(e_train)
+        self.e_hist["test"].append(e_test)
+
         #TODO: calc the mse both for train and test sets
         # R.MSE(train_set)
         # R.MSE(test_set)
@@ -148,4 +182,18 @@ class FNN_Train(object):
 
     # now all variable models have been trained
     return models
+
+  def write_e_hists(self):
+  #-----------------------------------------------------------------------------
+    """
+    save the e_hist into a png file
+    """
+    fig, ax = plt.subplots(1,1)
+    x = self.e_hist["train"]
+    y = self.e_hist["test"]
+    ax.plot(x)
+    ax.plot(y)
+
+    fig.savefig("./Pics/error_estimation.png")
+    pass
   pass  # end class

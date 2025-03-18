@@ -32,6 +32,8 @@ if __name__=="__main__":
     print("---------- Train ----------")
     fnn_train = FNN_Train()
     fnn_train.train()
+
+    fnn_train.write_e_hists()
     pass
 
   if Predict:
