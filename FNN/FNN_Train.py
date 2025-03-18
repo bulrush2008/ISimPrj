@@ -141,7 +141,7 @@ class FNN_Train(object):
       epochs = varList[var]
 
       for i in range(epochs):
-        print(f"  > Training Epoch {i+1} of {epochs} for {var}")
+        print(f" >> Training {var}, epoch {i+1}/{epochs}")
         for inp, label, _ in fsDataset_train:
           R.train(inp, label)
           pass
@@ -185,11 +185,15 @@ class FNN_Train(object):
 
     x = list(range(1,len(y1)+1))
 
-    ax.plot(x, y1)
-    ax.plot(x, y2)
+    ax.plot(x, y1, label="Train")
+    ax.plot(x, y2, label="Test")
 
     # log-y
     ax.set_yscale("log")
+    ax.set_xlabel("Epochs")
+    ax.set_ylabel("L1 norm")
+
+    ax.legend()
 
     fig.savefig(f"./Pics/errorsL1-{time}.png")
     pass
