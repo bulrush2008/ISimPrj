@@ -57,6 +57,10 @@ class Regression(nn.Module):
     # counter: record the trained times
     self.counter = 0
     self.progress = []  # loss of each train process
+
+    # error estimation of train and test sets
+    self.err_train = [] # float list
+    self.err_test  = [] # float list
     pass
 
   def _initialize_weights(self):
@@ -162,5 +166,18 @@ class Regression(nn.Module):
                   logy   = True)
     outFile = outDir.joinpath(f"lossHistory_{self.varName}.png")
     ax.figure.savefig(outFile)
+    pass  # end funcsaveLossHistory2PNG
+
+  def calc_dataset_error(self, dataset:list):
+  #-----------------------------------------------------------------------------
+    """
+    Calculate the errors either for train or test data set.add
+
+    - dataset: list of strings, containing the cases name of train/test dataset
+    """
     pass
+  pass  # end class Regression
+
+if __name__=="__main__":
+#===============================================================================
   pass
