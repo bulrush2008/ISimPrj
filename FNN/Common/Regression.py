@@ -196,8 +196,19 @@ class Regression(nn.Module):
     x = target.detach().numpy()
     y = self.forward(inp).detach().numpy()
 
+    imax = int(max(max(x),max(y)))
+    imin = int(min(min(x),min(y)))
+    
+    linex = liney = range(imin, imax)
+
     fig, ax = plt.subplots(1,1)
-    ax.plot(x,y, ls='', marker='o', label="Regression")
+    ax.plot(x,y,  ls='',
+                  marker='o',
+                  markersize=2,
+                  markerfacecolor='black',
+                  markeredgecolor="black",
+                  label="Regression")
+    ax.plot(linex, liney)
 
     ax.legend()
 
