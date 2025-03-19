@@ -76,34 +76,30 @@ class FNN_Train(object):
 
     filePathH5 = self.filePathH5
 
-    models = self._train( varList  = fieldList,
-                          trainSet = trnSet,
-                          testSet  = tstSet,
-                          dataPath = filePathH5 )
-
+    # directory of loss png
     dirPNG = Path("./Pics")
     if not dirPNG.exists(): dirPNG.mkdir(parents=True)
 
+    # directory of model
     dirModel = Path("./StateDicts")
     if not dirModel.exists(): dirModel.mkdir(parents=True)
 
-    for var in fieldList.keys():
-      #------------------------------------------------------------------------
-      # plot loss history and save
-      models[var].saveLossHistory2PNG(dirPNG)
-
-      #------------------------------------------------------------------------
-      # save model parameters
-      model_dicts_name = dirModel.joinpath(f"dict_{var}.pth")
-      torch.save(models[var].model.state_dict(), model_dicts_name)
-      pass
-    pass
+    # train
+    self._train(varList  = fieldList,
+                trainSet = trnSet,
+                testSet  = tstSet,
+                dataPath = filePathH5,
+                dirPNG   = dirPNG,
+                dirModel = dirModel)
+    pass  # end func 'self.train'
 
   def _train( self,
               varList :dict,
               trainSet:list,
               testSet :list,
-              dataPath:Path )->dict:
+              dataPath:Path,
+              dirPNG:Path,
+              dirModel:Path )->None:
   #-----------------------------------------------------------------------------
     """
     Train the FNN model by a give trainset, in which some cases field included.
@@ -177,11 +173,16 @@ class FNN_Train(object):
       # write residuals for this "var"
       self.write_e_hists(var)
 
-      models[var] = R
+      # plot loss history and save
+      R.saveLossHistory2PNG(dirPNG)
+
+      # save model parameters
+      model_dicts_name = dirModel.joinpath(f"dict_{var}.pth")
+      torch.save(R.model.state_dict(), model_dicts_name)
       pass  # end all var-models training
 
     # now all variable models have been trained
-    return models
+    pass
 
   def write_e_hists(self, var:str):
   #-----------------------------------------------------------------------------
