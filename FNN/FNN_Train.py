@@ -192,8 +192,8 @@ class FNN_Train(object):
     """
     fig, ax = plt.subplots(1,1)
 
-    y1 = self.e_hist["train"]
-    y2 = self.e_hist["test"]
+    y1 = self.res_trn_hist[var]
+    y2 = self.res_tst_hist[var]
 
     x = list(range(1,len(y1)+1))
 
