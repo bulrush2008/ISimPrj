@@ -6,6 +6,7 @@ import pandas
 import h5py
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from pathlib import Path
 
@@ -185,6 +186,24 @@ class Regression(nn.Module):
     e = max(abs(a-b))
 
     return e
+
+  def save_regression_png(self, order, inp, target):
+    """
+    绘制回归图，每个图点的
+    - 横坐标: CFD 仿真结果
+    - 纵坐标: 代理模型预测结果
+    """
+    x = target.detach().numpy()
+    y = self.forward(inp).detach().numpy()
+
+    fig, ax = plt.subplots(1,1)
+    ax.plot(x,y, ls='', marker='o', label="Regression")
+
+    ax.legend()
+
+    fig.savefig(f"./Pics/regression_{order:03d}.png")
+    plt.close()
+    pass
   pass  # end class Regression
 
 if __name__=="__main__":

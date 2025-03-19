@@ -1,8 +1,7 @@
 {
   "model": "FNN_Train",
   "vars": {
-    "T": 2,
-    "V": 2
+    "T": 1
   },
   "test_ratio": 0.2,
   "train_data": "../FSCases/FSHDF/MatrixData.h5"

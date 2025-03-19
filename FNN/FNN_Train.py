@@ -176,6 +176,12 @@ class FNN_Train(object):
       # plot loss history and save
       R.saveLossHistory2PNG(dirPNG)
 
+      ipic = 0
+      for inp, field, _ in fsDataset_test:
+        R.save_regression_png(order=ipic, inp=inp, target=field)
+        ipic += 1
+        pass
+
       # save model parameters
       model_dicts_name = dirModel.joinpath(f"dict_{var}.pth")
       torch.save(R.model.state_dict(), model_dicts_name)
