@@ -208,7 +208,7 @@ class Regression(nn.Module):
                   markerfacecolor='black',
                   markeredgecolor="black",
                   label="Regression")
-    ax.plot(linex, liney)
+    ax.plot(linex, liney, c='orange')
 
     ax.legend()
 

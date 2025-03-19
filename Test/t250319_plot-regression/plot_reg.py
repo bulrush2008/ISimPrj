@@ -16,7 +16,7 @@ im = range(int(m))
 
 fig, ax = plt.subplots(1,1)
 ax.plot(x,y, ls='', marker='o', markersize=2, markeredgecolor='black', markerfacecolor='black', label="Regression")
-ax.plot(im,im)
+ax.plot(im,im, c='orange')
 
 ax.legend()
 
