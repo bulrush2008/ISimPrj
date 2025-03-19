@@ -9,7 +9,6 @@ This is main function to call:
 Xia, S      2025.2.13   Simpop.cn   v6.x
 """
 import sys
-from datetime import datetime
 
 from FNN_Train import FNN_Train
 from FNN_Eval import FNN_Eval
@@ -33,9 +32,6 @@ if __name__=="__main__":
     print("---------- Train ----------")
     fnn_train = FNN_Train()
     fnn_train.train()
-
-    current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
-    fnn_train.write_e_hists(current_time)
     pass
 
   if Predict:

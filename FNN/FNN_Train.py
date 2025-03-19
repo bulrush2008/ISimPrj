@@ -16,6 +16,7 @@ import torch
 import matplotlib.pyplot as plt
 
 from pathlib import Path
+from datetime import datetime
 
 from Common.CaseSet import CaseSet
 from Common.FSimDataset import FSimDataset
@@ -50,8 +51,16 @@ class FNN_Train(object):
 
     self.fieldList = data["vars"]
 
-    self.e_hist = {"train":[], "test":[]}
-    pass
+    # data storing residuals between CFD field and prediction
+    #   including both for train and test sets 
+    self.res_trn_hist = {}
+    self.res_tst_hist = {}
+
+    for var in self.fieldList.keys():
+      self.res_trn_hist[var] = []
+      self.res_tst_hist[var] = []
+      pass
+    pass  # end '__init__()'
 
   def train(self):
   #-----------------------------------------------------------------------------
@@ -161,9 +170,12 @@ class FNN_Train(object):
           e_test = max(e_test, R.calc_Field_MSE(inp, field))
           pass
 
-        self.e_hist["train"].append(e_train)
-        self.e_hist["test"].append(e_test)
+        self.res_trn_hist[var].append(e_train)
+        self.res_tst_hist[var].append(e_test)
         pass
+
+      # write residuals for this "var"
+      self.write_e_hists(var)
 
       models[var] = R
       pass  # end all var-models training
@@ -171,12 +183,12 @@ class FNN_Train(object):
     # now all variable models have been trained
     return models
 
-  def write_e_hists(self, time:str):
+  def write_e_hists(self, var:str):
   #-----------------------------------------------------------------------------
     """
     save the e_hist into a png file
 
-    - time: string 变量，充当本次打印图片的时间戳
+    - var : string 变量，用于命名
     """
     fig, ax = plt.subplots(1,1)
 
@@ -195,6 +207,7 @@ class FNN_Train(object):
 
     ax.legend()
 
-    fig.savefig(f"./Pics/errorsLinf_{time}.png")
+    current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
+    fig.savefig(f"./Pics/ResLinf_{var}-{current_time}.png", dpi=200)
     pass
   pass  # end class
