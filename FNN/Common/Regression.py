@@ -8,6 +8,7 @@ import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 
+from datetime import datetime
 from pathlib import Path
 
 class Regression(nn.Module):
@@ -212,7 +213,10 @@ class Regression(nn.Module):
 
     ax.legend()
 
-    fig.savefig(f"./Pics/regression_{order:03d}.png")
+    var = self.varName
+    current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
+
+    fig.savefig(f"./Pics/Reg_{var}-{order:03d}-{current_time}.png")
     plt.close()
     pass
   pass  # end class Regression
