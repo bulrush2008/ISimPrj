@@ -189,10 +189,15 @@ class Regression(nn.Module):
     return e
 
   def save_regression_png(self, order, inp, target):
+  #-----------------------------------------------------------------------------
     """
     绘制回归图，每个图点的
     - 横坐标: CFD 仿真结果
     - 纵坐标: 代理模型预测结果
+
+    - order: 测试算例的标号索引
+    - inp: 对应算例的模型输入参数
+    - target: 算例对应的流场，它是模型的输入目标
     """
     x = target.detach().numpy()
     y = self.forward(inp).detach().numpy()
