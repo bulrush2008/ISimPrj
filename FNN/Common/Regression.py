@@ -54,7 +54,7 @@ class Regression(nn.Module):
 
     # regressive problem, MSE is proper
     self.loss_function = nn.MSELoss()
-    self.optimiser = torch.optim.Adam(self.parameters(), lr=0.01)
+    self.optimiser = torch.optim.Adam(self.parameters(), lr=0.005)
 
     # counter: record the trained times
     self.counter = 0
@@ -168,7 +168,11 @@ class Regression(nn.Module):
                   xlabel = "Number of Trained Cases",
                   ylabel = "Loss Value",
                   logy   = True)
-    outFile = outDir.joinpath(f"lossHistory_{self.varName}.png")
+
+    var = self.varName
+    current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
+
+    outFile = outDir.joinpath(f"lossHist_{var}-{current_time}.png")
     ax.figure.savefig(outFile)
     pass  # end funcsaveLossHistory2PNG
 
@@ -223,7 +227,7 @@ class Regression(nn.Module):
     var = self.varName
     current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
 
-    fig.savefig(f"./Pics/Reg_{var}-{order:03d}-{current_time}.png")
+    fig.savefig(f"./Pics/regression_{var}-{order:03d}-{current_time}.png")
     plt.close()
     pass
   pass  # end class Regression

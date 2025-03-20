@@ -215,6 +215,6 @@ class FNN_Train(object):
     ax.legend()
 
     current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
-    fig.savefig(f"./Pics/ResLinf_{var}-{current_time}.png", dpi=200)
+    fig.savefig(f"./Pics/resLinf_{var}-{current_time}.png", dpi=200)
     pass
   pass  # end class
