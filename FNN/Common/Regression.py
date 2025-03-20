@@ -158,7 +158,9 @@ class Regression(nn.Module):
   def saveLossHistory2PNG(self, outDir:Path)->None:
   #-----------------------------------------------------------------------------
     """
-    - 打印损失函数
+    打印损失函数
+
+    - outDir: 损失函数打印图片的输出目录
     """
     df = pandas.DataFrame(self.progress, columns=["Loss"])
     ax = df.plot( title  = f"Loss history of {self.varName}",
