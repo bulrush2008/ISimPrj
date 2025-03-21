@@ -225,6 +225,11 @@ class Regression(nn.Module):
                   label="Regression")
     ax.plot([0,1], [0,1], c='orange')
 
+    ax.set_xlabel("CFD")
+    ax.set_ylabel("ML Eval")
+
+    ax.set_title(f"Regression for variable {self.varName}")
+
     ax.legend()
 
     var = self.varName
