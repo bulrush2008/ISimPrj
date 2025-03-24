@@ -1,12 +1,21 @@
 
-from torch.utils.data import Dataset
+#from torch.utils.data import Dataset
 from pathlib import Path
 
 import torch
 import h5py
 
-class FSimDataset(Dataset):
+#class FSimDataset(Dataset):
+class FSimDataset(object):
+#===============================================================================
+  """
+  - 数据类
+
+  - 打开 H5 矩阵数据库，供随时调用
+  - 此类本身并不存储数据，而是提供一个指向数据的地址
+  """
   def __init__(self, file:Path, caseList:list, varName:str):
+  #-----------------------------------------------------------------------------
     """
     - The data remain stored in h5 file, read when needed
 
@@ -29,9 +38,11 @@ class FSimDataset(Dataset):
     self.varName  = varName
 
   def __len__(self):
+  #-----------------------------------------------------------------------------
     return self.numCases
 
   def __getitem__(self, idx):
+  #-----------------------------------------------------------------------------
     """
     return the input params and field
     """
@@ -41,8 +52,8 @@ class FSimDataset(Dataset):
     hdf = self.dataFile
     cid = self.caseList[idx]
 
-    inp = hdf[cid]["InParam"][:]  # numpy.ndarray
-    inp = torch.FloatTensor(inp)  # torch.FloatTensor
+    inp = hdf[cid]["input"]["inp"][:]  # numpy.ndarray
+    inp = torch.FloatTensor(inp)  # convert to type torch.FloatTensor
 
     data = []
 
@@ -51,28 +62,29 @@ class FSimDataset(Dataset):
     coords = {"x":[], "y":[], "z":[]}
 
     for blk in range(8):
-      key = "Block-"+ "%02d"%blk + "-" + self.varName
+      #key = "Block-"+ "%02d"%blk + "-" + self.varName
+      key = f"block{blk:03d}"
 
-      varFieldBlk = list(hdf[cid][key][:])
+      # for the variable field
+      varFieldBlk = list(hdf[cid][key][self.varName][:])
       data += varFieldBlk
 
-      # coordx
-      key = "Block-"+ "%02d"%blk + "-X"
-      crd = list(hdf[cid][key][:])
+      # coord x
+      crd = list(hdf[cid][key]["X"][:])
       coords["x"] += crd
 
-      # coordy
-      key = "Block-"+ "%02d"%blk + "-Y"
-      crd = list(hdf[cid][key][:])
+      # coord y
+      crd = list(hdf[cid][key]["Y"][:])
       coords["y"] += crd
 
-      # coordz
-      key = "Block-"+ "%02d"%blk + "-Z"
-      crd = list(hdf[cid][key][:])
+      # coord z
+      crd = list(hdf[cid][key]["Z"][:])
       coords["z"] += crd
       pass
 
     return inp, torch.FloatTensor(data), coords
   
   def plotVTK(self, idx):
-    pass
+  #-----------------------------------------------------------------------------
+    pass  # end class func plotVTK
+  pass  # end class FSimDataset
