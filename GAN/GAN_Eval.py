@@ -56,6 +56,7 @@ class GAN_Eval(object):
     pass  # end __init__
 
   def predict( self ):
+  #-----------------------------------------------------------------------------
     # create a new empty h5 file to save the prediced data
     outH5Path = Path(self.eval_file)
 
@@ -107,5 +108,6 @@ class GAN_Eval(object):
 
 
 if __name__=="__main__":
+#===============================================================================
   print("Only define class 'GAN_Eval' here")
   pass
