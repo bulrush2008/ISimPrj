@@ -77,11 +77,8 @@ class GAN_Eval(object):
 
       if not var_dict_path.exists():
         var_dict_path = None
-        #print(f"! Eval Warn: Predict {var} is TRIVAL!")
-        #print(f"  >>> State Dictionary 'dipct_{var}.pth' Not Exist")
         print(f">>> Predicting Field {var}: TRIVAL!")
       else:
-        #print(f">>> Hi, Now We are Predicting Field {var}!")
         print(f">>> Predicting Field {var}!")
         pass
 
