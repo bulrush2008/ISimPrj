@@ -6,10 +6,10 @@
 from numpy.random import Generator, PCG64
 
 gen_unif = Generator(PCG64(seed=100))
-gen_gaus = Generator(PCG64(seed=100))
+gen_gaus = Generator(PCG64(seed=640)) # 两个种子相互独立
 
 a = gen_unif.random(1)
-#b = gen_gaus.standard_normal(1)
+b = gen_gaus.standard_normal(1)
 c = gen_unif.random(1)
 
 print(f"1st - 2nd: {a, c}")
