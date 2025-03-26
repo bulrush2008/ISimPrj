@@ -15,6 +15,7 @@ from GAN_Train import GAN_Train
 from GAN_Eval import GAN_Eval
 
 if __name__=="__main__":
+#===============================================================================
   args = sys.argv
   num_args = len(args)
 
