@@ -7,6 +7,7 @@ import math
 from pathlib import Path
 
 class Discriminator(nn.Module):
+#===============================================================================
   def __init__(self, varName:str, dictPath:Path=None):
   #-----------------------------------------------------------------------------
     # init by parent init method

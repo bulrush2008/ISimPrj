@@ -11,8 +11,10 @@ from pathlib import Path
 
 # Regression class: Core of FNN
 class Generator(nn.Module):
+#===============================================================================
   # initialize PyTorch pararent class
   def __init__(self, varName:str, dictPath:Path=None):
+  #-----------------------------------------------------------------------------
     super().__init__()
 
     if varName not in ["P", "U", "V", "W", "T"]:
@@ -55,6 +57,7 @@ class Generator(nn.Module):
     pass
 
   def _initialize_weights(self):
+  #-----------------------------------------------------------------------------
     """
     - inner function, call only once at initialization
     - configure initial model weights
@@ -71,11 +74,13 @@ class Generator(nn.Module):
 
   # forward propagation
   def forward(self, inputs):
+  #-----------------------------------------------------------------------------
     # simply run the model
     return self.model(inputs)
 
   # train
   def train(self, D, inputs, targets):
+  #-----------------------------------------------------------------------------
     # calculate the output of the network
     g_output = self.forward(inputs)
 
@@ -138,8 +143,11 @@ class Generator(nn.Module):
     h5.close()
     pass
 
-  # 打印损失函数
   def saveLossHistory2PNG(self, outDir:Path)->None:
+  #-----------------------------------------------------------------------------
+    """
+    打印损失函数
+    """
     df = pandas.DataFrame(self.progress, columns=["Loss"])
     ax = df.plot( title  = f"G-Loss history of {self.varName}",
                   color  = "black",
@@ -152,5 +160,6 @@ class Generator(nn.Module):
   pass
 
 if __name__=="__main__":
+#===============================================================================
   g = Generation("T")
   pass
