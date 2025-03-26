@@ -139,7 +139,7 @@ class GAN_Train(object):
       epochs = varList[var]
 
       for i in range(epochs):
-        print(f"  - Training Epoch {i+1:5d} of {epochs:5d}")
+        print(f" >> Training {var}, epoch {i+1}/{epochs}")
         for inp, fld, _ in fsDataset_train:
           # train discriminatro on True
           D.train(fld, torch.FloatTensor([1.0]))
