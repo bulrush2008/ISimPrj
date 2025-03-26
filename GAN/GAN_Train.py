@@ -23,8 +23,9 @@ from Common.Generator import Generator
 from Common.Discriminator import Discriminator
 
 class GAN_Train(object):
-  #----------------------------------------------------------------------------
+#===============================================================================
   def __init__( self ):
+  #-----------------------------------------------------------------------------
     # split the cases into train and test sets
     # now: 125 = 100 + 25
     with open("./GAN_Train.json", 'r') as inp:
@@ -46,7 +47,7 @@ class GAN_Train(object):
     pass
 
   def train( self ):
-    #--------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------
     # train the fields one has assigned, which must be in
     # ["P", "T", "U", "V", "W"]
     # the order in list does not matter
@@ -93,6 +94,7 @@ class GAN_Train(object):
               trainSet:list,
               testSet :list,
               dataPath:Path )->dict:
+  #-----------------------------------------------------------------------------
     """
     Train the GAN model by a give trainset, in which some cases field included.
     - varList : dict of epochs for each field, such as ["P":1,"T":2]
@@ -158,5 +160,6 @@ class GAN_Train(object):
   pass  # end class
 
 if __name__=="__main__":
+#===============================================================================
   print("Only define class 'GAN_Train' here")
   pass
