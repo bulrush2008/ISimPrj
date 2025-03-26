@@ -130,15 +130,39 @@ paramInpDict = {
 
 lenParamInp = len(paramInpDict)
 
+_large =  1.0E+20
+_small = -1.0E+20
+
+maxs = [_small, _small, _small]
+mins = [_large, _large, _large]
+
+for value in paramInpDict.values():
+  for i in range(len(value)):
+    if value[i] > maxs[i]: maxs[i] = value[i]
+    if value[i] < mins[i]: mins[i] = value[i]
+
 # normalize the input
 for key in paramInpDict.keys():
-  paramInpDict[key][0] = (paramInpDict[key][0] - 400.0) / 100.0
-  paramInpDict[key][1] = paramInpDict[key][1] - 1.5
-  paramInpDict[key][2] = paramInpDict[key][2] / 1000000.0
+  for i in range(3):
+    paramInpDict[key][i] = (paramInpDict[key][i] - mins[i]) / (maxs[i]-mins[i])
+    pass
+  print(paramInpDict[key])
 
 if __name__=="__main__":
   print(lenParamInp)
 
-  for key, value in paramInpDict.items():
-    print(key, value)
+  #large = 1.E+20
+
+  #amax = -large
+  #amin = large
+
+  #for key, value in paramInpDict.items():
+  #  if value[2] > amax: amax = value[2]
+  #  if value[2] < amin: amin = value[2]
+  #  pass
+
+  #print(f"[min,max] = [{amin},{amax}]")
+
+  print(maxs)
+  print(mins)
   pass
