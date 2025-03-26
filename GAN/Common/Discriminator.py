@@ -8,6 +8,7 @@ from pathlib import Path
 
 class Discriminator(nn.Module):
   def __init__(self, varName:str, dictPath:Path=None):
+  #-----------------------------------------------------------------------------
     # init by parent init method
     super().__init__()
 
@@ -52,11 +53,13 @@ class Discriminator(nn.Module):
     pass
 
   def forward(self, inputs):
+  #-----------------------------------------------------------------------------
     # simply run model
     return self.model(inputs)
     pass
 
   def train(self, inputs, targets):
+  #-----------------------------------------------------------------------------
     # calculate the output of the network
     outputs = self.forward(inputs)
 
@@ -78,6 +81,7 @@ class Discriminator(nn.Module):
     pass
 
   def saveLossHistory2PNG(self, outDir:Path)->None:
+  #-----------------------------------------------------------------------------
     df = pandas.DataFrame(self.progress, columns=["Loss"])
     ax = df.plot( title  = f"D-Loss history of {self.varName}",
                   color  = "black",
@@ -89,6 +93,7 @@ class Discriminator(nn.Module):
     pass
 
   def _initialize_weights(self):
+  #-----------------------------------------------------------------------------
     """
     - inner function, call only once at initialization
     - configure initial model weights
@@ -105,5 +110,6 @@ class Discriminator(nn.Module):
   pass  # Class End
 
 if __name__=="__main__":
+#===============================================================================
   d = Discriminator(varName="T")
   pass
