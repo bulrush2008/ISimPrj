@@ -135,7 +135,6 @@ _small = -1.0E+20
 
 maxs = [_small, _small, _small]
 mins = [_large, _large, _large]
-gaps = [0.0, 0.0, 0.0]
 
 for value in paramInpDict.values():
   for i in range(len(value)):
@@ -144,14 +143,16 @@ for value in paramInpDict.values():
     pass
   pass
 
-for i in range(len(gaps)):
-  gaps[i] = maxs[i] - mins[i]
+_gaps = [0.0, 0.0, 0.0]
+
+for i in range(len(_gaps)):
+  _gaps[i] = maxs[i] - mins[i]
   pass
 
 # normalize the input
 for key, value in paramInpDict.items():
   for i in range(len(value)):
-    paramInpDict[key][i] = (paramInpDict[key][i] - mins[i]) / gaps[i]
+    paramInpDict[key][i] = (paramInpDict[key][i] - mins[i]) / _gaps[i]
     pass
   #print(paramInpDict[key])
   pass
@@ -173,5 +174,5 @@ if __name__=="__main__":
 
   print(maxs)
   print(mins)
-  print(gaps)
+  print(_gaps)
   pass
