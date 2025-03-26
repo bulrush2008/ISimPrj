@@ -142,8 +142,8 @@ for value in paramInpDict.values():
     if value[i] < mins[i]: mins[i] = value[i]
 
 # normalize the input
-for key in paramInpDict.keys():
-  for i in range(3):
+for key, value in paramInpDict.items():
+  for i in range(len(value)):
     paramInpDict[key][i] = (paramInpDict[key][i] - mins[i]) / (maxs[i]-mins[i])
     pass
   print(paramInpDict[key])
