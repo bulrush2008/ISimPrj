@@ -1,7 +1,7 @@
 {
   "model": "GAN_Train",
   "vars": {
-    "T": 1
+    "T": 20
   },
   "test_ratio": 0.2,
   "train_data": "../FSCases/FSHDF/MatrixData.h5"

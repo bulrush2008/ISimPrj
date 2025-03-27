@@ -113,7 +113,7 @@ class Generator(nn.Module):
     self.optimiser.step()
     pass
 
-  def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
+  def write2HDF(self, seeds:torch.FloatTensor, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
   #----------------------------------------------------------------------------
     # h5 文件已经在外部打开，这里只需要创建一个组，用来管理模型的预测数据即可
     grpName = "FNN_Out" # a case data is a group
@@ -130,7 +130,7 @@ class Generator(nn.Module):
 
     # 根据参数化输入，预测流场
     # the predicted data should be detached and converted to numpy format
-    output = self.forward(inp).detach().numpy()
+    output = self.forward(seeds,inp).detach().numpy()
 
     # write data into h5 database directly
     dsName = f"{self.varName}"

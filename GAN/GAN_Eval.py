@@ -22,6 +22,8 @@ from Common.FSimDataset import FSimDataset
 from Common.Generator import Generator
 from Common.Discriminator import Discriminator
 
+from Common.RandsGen import RandsGen
+
 class GAN_Eval(object):
 #===============================================================================
   def __init__( self ):
@@ -62,6 +64,8 @@ class GAN_Eval(object):
     inp[2] = (inp[2] - emin) / (emax-emin)
 
     self.eval_inp = inp
+
+    self.rand_generator = RandsGen(1984)
     pass  # end __init__
 
   def predict( self ):
@@ -104,10 +108,13 @@ class GAN_Eval(object):
       inp = torch.FloatTensor(self.eval_inp) # convert to torch.FloatTensor
 
       # the coordinates need to write only one time
+      seeds_inp = self.rand_generator.seed
+      self.rand_generator.update_seed()
+
       if ifield == 0:
-        G.write2HDF(inp, outH5Path, coords=coords)
+        G.write2HDF(seeds_inp, inp, outH5Path, coords=coords)
       else:
-        G.write2HDF(inp, outH5Path, coords=None)
+        G.write2HDF(seeds_inp, inp, outH5Path, coords=None)
         pass
 
       ifield += 1
