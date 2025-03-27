@@ -3,5 +3,9 @@
   "train_data": "../FSCases/FSHDF/MatrixData.h5",
   "test_ratio": 0.2,
   "eval_inp": [478.15,	1.84143565,	291666.6667],
+  "eval_range": {
+    "mins": [438.15, 1.61823132895853, 125000],
+    "maxs": [478.15, 2.51104861390117, 458333.333333333]
+  },
   "eval_file": "../Eval/fnn_t09_C070.h5"
 }
