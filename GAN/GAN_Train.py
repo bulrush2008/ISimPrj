@@ -7,7 +7,7 @@ This is function to call:
   - save to the database: .h5
 
 @author     @data       @aff        @version
-Xia, S      2025.2.21   Simpop.cn   v3.x
+Xia, S      2025.3.27   Simpop.cn   v4.x
 """
 import sys
 import json
@@ -106,8 +106,6 @@ class GAN_Train(object):
     - testSet : list of case names in test set, each is a string
     - dataPath: path of data of train set
     """
-
-    #--------------------------------------------------------------------------
     # extract the var names
     fields = []
     for key in varList.keys():
@@ -153,13 +151,9 @@ class GAN_Train(object):
           seeds_inp = self.rand_generator.seed
 
           # train discriminator on False
-          # debug
-          #print("*****debug: before? L157")
-          Ad = G.forward(seeds_inp, label_inp).detach().dtype
-          #print(Ad); sys.exit("******debug L158")
-
           D.train(G.forward(seeds_inp, label_inp).detach(), label_inp, torch.FloatTensor([0.0]))
 
+          # 更新随机数生成器
           self.rand_generator.update_inpu()
           self.rand_generator.update_seed()
 
@@ -170,6 +164,7 @@ class GAN_Train(object):
           # train generator
           G.train(D, seeds_inp, label_inp, torch.FloatTensor([1.0]))
 
+          # 更新随机数生成器
           self.rand_generator.update_inpu()
           self.rand_generator.update_seed()
           pass  # Tranverse all fields in 1 epoch

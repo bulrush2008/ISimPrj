@@ -81,14 +81,9 @@ class Generator(nn.Module):
     - pinp: 参数化输入，[入口温度、质量流率、热通量]
     """
     # simply run the model
-    #print(inputs.dtype)
-
+    # nn.model read float32 as input precision by default
     cat_in = torch.cat((inputs, pinp)).float()
-    #print(cat_in.dtype)
-
-    #print("*****debug 88: before return")
     out = self.model(cat_in)
-    #print("*****debug 90: after return")
     return out
 
   # train

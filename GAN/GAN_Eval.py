@@ -7,7 +7,7 @@ This is function to call:
   - save to the database: .h5
 
 @author     @data       @aff        @version
-Xia, S      2025.2.21   Simpop.cn   v3.x
+Xia, S      2025.3.27   Simpop.cn   v4.x
 """
 import sys
 import json

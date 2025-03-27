@@ -61,6 +61,7 @@ class Discriminator(nn.Module):
     - pinp: 参数化输入，[入口温度、质量流率、热通量]
     """
     # simply run model
+    # nn.model read float32 as input precision by default
     cat_in = torch.cat((inputs, pinp)).float()
     return self.model(cat_in)
     pass
