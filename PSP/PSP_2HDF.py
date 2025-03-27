@@ -24,6 +24,8 @@ from Common.readVTR import readVTR
 from Common.readVTM import readVTM
 from Common.assertFileExist import assertFileExist
 from Common.paramInps import paramInpDict, lenParamInp
+from Common.paramInps import mins as inp_range_mins
+from Common.paramInps import maxs as inp_range_maxs
 from Common.cleanBadSpots import cleanBadSpots
 from Common.splitData import splitData
 
@@ -98,6 +100,9 @@ class PSP(object):
       # input_parameters as a sub-group
       sub_grp_inp = grpC.create_group("input")
       sub_grp_inp.create_dataset("inp", data=paramInpDict[case])
+
+      # range [mins, maxs] to recover the input for NN model
+      sub_grp_inp.create_dataset("range", data=[inp_range_mins, inp_range_maxs])
 
       # assertain each vtm file is alive
       alive = assertFileExist(filePathVTM)
