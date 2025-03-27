@@ -210,3 +210,6 @@
   - 引入 "from numpy.random import Generator, PCG64"，实现独立生成随机数分布
   - 考察独立分布对 cGAN 的影响
   2025.3.26, 18:13
+
+45, GAN 的两个 loss-history，应该绘制在一张图上。
+  2025.3.27, 14:14
