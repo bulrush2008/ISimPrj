@@ -47,10 +47,19 @@ class GAN_Eval(object):
     # this input is real
     # but should be normalized, before feed into the NN model
     inp = data["eval_inp"]
+    eval_range = data["eval_range"]
 
-    inp[0] = (inp[0] - 400.0) / 100.0
-    inp[1] = inp[1] - 1.5
-    inp[2] = inp[2] / 1000000.0
+    emin = eval_range["mins"][0]
+    emax = eval_range["maxs"][0]
+    inp[0] = (inp[0] - emin) / (emax-emin)
+
+    emin = eval_range["mins"][1]
+    emax = eval_range["maxs"][1]
+    inp[1] = (inp[1] - emin) / (emax-emin)
+
+    emin = eval_range["mins"][2]
+    emax = eval_range["maxs"][2]
+    inp[2] = (inp[2] - emin) / (emax-emin)
 
     self.eval_inp = inp
     pass  # end __init__
