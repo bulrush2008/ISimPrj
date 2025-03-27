@@ -22,6 +22,8 @@ from Common.FSimDataset import FSimDataset
 from Common.Generator import Generator
 from Common.Discriminator import Discriminator
 
+from Common.RandsGen import RandsGen
+
 class GAN_Train(object):
 #===============================================================================
   def __init__( self ):
@@ -44,6 +46,8 @@ class GAN_Train(object):
     self.filePathH5 = Path(data["train_data"])
 
     self.fieldList = data["vars"]
+
+    self.rand_generator = RandsGen(1984)
     pass
 
   def train( self ):
@@ -142,13 +146,32 @@ class GAN_Train(object):
         print(f" >> Training {var}, epoch {i+1}/{epochs}")
         for inp, fld, _ in fsDataset_train:
           # train discriminatro on True
-          D.train(fld, torch.FloatTensor([1.0]))
+          D.train(fld, inp, torch.FloatTensor([1.0]))
+
+          # 为鉴别器生成随机种子和标签
+          label_inp = self.rand_generator.inpu
+          seeds_inp = self.rand_generator.seed
 
           # train discriminator on False
-          D.train(G.forward(inp).detach(), torch.FloatTensor([0.0]))
+          # debug
+          #print("*****debug: before? L157")
+          Ad = G.forward(seeds_inp, label_inp).detach().dtype
+          #print(Ad); sys.exit("******debug L158")
+
+          D.train(G.forward(seeds_inp, label_inp).detach(), label_inp, torch.FloatTensor([0.0]))
+
+          self.rand_generator.update_inpu()
+          self.rand_generator.update_seed()
+
+          # 为生成器生成随机标签和随机种子
+          label_inp = self.rand_generator.inpu
+          seeds_inp = self.rand_generator.seed
 
           # train generator
-          G.train(D, inp, torch.FloatTensor([1.0]))
+          G.train(D, seeds_inp, label_inp, torch.FloatTensor([1.0]))
+
+          self.rand_generator.update_inpu()
+          self.rand_generator.update_seed()
           pass  # Tranverse all fields in 1 epoch
         pass  # All Epochs Finished
 

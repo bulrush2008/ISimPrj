@@ -19,8 +19,9 @@ class Discriminator(nn.Module):
     self.varName = varName
 
     # define neural network layers
+    # model 默认输入必须为 float，rather than float64
     self.model = nn.Sequential(
-      nn.Linear(125557,1000),
+      nn.Linear(125557+3,1000), # ‘3’ 是参数化输入
       nn.LeakyReLU(0.02),
       nn.LayerNorm(1000),
 
@@ -53,16 +54,26 @@ class Discriminator(nn.Module):
     self.progress = []
     pass
 
-  def forward(self, inputs):
+  def forward(self, inputs, pinp):
   #-----------------------------------------------------------------------------
+    """
+    - D-inputs: 流场数据
+    - pinp: 参数化输入，[入口温度、质量流率、热通量]
+    """
     # simply run model
-    return self.model(inputs)
+    cat_in = torch.cat((inputs, pinp)).float()
+    return self.model(cat_in)
     pass
 
-  def train(self, inputs, targets):
+  def train(self, inputs, pinp, targets):
   #-----------------------------------------------------------------------------
+    """
+    - inputs: in cGAN, D-inputs 是流场数据
+    - pinp: parameterized 3-size inputs, such as [入口温度，入口流量，热通量]
+    - targets: 0, or 1
+    """
     # calculate the output of the network
-    outputs = self.forward(inputs)
+    outputs = self.forward(inputs, pinp)
 
     # calculate loss
     loss = self.loss_function(outputs, targets)

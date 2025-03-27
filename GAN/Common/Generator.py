@@ -23,8 +23,9 @@ class Generator(nn.Module):
     self.varName = varName
 
     # 初次设置 3 个隐藏层
+    # model 默认输入必须为 float，rather than float64
     self.model = nn.Sequential(
-      nn.Linear(3, 100),  # 3 inputs
+      nn.Linear(100+3, 100),  # 100 random seeds + 3 param-inputs
       nn.LeakyReLU(0.02),
       nn.LayerNorm(100),
 
@@ -73,19 +74,31 @@ class Generator(nn.Module):
     pass
 
   # forward propagation
-  def forward(self, inputs):
+  def forward(self, inputs, pinp):
   #-----------------------------------------------------------------------------
+    """
+    - inputs: random seeds of size, say, 100
+    - pinp: 参数化输入，[入口温度、质量流率、热通量]
+    """
     # simply run the model
-    return self.model(inputs)
+    #print(inputs.dtype)
+
+    cat_in = torch.cat((inputs, pinp)).float()
+    #print(cat_in.dtype)
+
+    #print("*****debug 88: before return")
+    out = self.model(cat_in)
+    #print("*****debug 90: after return")
+    return out
 
   # train
-  def train(self, D, inputs, targets):
+  def train(self, D, inputs, pinp, targets):
   #-----------------------------------------------------------------------------
     # calculate the output of the network
-    g_output = self.forward(inputs)
+    g_output = self.forward(inputs, pinp)
 
     # pass onto Discriminator
-    d_output = D.forward(g_output)
+    d_output = D.forward(g_output, pinp)
 
     # calculate loss
     loss = self.loss_function(d_output, targets)
