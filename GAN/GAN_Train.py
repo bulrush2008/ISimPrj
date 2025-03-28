@@ -147,7 +147,7 @@ class GAN_Train(object):
           D.train(fld, inp, torch.FloatTensor([1.0]))
 
           # 为鉴别器生成随机种子和标签
-          label_inp = inp
+          label_inp = self.rand_generator.inpu
           seeds_inp = self.rand_generator.seed
 
           # train discriminator on False
@@ -157,6 +157,7 @@ class GAN_Train(object):
           G.train(D, seeds_inp, label_inp, torch.FloatTensor([1.0]))
 
           self.rand_generator.update_seed()
+          self.rand_generator.update_inpu()
           pass  # Tranverse all fields in 1 epoch
         pass  # All Epochs Finished
 
