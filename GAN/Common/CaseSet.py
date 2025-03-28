@@ -122,9 +122,9 @@ if __name__=="__main__":
   #print(len(cases), cases.size)
   #print(cases[4], cases[43]) # 11, 113
 
-  #listTrn, listTst = cases.splitSet()
-  #print(listTrn, "\n", listTst)
-  print(cases.blockNumb)
-  for iblk in range(cases.blockNumb):
-    print(cases.blockInfo[iblk])
-    print(cases.blockPosi[iblk])
+  listTrn, listTst = cases.splitSet()
+  print(listTrn, "\n", listTst)
+  #print(cases.blockNumb)
+  #for iblk in range(cases.blockNumb):
+  #  print(cases.blockInfo[iblk])
+  #  print(cases.blockPosi[iblk])

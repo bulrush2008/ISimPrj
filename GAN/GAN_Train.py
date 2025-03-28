@@ -153,6 +153,12 @@ class GAN_Train(object):
           # train discriminator on False
           D.train(G.forward(seeds_inp, label_inp).detach(), label_inp, torch.FloatTensor([0.0]))
 
+          self.rand_generator.update_seed()
+          self.rand_generator.update_inpu()
+
+          label_inp = self.rand_generator.inpu
+          seeds_inp = self.rand_generator.seed
+
           # train generator
           G.train(D, seeds_inp, label_inp, torch.FloatTensor([1.0]))
 
