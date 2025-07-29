@@ -21,6 +21,7 @@ from datetime import datetime
 from Common.CaseSet import CaseSet
 from Common.FSimDataset import FSimDataset
 from Common.Regression  import Regression
+from torch.utils.data import DataLoader
 
 class FNN_Train(object):
 #===============================================================================
@@ -38,6 +39,13 @@ class FNN_Train(object):
       pass
 
     ratioTest = data["test_ratio"]  # e.g. 0.2
+    self.trainBatchSize = data["train_batch_size"]
+    print(f"*Use trainBatchSize: {self.trainBatchSize}")
+    self.load_dict = data["load_dict"]
+    self.device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+    print(f"*Use device: {self.device}")
+    self.dropout = data["dropout"]
+    print(f"*Use dropout: {self.dropout}")
     caseSet = CaseSet(ratio=ratioTest)
 
     trnSet, tstSet = caseSet.splitSet()
@@ -50,6 +58,7 @@ class FNN_Train(object):
     self.filePathH5 = Path(matrix_data_path)
 
     self.fieldList = data["vars"]
+
 
     # data storing residuals between CFD field and prediction
     #   including both for train and test sets 
@@ -92,6 +101,7 @@ class FNN_Train(object):
                 dirPNG   = dirPNG,
                 dirModel = dirModel)
     pass  # end func 'self.train'
+  
 
   def _train( self,
               varList :dict,
@@ -128,17 +138,19 @@ class FNN_Train(object):
       # test set servers only as erro estimation
       fsDataset_test = FSimDataset(dataPath, testSet, var)
 
+      train_loader = DataLoader(fsDataset_train, batch_size=self.trainBatchSize, shuffle=True, collate_fn=custom_collate_fn)
+
       # gen a obj as regression, and then train the model
       var_dict_path = Path(f"./StateDicts/dict_{var}.pth")
 
-      if not var_dict_path.exists():
-        var_dict_path = None
-        print(f"Train from ZERO for {var}")
-      else:
-        print(f"Train from dict_{var}.pth")
-        pass
+      # if not var_dict_path.exists():
+      #   var_dict_path = None
+      #   print(f"Train from ZERO for {var}")
+      # else:
+      #   print(f"Train from dict_{var}.pth")
+      #   pass
 
-      R = Regression(var, var_dict_path)
+      R = Regression(var, var_dict_path, self.load_dict,self.dropout,self.device)
 
       print(f"*Now we are training {var} field:")
 
@@ -147,7 +159,11 @@ class FNN_Train(object):
 
       for i in range(epochs):
         print(f" >> Training {var}, epoch {i+1}/{epochs}")
-        for inp, label, _ in fsDataset_train:
+        # for inp, label, _ in fsDataset_train:
+        #   R.train(inp, label)
+        #   pass
+        for inp, label, _ in train_loader:
+          assert inp.shape[0] == self.trainBatchSize
           R.train(inp, label)
           pass
 
@@ -155,32 +171,32 @@ class FNN_Train(object):
         #   test data set
 
         # for the train set
-        e_train = 0.0
+        e_train = []
         for inp, field, _ in fsDataset_train:
-          e_train = max(e_train, R.calc_Field_MSE(inp, field))
+          e_train.append(R.calc_Field_MSE(inp, field))
           pass
 
         # for the test set
-        e_test = 0.0
+        e_test = []
         for inp, field, _ in fsDataset_test:
-          e_test = max(e_test, R.calc_Field_MSE(inp, field))
+          e_test.append(R.calc_Field_MSE(inp, field))
           pass
 
         self.res_trn_hist[var].append(e_train)
         self.res_tst_hist[var].append(e_test)
         pass
 
-      # write residuals for this "var"
-      self.write_e_hists(var)
+      # # write residuals for this "var"
+      # self.write_e_hists(var)
 
-      # plot loss history and save
-      R.saveLossHistory2PNG(dirPNG)
+      # # plot loss history and save
+      # R.saveLossHistory2PNG(dirPNG)
 
-      ipic = 0
-      for inp, field, _ in fsDataset_test:
-        R.save_regression_png(order=ipic, inp=inp, target=field)
-        ipic += 1
-        pass
+      # ipic = 0
+      # for inp, field, _ in fsDataset_test:
+        # R.save_regression_png(order=ipic, inp=inp, target=field)
+      #   ipic += 1
+      #   pass
 
       # save model parameters
       model_dicts_name = dirModel.joinpath(f"dict_{var}.pth")
@@ -218,3 +234,15 @@ class FNN_Train(object):
     fig.savefig(f"./Pics/resLinf_{var}-{current_time}.png", dpi=200)
     pass
   pass  # end class
+
+
+def custom_collate_fn(batch):
+    """
+    batch: a list of tuples (inp, data, coords)
+    """
+    inps, datas, coords_list = zip(*batch)  # unzip
+
+    inps = torch.stack(inps)
+    datas = torch.stack(datas)
+
+    return inps, datas, coords_list

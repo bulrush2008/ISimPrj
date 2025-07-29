@@ -1,12 +1,14 @@
 
-#from torch.utils.data import Dataset
+from torch.utils.data import Dataset
 from pathlib import Path
 
 import torch
 import h5py
 
+
+
 #class FSimDataset(Dataset):
-class FSimDataset(object):
+class FSimDataset(Dataset):
 #===============================================================================
   """
   - 数据类
@@ -36,6 +38,7 @@ class FSimDataset(object):
       raise ValueError("Error: the Variable Name must be P/U/V/W/T.")
 
     self.varName  = varName
+
 
   def __len__(self):
   #-----------------------------------------------------------------------------

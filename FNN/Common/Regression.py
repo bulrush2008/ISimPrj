@@ -4,6 +4,7 @@ import torch.nn as nn
 import math
 import pandas
 import h5py
+from typing import Optional
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,7 +19,7 @@ class Regression(nn.Module):
   - 方法类
   """
   # initialize PyTorch pararent class
-  def __init__(self, varName:str, dictPath:Path=None):
+  def __init__(self, varName:str, dictPath:Path=None, load_dict:bool=False, dropout:Optional[float]=None, device="cpu"):
   #-----------------------------------------------------------------------------
     super().__init__()
 
@@ -26,30 +27,33 @@ class Regression(nn.Module):
       raise ValueError("Error: the Variable Name must be P/U/V/W/T.")
 
     self.varName = varName
+    self.dropout = dropout
 
     # 初次设置 3 个隐藏层
-    self.model = nn.Sequential(
-      nn.Linear(3, 100),  # 3 inputs
-      nn.LeakyReLU(0.02),
-      nn.LayerNorm(100),
+    layers = []
+    for i, (in_features, out_features) in enumerate([(3, 100), (100, 300), (300, 1000), (1000, 125557)]):
+        layers.append(nn.Linear(in_features, out_features))
+        if i < 3:
+            layers.append(nn.LeakyReLU(0.02))
+            if self.dropout is not None and self.dropout > 0:
+                layers.append(nn.Dropout(p=self.dropout))
+            layers.append(nn.LayerNorm(out_features))
+    layers.append(nn.Identity())
+    self.model = nn.Sequential(*layers)
 
-      nn.Linear(100,300),
-      nn.LeakyReLU(0.02),
-      nn.LayerNorm(300),
+    print("*Model structure:")
+    print(self.model)
+    
+    self.device = device
+    self.model = self.model.to(self.device)
 
-      nn.Linear(300,1000),
-      nn.LeakyReLU(0.02),
-      nn.LayerNorm(1000),
-
-      nn.Linear(1000,125557), # output field, 8 block
-      nn.Identity()
-    )
-
-    if dictPath is not None:
+    if dictPath is not None and load_dict:
       self.model.load_state_dict(torch.load(dictPath))
+      print(f"Load model from {dictPath}")
     else:
       # initialize weights，using He Kaiming method now
       self._initialize_weights()
+      print(f"Initialize model weights")
       pass
 
     # regressive problem, MSE is proper
@@ -83,6 +87,7 @@ class Regression(nn.Module):
 
   def forward(self, inputs):
   #-----------------------------------------------------------------------------
+    inputs = inputs.to(self.device)
     return self.model(inputs)
 
   def train(self, inputs, targets):
@@ -93,18 +98,22 @@ class Regression(nn.Module):
     - inputs : 神经网络的输入
     - targets: 神经网络的教师标签
     """
+    
+    inputs = inputs.to(self.device)
+    targets = targets.to(self.device)
+
     outputs = self.forward(inputs)
 
     # calculate loss
     loss = self.loss_function(outputs, targets)
 
-    # each train step, the loss must be added
-    self.progress.append(loss.item())
+    # # each train step, the loss must be added
+    # self.progress.append(loss.item())
 
-    self.counter += 1
-    if(self.counter%10 == 0):  # print training info onto screen every 10 cases
-      print(f"    - {self.counter:5d} Cases Trained ...")
-      pass
+    # self.counter += 1
+    # if(self.counter%10 == 0):  # print training info onto screen every 10 cases
+    #   print(f"    - {self.counter:5d} Cases Trained ...")
+    #   pass
 
     # grad must set back to zero
     # back propagation, and update the learning rate parameter
@@ -134,7 +143,7 @@ class Regression(nn.Module):
 
     # 根据参数化输入，预测流场
     # the predicted data should be detached and converted to numpy format
-    output = self.forward(inp).detach().numpy()
+    output = self.forward(inp).detach().cpu().numpy()
 
     # write data into h5 database directly
     dsName = f"{self.varName}"
@@ -176,7 +185,7 @@ class Regression(nn.Module):
     ax.figure.savefig(outFile)
     pass  # end funcsaveLossHistory2PNG
 
-  def calc_Field_MSE(self, inp, target)->np.float64:
+  def calc_Field_MSE(self, inp, target):
   #-----------------------------------------------------------------------------
     """
     Calculate error each case between prediction and real.
@@ -185,10 +194,17 @@ class Regression(nn.Module):
     - inp: input parameters
     - target: data of the real field of each case
     """
-    output = self.forward(inp).detach().numpy()
+    # Move inputs and targets to device
+    inp = inp.to(self.device)
+    target = target.to(self.device)
+
+    # Set the model to eval mode so that dropout and batch norm behave correctly
+    self.model.eval()
+
+    output = self.forward(inp).detach().cpu().numpy()
 
     # a/b both of type torch.FloatTensor
-    a = output; b = target.detach().numpy()
+    a = output; b = target.detach().cpu().numpy()
     #e = sum(abs(a-b))
     e = max(abs(a-b))
 
@@ -205,8 +221,8 @@ class Regression(nn.Module):
     - inp: 对应算例的模型输入参数
     - target: 算例对应的流场，它是模型的输入目标
     """
-    x = target.detach().numpy()
-    y = self.forward(inp).detach().numpy()
+    x = target.detach().cpu().numpy()
+    y = self.forward(inp).detach().cpu().numpy()
 
     imax = max(max(x),max(y))
     imin = min(min(x),min(y))
