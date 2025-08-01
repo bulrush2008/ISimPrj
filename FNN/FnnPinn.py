@@ -113,16 +113,24 @@ class FnnPinn(object):
     # train fields
     # obj to get the train data set
     # train set serves as (1) train & (2) error estimation
-    fs_dataset_train = FSimDatasetPINN(data_path, train_set, self.config["var"])
+    model = ModelPinn(self.config)  # Create model first to get device
+    
+    fs_dataset_train = FSimDatasetPINN(data_path, train_set, self.config["var"], device=model.device)
 
     # obj to get the test data set
     # test set servers only as error estimation
-    fs_dataset_test = FSimDatasetPINN(data_path, test_set, self.config["var"])
+    fs_dataset_test = FSimDatasetPINN(data_path, test_set, self.config["var"], device=model.device)
 
-    train_loader = DataLoader(fs_dataset_train, batch_size=self.train_batch_size, shuffle=True)
-    test_loader = DataLoader(fs_dataset_test, batch_size=self.train_batch_size, shuffle=True)
-
-    model = ModelPinn(self.config)
+    # Use pinned memory for faster GPU transfers if using CUDA
+    pin_memory = str(model.device).startswith('cuda')
+    num_workers = 2 if pin_memory else 0  # Use multiple workers for CUDA
+    
+    train_loader = DataLoader(fs_dataset_train, batch_size=self.train_batch_size, shuffle=True, 
+                             pin_memory=pin_memory, num_workers=num_workers)
+    test_loader = DataLoader(fs_dataset_test, batch_size=self.train_batch_size, shuffle=True,
+                            pin_memory=pin_memory, num_workers=num_workers)
+    
+    print(f"*DataLoader config: pin_memory={pin_memory}, num_workers={num_workers}")
 
     # train the model
     epochs = self.config["epochs"]

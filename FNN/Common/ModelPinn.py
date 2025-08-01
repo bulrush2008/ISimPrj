@@ -1,4 +1,3 @@
-
 import torch
 import torch.nn as nn
 import math
@@ -40,6 +39,11 @@ class ModelPinn(nn.Module):
     print(f"*Use learning rate: {self.learning_rate}")
     print(f"*Use activation: {self.activation}")
     print(f"*Load Previous Model: {'yes' if self.load_dict else 'no'}")
+    
+    # Additional GPU information
+    if torch.cuda.is_available():
+        print(f"*CUDA Device Name: {torch.cuda.get_device_name(0)}")
+        print(f"*CUDA Memory Available: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
     
     # Build model from configurable architecture
     self.model = self._build_model(config["architecture"])
