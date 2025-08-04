@@ -11,14 +11,13 @@ class FSimDatasetPINN(Dataset):
   """
   - FSimDatasetPINN: Dataset for PINN training on FSim data
   """
-  def __init__(self, file:Path, caseList:list, varName:str, device=torch.device("cpu")):
+  def __init__(self, file:Path, caseList:list, varName:str):
   #-----------------------------------------------------------------------------
     """
     """
     self.dataFile = h5py.File(file, 'r')
     self.caseList = caseList
     self.numCases = len(caseList)
-    self.device = device  # Store device for tensor creation
 
     if varName not in ["P", "U", "V", "W", "T"]:
       raise ValueError("Error: the Variable Name must be P/U/V/W/T.")
@@ -64,9 +63,9 @@ class FSimDatasetPINN(Dataset):
 
   def __getitem__(self, idx):
     return (
-      torch.from_numpy(self.inputs[idx]).to(torch.float32).to(self.device), #设置为float32，由于MPS不支持float64
-      torch.from_numpy(self.coords[idx]).to(torch.float32).to(self.device),
-      torch.from_numpy(self.values[idx]).to(torch.float32).to(self.device)
+      torch.from_numpy(self.inputs[idx]).to(torch.float32), #设置为float32，由于MPS不支持float64
+      torch.from_numpy(self.coords[idx]).to(torch.float32),
+      torch.from_numpy(self.values[idx]).to(torch.float32)
     )
 
 if __name__ == "__main__":
@@ -75,9 +74,8 @@ if __name__ == "__main__":
   trnSet, tstSet = caseSet.splitSet()
   import time 
   start_time = time.time()
-  device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-  fsDataset = FSimDatasetPINN(Path("../FSCases/FSHDF/MatrixData.h5"), trnSet, "T", device=device)
-  print(len(fsDataset))
+  fsDataset = FSimDatasetPINN(Path("../FSCases/FSHDF/MatrixData.h5"), trnSet, "T")
+  print(len(fsDataset)) 
   end_time = time.time()
   print(f"Time taken: {end_time - start_time} seconds")
   from torch.utils.data import DataLoader

@@ -21,9 +21,9 @@ from util.MetricTracker import MetricTracker
 
 
 
-import wandb
-wandb.login(key="1234")
-wandb.init(project="pinn_07_31")
+# import wandb
+# wandb.login(key="1234")
+# wandb.init(project="pinn_07_31")
 
 
 class FnnPinn(object):
@@ -115,22 +115,15 @@ class FnnPinn(object):
     # train set serves as (1) train & (2) error estimation
     model = ModelPinn(self.config)  # Create model first to get device
     
-    fs_dataset_train = FSimDatasetPINN(data_path, train_set, self.config["var"], device=model.device)
+    fs_dataset_train = FSimDatasetPINN(data_path, train_set, self.config["var"])
 
     # obj to get the test data set
     # test set servers only as error estimation
-    fs_dataset_test = FSimDatasetPINN(data_path, test_set, self.config["var"], device=model.device)
+    fs_dataset_test = FSimDatasetPINN(data_path, test_set, self.config["var"])
 
-    # Use pinned memory for faster GPU transfers if using CUDA
-    pin_memory = str(model.device).startswith('cuda')
-    num_workers = 2 if pin_memory else 0  # Use multiple workers for CUDA
     
-    train_loader = DataLoader(fs_dataset_train, batch_size=self.train_batch_size, shuffle=True, 
-                             pin_memory=pin_memory, num_workers=num_workers)
-    test_loader = DataLoader(fs_dataset_test, batch_size=self.train_batch_size, shuffle=True,
-                            pin_memory=pin_memory, num_workers=num_workers)
-    
-    print(f"*DataLoader config: pin_memory={pin_memory}, num_workers={num_workers}")
+    train_loader = DataLoader(fs_dataset_train, batch_size=self.train_batch_size, shuffle=True)
+    test_loader = DataLoader(fs_dataset_test, batch_size=self.train_batch_size, shuffle=True) 
 
     # train the model
     epochs = self.config["epochs"]
@@ -141,7 +134,7 @@ class FnnPinn(object):
         batch_loss = model.train(params, coords, targets)
         self.train_loss_tracker.add(batch_loss)
         pass
-      wandb.log({"avg_train_loss": self.train_loss_tracker.average()})
+      # wandb.log({"avg_train_loss": self.train_loss_tracker.average()})
       self.train_loss_summary.append(self.train_loss_tracker.summary())
       self.train_loss_tracker.reset()
 
@@ -160,7 +153,7 @@ class FnnPinn(object):
         self.test_L2_tracker.add(*L2_error)
         pass
       
-      wandb.log({"avg_test_Linf": self.test_Linf_tracker.average(), "avg_test_L2": self.test_L2_tracker.average()})
+      # wandb.log({"avg_test_Linf": self.test_Linf_tracker.average(), "avg_test_L2": self.test_L2_tracker.average()})
       self.test_Linf_summary.append(self.test_Linf_tracker.summary())
       self.test_L2_summary.append(self.test_L2_tracker.summary())
       self.test_Linf_tracker.reset()

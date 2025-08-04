@@ -132,7 +132,6 @@ class ModelPinn(nn.Module):
     - 神经网络，根据输入和标签，进行训练
 
     - params : 控制参数
-    - coords : 坐标
     - targets: 目标值
     """
     params = params.to(self.device)
