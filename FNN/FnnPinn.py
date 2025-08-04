@@ -14,16 +14,8 @@ from Common.FSimDatasetPINN import FSimDatasetPINN
 from Common.ModelPinn  import ModelPinn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
-
 from util.MetricTracker import MetricTracker
-
-
-
-
-# import wandb
-# wandb.login(key="1234")
-# wandb.init(project="pinn_07_31")
+import wandb
 
 
 class FnnPinn(object):
@@ -136,7 +128,7 @@ class FnnPinn(object):
         # print("Memory allocated:", torch.cuda.memory_allocated(0) / 1024**2, "MB")
         # print("Memory reserved:", torch.cuda.memory_reserved(0) / 1024**2, "MB")
         pass
-      # wandb.log({"avg_train_loss": self.train_loss_tracker.average()})
+      wandb.log({"avg_train_loss": self.train_loss_tracker.average()})
       self.train_loss_summary.append(self.train_loss_tracker.summary())
       self.train_loss_tracker.reset()
 
@@ -155,7 +147,7 @@ class FnnPinn(object):
         self.test_L2_tracker.add(*L2_error)
         pass
       
-      # wandb.log({"avg_test_Linf": self.test_Linf_tracker.average(), "avg_test_L2": self.test_L2_tracker.average()})
+      wandb.log({"avg_test_Linf": self.test_Linf_tracker.average(), "avg_test_L2": self.test_L2_tracker.average()})
       self.test_Linf_summary.append(self.test_Linf_tracker.summary())
       self.test_L2_summary.append(self.test_L2_tracker.summary())
       self.test_Linf_tracker.reset()
@@ -169,5 +161,14 @@ class FnnPinn(object):
 
   
 if __name__ == "__main__":
+    # Read wandb key from file
+  try:
+      with open("../wandb.key", 'r') as f:
+          wandb_key = f.read().strip()
+  except FileNotFoundError:
+      raise FileNotFoundError("wandb.key file not found. Please create a file named 'wandb.key' containing your wandb API key.")
+
+  wandb.login(key=wandb_key)
+  wandb.init(project="pinn_08_04")
   fnn_pinn = FnnPinn()
   fnn_pinn.train()
