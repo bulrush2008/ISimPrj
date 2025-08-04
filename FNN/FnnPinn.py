@@ -122,8 +122,8 @@ class FnnPinn(object):
     fs_dataset_test = FSimDatasetPINN(data_path, test_set, self.config["var"])
 
     
-    train_loader = DataLoader(fs_dataset_train, batch_size=self.train_batch_size, shuffle=True)
-    test_loader = DataLoader(fs_dataset_test, batch_size=self.train_batch_size, shuffle=True) 
+    train_loader = DataLoader(fs_dataset_train, batch_size=self.train_batch_size, shuffle=True, num_workers=4, pin_memory=True)
+    test_loader = DataLoader(fs_dataset_test, batch_size=self.train_batch_size, shuffle=True, num_workers=4, pin_memory=True) 
 
     # train the model
     epochs = self.config["epochs"]
@@ -133,6 +133,8 @@ class FnnPinn(object):
       for params, coords, targets in tqdm(train_loader, desc=f"Epoch {i+1}/{epochs}"):
         batch_loss = model.train(params, coords, targets)
         self.train_loss_tracker.add(batch_loss)
+        # print("Memory allocated:", torch.cuda.memory_allocated(0) / 1024**2, "MB")
+        # print("Memory reserved:", torch.cuda.memory_reserved(0) / 1024**2, "MB")
         pass
       # wandb.log({"avg_train_loss": self.train_loss_tracker.average()})
       self.train_loss_summary.append(self.train_loss_tracker.summary())

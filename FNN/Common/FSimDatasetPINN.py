@@ -15,7 +15,7 @@ class FSimDatasetPINN(Dataset):
   #-----------------------------------------------------------------------------
     """
     """
-    self.dataFile = h5py.File(file, 'r')
+    # self.dataFile = h5py.File(file, 'r')
     self.caseList = caseList
     self.numCases = len(caseList)
 
@@ -28,29 +28,30 @@ class FSimDatasetPINN(Dataset):
     self.coords   = []
     self.values   = []
 
-    for case in self.caseList:
-      inp = self.dataFile[case]["input"]["inp"][:].astype(np.float32)
-      for blk in range(8):
-        key = f"block{blk:03d}"
+    with h5py.File(file, 'r') as dataFile:
+      for case in self.caseList:
+        inp = dataFile[case]["input"]["inp"][:].astype(np.float32)
+        for blk in range(8):
+          key = f"block{blk:03d}"
 
-        # Load coordinates
-        x = self.dataFile[case][key]["X"][:]
-        y = self.dataFile[case][key]["Y"][:]
-        z = self.dataFile[case][key]["Z"][:]
-        Z, Y, X = np.meshgrid(z, y, x, indexing='ij')  # shape: (x,y,z)
+          # Load coordinates
+          x = dataFile[case][key]["X"][:]
+          y = dataFile[case][key]["Y"][:]
+          z = dataFile[case][key]["Z"][:]
+          Z, Y, X = np.meshgrid(z, y, x, indexing='ij')  # shape: (x,y,z)
 
-        # Flatten to (N, 3)
-        coords = np.stack([X, Y, Z], axis=-1).reshape(-1, 3)
+          # Flatten to (N, 3)
+          coords = np.stack([X, Y, Z], axis=-1).reshape(-1, 3)
 
-        # Flatten var field
-        T = self.dataFile[case][key][self.varName][:].astype(np.float32).reshape(-1, 1)
+          # Flatten var field
+          T = dataFile[case][key][self.varName][:].astype(np.float32).reshape(-1, 1)
 
-        # Repeat `inp` for each point in block
-        inp_repeated = np.repeat(inp[np.newaxis, :], coords.shape[0], axis=0)
+          # Repeat `inp` for each point in block
+          inp_repeated = np.repeat(inp[np.newaxis, :], coords.shape[0], axis=0)
 
-        self.inputs.append(inp_repeated)
-        self.coords.append(coords)
-        self.values.append(T)
+          self.inputs.append(inp_repeated)
+          self.coords.append(coords)
+          self.values.append(T)
     
     self.inputs  = np.concatenate(self.inputs, axis=0)
     self.coords  = np.concatenate(self.coords, axis=0)
