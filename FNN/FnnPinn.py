@@ -10,11 +10,13 @@ from pathlib import Path
 from datetime import datetime
 
 from Common.CaseSet import CaseSet
-from Common.FSimDatasetPINN import FSimDatasetPINN
+from Common.FSimDatasetPinn import FSimDatasetPinn
 from Common.ModelPinn  import ModelPinn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from util.MetricTracker import MetricTracker
+from util.Write2HDF import write2HDF
+from util.error import LInfError, L2Error, L1Error
 import wandb
 
 
@@ -44,18 +46,14 @@ class FnnPinn(object):
     # path of data used as training and possibly test
     self.file_path_h5 = Path(self.config["train_data"])
 
-    # data storing residuals between CFD field and prediction
-    #   including both for train and test sets 
-    # self.res_trn_hist = {}
-    # self.res_tst_hist = {}
-
-    self.test_Linf_tracker = MetricTracker()
-    self.test_L2_tracker = MetricTracker()
-    self.train_loss_tracker = MetricTracker()
-
-    self.test_Linf_summary = []
-    self.test_L2_summary = []
-    self.train_loss_summary = []
+    self.fs_dataset_train = FSimDatasetPinn(file=self.file_path_h5, caseList=trn_set, varName=self.config["var"])
+    self.fs_dataset_test = FSimDatasetPinn(file=self.file_path_h5, caseList=tst_set, varName=self.config["var"])
+    self.train_loader = DataLoader(self.fs_dataset_train, batch_size=self.train_batch_size, shuffle=True, 
+                                   num_workers=4, pin_memory=True)
+    self.test_loader = DataLoader(self.fs_dataset_test, batch_size=self.train_batch_size, shuffle=True, 
+                                  num_workers=4, pin_memory=True) 
+    
+    self.model = ModelPinn(self.config)  # Create model first to get device
 
     pass  # end '__init__()'
 
@@ -67,10 +65,14 @@ class FnnPinn(object):
 
     print(f"*Fields Models Will Be Trained with Epochs {self.config['epochs']}.")
 
-    trn_set = self.trn_set
-    tst_set = self.tst_set
+    self.test_Linf_tracker = MetricTracker()
+    self.test_L2_tracker = MetricTracker()
+    self.train_loss_tracker = MetricTracker()
 
-    file_path_h5 = self.file_path_h5
+    self.test_Linf_summary = []
+    self.test_L2_summary = []
+    self.train_loss_summary = []
+
 
     # directory of loss png
     dir_png = Path("./Pics")
@@ -81,18 +83,34 @@ class FnnPinn(object):
     if not dir_model.exists(): dir_model.mkdir(parents=True)
 
     # train
-    self._train(
-                train_set = trn_set,
-                test_set  = tst_set,
-                data_path = file_path_h5,
-                dir_model = dir_model)
+    self._train(dir_model = dir_model)
     pass  # end func 'self.train'
   
+  def evaluate(self, write_vtk:bool=False):
+    """
+    """
+    self.model.eval()
+    self.fs_dataset_test.mode = "case"
+    error = {"L-inf": [], "L-2": [], "L-1": []}
+
+    for inp, axis_points, coord, value in tqdm(self.fs_dataset_test, desc="Evaluating"):
+      with torch.no_grad():
+        inp = inp.repeat(coord.shape[0], 1)
+        pred = self.model.forward(params=inp, coords=coord)
+        pred = pred.reshape(1, pred.shape[0]) # (1, P)
+        if write_vtk:
+          path = Path(self.config["eval_dir_path"]).joinpath(f"{inp[0][0]}_{inp[0][1]}_{inp[0][2]}.h5")
+          write2HDF(pred, path, self.config["var"], axis_points)
+        error["L-inf"].append(LInfError(pred, value))
+        error["L-2"].append(L2Error(pred, value))
+        error["L-1"].append(L1Error(pred, value))
+        pass
+      pass
+    self.model.train()
+    return error
+      
 
   def _train( self,
-              train_set:list,
-              test_set :list,
-              data_path:Path,
               dir_model:Path )->None:
   #-----------------------------------------------------------------------------
     """
@@ -101,29 +119,12 @@ class FnnPinn(object):
     - test_set : list of case names in test set, each is a string
     - data_path: path of data of train set
     """
-  
-    # train fields
-    # obj to get the train data set
-    # train set serves as (1) train & (2) error estimation
-    model = ModelPinn(self.config)  # Create model first to get device
-    
-    fs_dataset_train = FSimDatasetPINN(data_path, train_set, self.config["var"])
-
-    # obj to get the test data set
-    # test set servers only as error estimation
-    fs_dataset_test = FSimDatasetPINN(data_path, test_set, self.config["var"])
-
-    
-    train_loader = DataLoader(fs_dataset_train, batch_size=self.train_batch_size, shuffle=True, num_workers=4, pin_memory=True)
-    test_loader = DataLoader(fs_dataset_test, batch_size=self.train_batch_size, shuffle=True, num_workers=4, pin_memory=True) 
-
-    # train the model
     epochs = self.config["epochs"]
 
     for i in range(epochs):
       print(f" >> Training {self.config['var']}, epoch {i+1}/{epochs}")
-      for params, coords, targets in tqdm(train_loader, desc=f"Epoch {i+1}/{epochs}"):
-        batch_loss = model.train(params, coords, targets)
+      for params, coords, targets in tqdm(self.train_loader, desc=f"Epoch {i+1}/{epochs}"):
+        batch_loss = self.model.train_step(params, coords, targets)
         self.train_loss_tracker.add(batch_loss)
         # print("Memory allocated:", torch.cuda.memory_allocated(0) / 1024**2, "MB")
         # print("Memory reserved:", torch.cuda.memory_reserved(0) / 1024**2, "MB")
@@ -132,20 +133,17 @@ class FnnPinn(object):
       self.train_loss_summary.append(self.train_loss_tracker.summary())
       self.train_loss_tracker.reset()
 
-
-      # # for the train set
-      # e_train = []
-      # for inp, field, _ in fs_dataset_train:
-      #   e_train.append(model.calc_field_mse(inp, field))
+      # # for the test set  
+      # for params, coords, targets in self.test_loader:
+      #   LInf_error = self.model.field_error(params, coords, targets, error_type="L-inf")
+      #   L2_error = self.model.field_error(params, coords, targets, error_type="L-2")
+      #   self.test_Linf_tracker.add(*LInf_error)
+      #   self.test_L2_tracker.add(*L2_error)
       #   pass
+      test_error = self.evaluate()
+      self.test_Linf_tracker.add(*test_error["L-inf"])
+      self.test_L2_tracker.add(*test_error["L-2"])
 
-      # for the test set  
-      for params, coords, targets in test_loader:
-        LInf_error = model.field_error(params, coords, targets, error_type="L-inf")
-        L2_error = model.field_error(params, coords, targets, error_type="L-2")
-        self.test_Linf_tracker.add(*LInf_error)
-        self.test_L2_tracker.add(*L2_error)
-        pass
       
       wandb.log({"avg_test_Linf": self.test_Linf_tracker.average(), "avg_test_L2": self.test_L2_tracker.average()})
       self.test_Linf_summary.append(self.test_Linf_tracker.summary())
@@ -156,12 +154,12 @@ class FnnPinn(object):
 
     # save model parameters
     model_dicts_name = dir_model.joinpath(f"dict_{datetime.now().strftime('%Y%m%d%H%M%S')}")
-    torch.save(model.model.state_dict(), model_dicts_name)
+    torch.save(self.model.state_dict(), model_dicts_name)
     pass  
 
   
 if __name__ == "__main__":
-    # Read wandb key from file
+  # Read wandb key from file
   try:
       with open("../wandb.key", 'r') as f:
           wandb_key = f.read().strip()
@@ -172,3 +170,5 @@ if __name__ == "__main__":
   wandb.init(project="pinn_08_04")
   fnn_pinn = FnnPinn()
   fnn_pinn.train()
+  # e = fnn_pinn.evaluate()
+  # print(e)

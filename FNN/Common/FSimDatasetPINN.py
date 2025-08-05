@@ -6,16 +6,17 @@ import torch
 import numpy as np
 import h5py
 
-class FSimDatasetPINN(Dataset):
+class FSimDatasetPinn(Dataset):
 #===============================================================================
   """
-  - FSimDatasetPINN: Dataset for PINN training on FSim data
+  - FSimDatasetPinn: Dataset for PINN training on FSim data
   """
-  def __init__(self, file:Path, caseList:list, varName:str):
+  def __init__(self, file:Path, caseList:list, varName:str, mode:str="serial"):
   #-----------------------------------------------------------------------------
     """
     """
     # self.dataFile = h5py.File(file, 'r')
+    self._mode = mode
     self.caseList = caseList
     self.numCases = len(caseList)
 
@@ -23,14 +24,22 @@ class FSimDatasetPINN(Dataset):
       raise ValueError("Error: the Variable Name must be P/U/V/W/T.")
 
     self.varName  = varName
-    self.data = []
-    self.inputs   = []
-    self.coords   = []
-    self.values   = []
+
+    self.inp_serial   = []
+    self.coord_serial   = []
+    self.value_serial   = []
+
+    self.inp_case = []
+    self.axis_points_case = []
+    self.coord_case = []
+    self.value_case = []
 
     with h5py.File(file, 'r') as dataFile:
       for case in self.caseList:
         inp = dataFile[case]["input"]["inp"][:].astype(np.float32)
+        axis_points = {"x":[], "y":[], "z":[]}
+        values = np.empty((0, 1), dtype=np.float32)
+        coords = np.empty((0, 3), dtype=np.float32)
         for blk in range(8):
           key = f"block{blk:03d}"
 
@@ -38,44 +47,119 @@ class FSimDatasetPINN(Dataset):
           x = dataFile[case][key]["X"][:]
           y = dataFile[case][key]["Y"][:]
           z = dataFile[case][key]["Z"][:]
+
+          axis_points["x"] += list(x)
+          axis_points["y"] += list(y)
+          axis_points["z"] += list(z)
+
           Z, Y, X = np.meshgrid(z, y, x, indexing='ij')  # shape: (x,y,z)
 
           # Flatten to (N, 3)
-          coords = np.stack([X, Y, Z], axis=-1).reshape(-1, 3)
+          coords_stack = np.stack([X, Y, Z], axis=-1).reshape(-1, 3)
+          coords = np.concatenate([coords, coords_stack], axis=0)
 
           # Flatten var field
           T = dataFile[case][key][self.varName][:].astype(np.float32).reshape(-1, 1)
+          values = np.concatenate([values, T], axis=0)
 
           # Repeat `inp` for each point in block
-          inp_repeated = np.repeat(inp[np.newaxis, :], coords.shape[0], axis=0)
+          inp_repeated = np.repeat(inp[np.newaxis, :], coords_stack.shape[0], axis=0)
 
-          self.inputs.append(inp_repeated)
-          self.coords.append(coords)
-          self.values.append(T)
+          self.inp_serial.append(inp_repeated)
+          self.coord_serial.append(coords_stack)
+          self.value_serial.append(T)
+
+        self.inp_case.append(torch.tensor(inp, dtype=torch.float32))
+        self.axis_points_case.append(axis_points)
+        self.coord_case.append(torch.tensor(coords, dtype=torch.float32))
+        self.value_case.append(torch.tensor(values, dtype=torch.float32).T)
     
-    self.inputs  = np.concatenate(self.inputs, axis=0)
-    self.coords  = np.concatenate(self.coords, axis=0)
-    self.values  = np.concatenate(self.values, axis=0)
-    assert self.inputs.shape[0] == self.coords.shape[0] == self.values.shape[0]
+    self.inp_serial  = np.concatenate(self.inp_serial, axis=0)
+    self.coord_serial  = np.concatenate(self.coord_serial, axis=0)
+    self.value_serial  = np.concatenate(self.value_serial, axis=0)
+    assert self.inp_serial.shape[0] == self.coord_serial.shape[0] == self.value_serial.shape[0]
     
   def __len__(self):
-    return self.inputs.shape[0]
-
+    if self.mode == "serial":
+      return self.inp_serial.shape[0]
+    elif self.mode == "case":
+      return len(self.inp_case)
+    else:
+      raise ValueError(f"Invalid mode: {self.mode}")
 
   def __getitem__(self, idx):
-    return (
-      torch.from_numpy(self.inputs[idx]).to(torch.float32), #设置为float32，由于MPS不支持float64
-      torch.from_numpy(self.coords[idx]).to(torch.float32),
-      torch.from_numpy(self.values[idx]).to(torch.float32)
-    )
+    if self.mode == "serial":
+      return (
+        torch.from_numpy(self.inp_serial[idx]).to(torch.float32), #设置为float32，由于MPS不支持float64
+        torch.from_numpy(self.coord_serial[idx]).to(torch.float32),
+        torch.from_numpy(self.value_serial[idx]).to(torch.float32)
+      )
+    elif self.mode == "case":
+      return (
+        self.inp_case[idx],
+        self.axis_points_case[idx],
+        self.coord_case[idx],
+        self.value_case[idx]
+      )
+    else:
+      raise ValueError(f"Invalid mode: {self.mode}")
+  
+  @property
+  def mode(self):
+    return self._mode
+  
+  @mode.setter
+  def mode(self, val):
+    if val not in ["serial", "case"]:
+      raise ValueError(f"Invalid mode: {val}")
+    self._mode = val
+  
+  # def get_coords_values_from_inp(self, inp):
+  #   """
+  #   - inp: (1,3) np.array or torch.tensor
+  #   Given the inp, return the list of coords using the order as in __init__()
+  #   """
+  #   if torch.is_tensor(inp):
+  #     inp = inp.cpu().numpy()
+  #   # Ensure inp is the right shape
+  #   if inp.shape == (3,):
+  #     inp = inp.reshape(1, 3)
+  #   mask = np.array([np.allclose(inp, self.inputs[i:i+1], rtol=1e-5, atol=1e-8) 
+  #                 for i in range(self.inputs.shape[0])])
+  #   return self.coords[mask], self.values[mask]
+  
+  # def get_axis_points_from_inp(self, inp):
+  #   """
+  #   - inp: (1,3) np.array or torch.tensor
+  #   Given the inp, return the list of axis points using the order as in __init__()
+  #   """
+  #   coords, _ = self.get_coords_values_from_inp(inp)
+  #   x = np.unique(coords[:, 0])
+  #   y = np.unique(coords[:, 1])
+  #   z = np.unique(coords[:, 2])
+    
+  #   # Assert that x, y, and z are monotonically increasing
+  #   assert np.all(np.diff(x) >= 0), "x coordinates are not monotonically increasing"
+  #   assert np.all(np.diff(y) >= 0), "y coordinates are not monotonically increasing"
+  #   assert np.all(np.diff(z) >= 0), "z coordinates are not monotonically increasing"
 
+  #   return {"x":list(x), "y":list(y), "z":list(z)}
+
+  # @property
+  # def unique_inps(self):
+  #   """
+  #   Return all unique inps
+  #   """
+  #   return np.unique(self.inputs, axis=0)
+  
+  
 if __name__ == "__main__":
   from CaseSet import CaseSet
   caseSet = CaseSet(ratio = 0.2)
   trnSet, tstSet = caseSet.splitSet()
   import time 
   start_time = time.time()
-  fsDataset = FSimDatasetPINN(Path("../FSCases/FSHDF/MatrixData.h5"), trnSet, "T")
+  fsDataset = FSimDatasetPinn(Path("../FSCases/FSHDF/MatrixData.h5"), trnSet, "T")
   print(len(fsDataset)) 
   end_time = time.time()
   print(f"Time taken: {end_time - start_time} seconds")

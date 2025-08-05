@@ -32,7 +32,7 @@ class ModelPinn(nn.Module):
     else:
         self.device = torch.device("cpu")
     
-    self.dict_path = Path(config["dict_dir_path"]).joinpath(f"dict_{config['dict_load_name']}")
+    self.dict_path = Path(config["dict_dir_path"]).joinpath(f"{config['dict_load_name']}")
 
     print(f"*Use device: {self.device}")
     print(f"*Use dropout: {self.dropout}")
@@ -54,7 +54,7 @@ class ModelPinn(nn.Module):
     self.model = self.model.to(self.device)
 
     if self.load_dict:
-      self.model.load_state_dict(torch.load(self.dict_path))
+      self.model.load_state_dict(torch.load(self.dict_path, map_location=self.device))
       print(f"Load model from {self.dict_path}")
     else:
       # initialize weights，using He Kaiming method now
@@ -121,12 +121,14 @@ class ModelPinn(nn.Module):
       pass
     pass
 
-  def forward(self, inputs):
+  def forward(self, params, coords):
   #-----------------------------------------------------------------------------
     # inputs = inputs.to(self.device)
+    inputs = torch.cat([params, coords], dim=1) # (N, 6)
+    inputs = inputs.to(self.device)
     return self.model(inputs)
 
-  def train(self, params, coords, targets):
+  def train_step(self, params, coords, targets):
   #-----------------------------------------------------------------------------
     """
     - 神经网络，根据输入和标签，进行训练
@@ -138,13 +140,14 @@ class ModelPinn(nn.Module):
     coords = coords.to(self.device)
     targets = targets.to(self.device)
     
-    inputs = torch.cat([params, coords], dim=1) # (N, 6)
-    outputs = self.forward(inputs) # (N, 1)
+    outputs = self.forward(params, coords) # (N, 1)
     loss = self.loss_function(outputs, targets)
     self.optimiser.zero_grad()
     loss.backward()
     self.optimiser.step()
     return loss.item()
+  
+  
 
 #   def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
 #   #-----------------------------------------------------------------------------
