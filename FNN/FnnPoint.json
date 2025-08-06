@@ -5,7 +5,7 @@
     "test_ratio": 0.2,
     "train_batch_size": 4096,
     "dropout": null,
-    "load_dict": false,
+    "load_dict": true,
     "dict_dir_path": "./StateDicts/Pinn",
     "dict_load_name": "dict_20250804220844",
     "train_data": "../FSCases/FSHDF/MatrixData.h5",

@@ -10,8 +10,8 @@ from pathlib import Path
 from datetime import datetime
 
 from Common.CaseSet import CaseSet
-from Common.FSimDatasetPinn import FSimDatasetPinn
-from Common.ModelPinn  import ModelPinn
+from Common.FSimDatasetPoint import FSimDatasetPoint
+from Common.ModelPoint  import ModelPoint
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from util.MetricTracker import MetricTracker
@@ -20,50 +20,49 @@ from util.error import LInfError, L2Error, L1Error
 import wandb
 
 
-class FnnPinn(object):
+class FnnPoint(object):
 #===============================================================================
   """
   - 应用任务类
 
   - 调用方法类和数据类，实现特定的应用任务
   """
-  def __init__( self ):
+  def __init__(self):
   #-----------------------------------------------------------------------------
     # split the cases into train and test sets
     # now: 125 = 100 + 25
-    with open("./fnnPinn.json", 'r') as inp:
+    with open("./fnnPoint.json", 'r') as inp:
       self.config = json.load(inp)
-      pass
 
+    self._setup_dataset()
+    self._setup_model()
+    pass
+
+  def _setup_dataset(self):
+  #-----------------------------------------------------------------------------
     self.train_batch_size = self.config["train_batch_size"]
+    print(f"*Use train batch size: {self.train_batch_size}")
     case_set = CaseSet(ratio=self.config["test_ratio"])
     trn_set, tst_set = case_set.splitSet()
     self.trn_set = trn_set
     self.tst_set = tst_set
-
-    print(f"*Use trainBatchSize: {self.train_batch_size}")
-
-    # path of data used as training and possibly test
     self.file_path_h5 = Path(self.config["train_data"])
-
-    self.fs_dataset_train = FSimDatasetPinn(file=self.file_path_h5, caseList=trn_set, varName=self.config["var"])
-    self.fs_dataset_test = FSimDatasetPinn(file=self.file_path_h5, caseList=tst_set, varName=self.config["var"])
+    self.fs_dataset_train = FSimDatasetPoint(file=self.file_path_h5, caseList=trn_set, varName=self.config["var"])
+    self.fs_dataset_test = FSimDatasetPoint(file=self.file_path_h5, caseList=tst_set, varName=self.config["var"])
     self.train_loader = DataLoader(self.fs_dataset_train, batch_size=self.train_batch_size, shuffle=True, 
                                    num_workers=4, pin_memory=True)
     self.test_loader = DataLoader(self.fs_dataset_test, batch_size=self.train_batch_size, shuffle=True, 
-                                  num_workers=4, pin_memory=True) 
-    
-    self.model = ModelPinn(self.config)  # Create model first to get device
+                                  num_workers=4, pin_memory=True)
+    pass
 
-    pass  # end '__init__()'
+  def _setup_model(self):
+  #-----------------------------------------------------------------------------
+    self.model = ModelPoint(self.config)
+    pass
 
   def train(self):
   #-----------------------------------------------------------------------------
-    # train the fields one has assigned, which must be in
-    # ["P", "T", "U", "V", "W"]
-    # the order in list does not matter
-
-    print(f"*Fields Models Will Be Trained with Epochs {self.config['epochs']}.")
+    print(f"*Model Will Be Trained with Epochs {self.config['epochs']}.")
 
     self.test_Linf_tracker = MetricTracker()
     self.test_L2_tracker = MetricTracker()
@@ -97,7 +96,7 @@ class FnnPinn(object):
       with torch.no_grad():
         inp = inp.repeat(coord.shape[0], 1)
         pred = self.model.forward(params=inp, coords=coord)
-        pred = pred.reshape(1, pred.shape[0]) # (1, P)
+        pred = pred.squeeze(1) # (1, P) # NOTE: This shit is weird but necessary
         if write_vtk:
           path = Path(self.config["eval_dir_path"]).joinpath(f"{inp[0][0]}_{inp[0][1]}_{inp[0][2]}.h5")
           write2HDF(pred, path, self.config["var"], axis_points)
@@ -114,10 +113,8 @@ class FnnPinn(object):
               dir_model:Path )->None:
   #-----------------------------------------------------------------------------
     """
-    Train the FnnPinn model by a give trainset, in which some cases field included.
-    - train_set: list of case names in train set, each is a string
-    - test_set : list of case names in test set, each is a string
-    - data_path: path of data of train set
+    Train the FnnPoint model by a give trainset, in which some cases field included.
+    - dir_model: path of model
     """
     epochs = self.config["epochs"]
 
@@ -126,21 +123,12 @@ class FnnPinn(object):
       for params, coords, targets in tqdm(self.train_loader, desc=f"Epoch {i+1}/{epochs}"):
         batch_loss = self.model.train_step(params, coords, targets)
         self.train_loss_tracker.add(batch_loss)
-        # print("Memory allocated:", torch.cuda.memory_allocated(0) / 1024**2, "MB")
-        # print("Memory reserved:", torch.cuda.memory_reserved(0) / 1024**2, "MB")
         pass
       wandb.log({"avg_train_loss": self.train_loss_tracker.average()})
       self.train_loss_summary.append(self.train_loss_tracker.summary())
       self.train_loss_tracker.reset()
 
-      # # for the test set  
-      # for params, coords, targets in self.test_loader:
-      #   LInf_error = self.model.field_error(params, coords, targets, error_type="L-inf")
-      #   L2_error = self.model.field_error(params, coords, targets, error_type="L-2")
-      #   self.test_Linf_tracker.add(*LInf_error)
-      #   self.test_L2_tracker.add(*L2_error)
-      #   pass
-      test_error = self.evaluate()
+      test_error = self.evaluate(write_vtk=False)
       self.test_Linf_tracker.add(*test_error["L-inf"])
       self.test_L2_tracker.add(*test_error["L-2"])
 
@@ -160,15 +148,15 @@ class FnnPinn(object):
   
 if __name__ == "__main__":
   # Read wandb key from file
-  try:
-      with open("../wandb.key", 'r') as f:
-          wandb_key = f.read().strip()
-  except FileNotFoundError:
-      raise FileNotFoundError("wandb.key file not found. Please create a file named 'wandb.key' containing your wandb API key.")
+  # try:
+  #     with open("../wandb.key", 'r') as f:
+  #         wandb_key = f.read().strip()
+  # except FileNotFoundError:
+  #     raise FileNotFoundError("wandb.key file not found. Please create a file named 'wandb.key' containing your wandb API key.")
 
-  wandb.login(key=wandb_key)
-  wandb.init(project="pinn_08_04")
-  fnn_pinn = FnnPinn()
-  fnn_pinn.train()
-  # e = fnn_pinn.evaluate()
+  # wandb.login(key=wandb_key)
+  # wandb.init(project="pinn_08_04")
+  fnn_point = FnnPoint()
+  fnn_point.train()
+  e = fnn_point.evaluate(write_vtk=True)
   # print(e)

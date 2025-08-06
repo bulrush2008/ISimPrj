@@ -23,6 +23,8 @@ from Common.FSimDataset import FSimDataset
 from Common.Regression  import Regression
 from torch.utils.data import DataLoader
 
+from util.error import LInfError, L2Error, L1Error
+
 class FNN_Train(object):
 #===============================================================================
   """
@@ -94,13 +96,14 @@ class FNN_Train(object):
     if not dirModel.exists(): dirModel.mkdir(parents=True)
 
     # train
-    self._train(varList  = fieldList,
+    error = self._train(varList  = fieldList,
                 trainSet = trnSet,
                 testSet  = tstSet,
                 dataPath = filePathH5,
                 dirPNG   = dirPNG,
                 dirModel = dirModel)
     pass  # end func 'self.train'
+    return error
   
 
   def _train( self,
@@ -203,8 +206,18 @@ class FNN_Train(object):
       torch.save(R.model.state_dict(), model_dicts_name)
       pass  # end all var-models training
 
-    # now all variable models have been trained
-    pass
+    R.model.eval()
+    error = {"L-inf": [], "L-2": [], "L-1": []}
+    for inp, field, _ in fsDataset_test:
+      with torch.no_grad():
+        inp = inp.to(self.device)
+        pred = R.model.forward(inp)
+        error["L-inf"].append(LInfError(pred, field))
+        error["L-2"].append(L2Error(pred, field))
+        error["L-1"].append(L1Error(pred, field))
+      pass
+    R.model.train()
+    return error
 
   def write_e_hists(self, var:str):
   #-----------------------------------------------------------------------------

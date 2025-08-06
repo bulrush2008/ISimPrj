@@ -31,9 +31,9 @@ class Regression(nn.Module):
 
     # 初次设置 3 个隐藏层
     layers = []
-    for i, (in_features, out_features) in enumerate([(3, 100), (100, 300), (300, 1000), (1000, 125557)]):
+    for i, (in_features, out_features) in enumerate([(3, 512), (512, 1024), (1024, 1024),(1024, 1024), (1024, 2048), (2048, 125557)]):
         layers.append(nn.Linear(in_features, out_features))
-        if i < 3:
+        if i < 5:
             layers.append(nn.LeakyReLU(0.02))
             if self.dropout is not None and self.dropout > 0:
                 layers.append(nn.Dropout(p=self.dropout))

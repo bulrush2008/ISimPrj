@@ -6,10 +6,10 @@ import torch
 import numpy as np
 import h5py
 
-class FSimDatasetPinn(Dataset):
+class FSimDatasetPoint(Dataset):
 #===============================================================================
   """
-  - FSimDatasetPinn: Dataset for PINN training on FSim data
+  - FSimDatasetPoint: Dataset for Point training on FSim data
   """
   def __init__(self, file:Path, caseList:list, varName:str, mode:str="serial"):
   #-----------------------------------------------------------------------------
@@ -37,6 +37,7 @@ class FSimDatasetPinn(Dataset):
     with h5py.File(file, 'r') as dataFile:
       for case in self.caseList:
         inp = dataFile[case]["input"]["inp"][:].astype(np.float32)
+        # print(f"case: {case}, inp: {inp}")
         axis_points = {"x":[], "y":[], "z":[]}
         values = np.empty((0, 1), dtype=np.float32)
         coords = np.empty((0, 3), dtype=np.float32)
@@ -113,45 +114,7 @@ class FSimDatasetPinn(Dataset):
     if val not in ["serial", "case"]:
       raise ValueError(f"Invalid mode: {val}")
     self._mode = val
-  
-  # def get_coords_values_from_inp(self, inp):
-  #   """
-  #   - inp: (1,3) np.array or torch.tensor
-  #   Given the inp, return the list of coords using the order as in __init__()
-  #   """
-  #   if torch.is_tensor(inp):
-  #     inp = inp.cpu().numpy()
-  #   # Ensure inp is the right shape
-  #   if inp.shape == (3,):
-  #     inp = inp.reshape(1, 3)
-  #   mask = np.array([np.allclose(inp, self.inputs[i:i+1], rtol=1e-5, atol=1e-8) 
-  #                 for i in range(self.inputs.shape[0])])
-  #   return self.coords[mask], self.values[mask]
-  
-  # def get_axis_points_from_inp(self, inp):
-  #   """
-  #   - inp: (1,3) np.array or torch.tensor
-  #   Given the inp, return the list of axis points using the order as in __init__()
-  #   """
-  #   coords, _ = self.get_coords_values_from_inp(inp)
-  #   x = np.unique(coords[:, 0])
-  #   y = np.unique(coords[:, 1])
-  #   z = np.unique(coords[:, 2])
     
-  #   # Assert that x, y, and z are monotonically increasing
-  #   assert np.all(np.diff(x) >= 0), "x coordinates are not monotonically increasing"
-  #   assert np.all(np.diff(y) >= 0), "y coordinates are not monotonically increasing"
-  #   assert np.all(np.diff(z) >= 0), "z coordinates are not monotonically increasing"
-
-  #   return {"x":list(x), "y":list(y), "z":list(z)}
-
-  # @property
-  # def unique_inps(self):
-  #   """
-  #   Return all unique inps
-  #   """
-  #   return np.unique(self.inputs, axis=0)
-  
   
 if __name__ == "__main__":
   from CaseSet import CaseSet
@@ -159,7 +122,7 @@ if __name__ == "__main__":
   trnSet, tstSet = caseSet.splitSet()
   import time 
   start_time = time.time()
-  fsDataset = FSimDatasetPinn(Path("../FSCases/FSHDF/MatrixData.h5"), trnSet, "T")
+  fsDataset = FSimDatasetPoint(Path("../FSCases/FSHDF/MatrixData.h5"), trnSet, "T")
   print(len(fsDataset)) 
   end_time = time.time()
   print(f"Time taken: {end_time - start_time} seconds")
