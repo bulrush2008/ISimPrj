@@ -83,7 +83,6 @@ class FnnPoint(object):
         self.train_loss_tracker.add(batch_loss)
         pass
       self.train_loss_summary.append(self.train_loss_tracker.summary())
-      self.train_loss_tracker.reset()
 
       _, e_L2, e_LInf = self.evaluate(write_vtk=False)
 
@@ -100,7 +99,8 @@ class FnnPoint(object):
         wandb_log[f"avg_test_L2_{var}"] = self.test_L2_tracker[var].average()
         self.test_LInf_tracker[var].reset()
         self.test_L2_tracker[var].reset()
-
+      
+      self.train_loss_tracker.reset()
       wandb.log(wandb_log)
 
     # directory of model
