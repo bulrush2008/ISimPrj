@@ -132,7 +132,7 @@ class ModelPoint(nn.Module):
     coords = coords.to(self.device)
     targets = targets.to(self.device)
     
-    outputs = self.forward(params, coords) # (N, 1)
+    outputs = self.forward(params, coords) # (N, len(var_name))
     loss = self.loss_function(outputs, targets)
     self.optimiser.zero_grad()
     loss.backward()

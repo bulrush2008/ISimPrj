@@ -1,11 +1,11 @@
 {
     "model": "fnnPinn",
-    "var": "T",
+    "var": ["U", "V", "W"],
     "epochs": 100,
     "test_ratio": 0.2,
     "train_batch_size": 4096,
     "dropout": null,
-    "load_dict": true,
+    "load_dict": false,
     "dict_dir_path": "./StateDicts/Pinn",
     "dict_load_name": "dict_20250804220844",
     "train_data": "../FSCases/FSHDF/MatrixData.h5",
@@ -15,7 +15,7 @@
       [1024, 1024],
       [1024, 512],
       [512, 256],
-      [256, 1]
+      [256, 3]
     ],
     "learning_rate": 0.005,
     "activation": "leaky_relu",
