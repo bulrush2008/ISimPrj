@@ -184,7 +184,7 @@ if __name__ == "__main__":
       raise FileNotFoundError("wandb.key file not found. Please create a file named 'wandb.key' containing your wandb API key.")
 
   wandb.login(key=wandb_key)
-  wandb.init(project="pinn_08_04")
+  wandb.init(project="pinn_08_07")
   fnn_point = FnnPoint()
   fnn_point.train()
   # e = fnn_point.evaluate(write_vtk=True)
