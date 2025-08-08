@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 from pathlib import Path
 
+from .PinnLoss import incompressibility_loss
+
 class ModelPoint(nn.Module):
 #===============================================================================
   """
@@ -23,6 +25,7 @@ class ModelPoint(nn.Module):
     super().__init__()
     self.load_dict = config.get("load_dict", False) # 是否载入之前训练的模型
     self.dropout = config.get("dropout", None)
+    self.alpha = config.get("alpha", 0.5)
     self.learning_rate = config.get("learning_rate", 0.005)
     self.activation = config.get("activation", "leaky_relu")
     if torch.cuda.is_available():
@@ -64,6 +67,7 @@ class ModelPoint(nn.Module):
 
     # regressive problem, MSE is proper
     self.loss_function = nn.MSELoss()
+    self.pinn_loss_function = incompressibility_loss
     self.optimiser = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
     pass
 
@@ -129,15 +133,18 @@ class ModelPoint(nn.Module):
     - targets: 目标值
     """
     params = params.to(self.device)
-    coords = coords.to(self.device)
+    coords = coords.to(self.device).requires_grad_(True)  # Enable gradients for PINN
     targets = targets.to(self.device)
     
     outputs = self.forward(params, coords) # (N, len(var_name))
-    loss = self.loss_function(outputs, targets)
+    data_loss = self.loss_function(outputs, targets)
+    pinn_loss = self.pinn_loss_function(outputs, coords)
+    loss = (1 - self.alpha) * data_loss + self.alpha * pinn_loss
     self.optimiser.zero_grad()
     loss.backward()
     self.optimiser.step()
     return loss.item()
+  
   
   def field_error(self, params, coords, targets, error_type="L-inf"):
   #-----------------------------------------------------------------------------

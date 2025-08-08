@@ -101,7 +101,7 @@ class FnnPoint(object):
         self.test_L2_tracker[var].reset()
       
       self.train_loss_tracker.reset()
-      wandb.log(wandb_log)
+      # wandb.log(wandb_log)
 
     # directory of model
     dir_model = Path(self.config["dict_dir_path"])
@@ -177,14 +177,14 @@ class FnnPoint(object):
   
 if __name__ == "__main__":
   # Read wandb key from file
-  try:
-      with open("../wandb.key", 'r') as f:
-          wandb_key = f.read().strip()
-  except FileNotFoundError:
-      raise FileNotFoundError("wandb.key file not found. Please create a file named 'wandb.key' containing your wandb API key.")
+  # try:
+  #     with open("../wandb.key", 'r') as f:
+  #         wandb_key = f.read().strip()
+  # except FileNotFoundError:
+  #     raise FileNotFoundError("wandb.key file not found. Please create a file named 'wandb.key' containing your wandb API key.")
 
-  wandb.login(key=wandb_key)
-  wandb.init(project="pinn_08_07")
+  # wandb.login(key=wandb_key)
+  # wandb.init(project="pinn_08_07")
   fnn_point = FnnPoint()
   fnn_point.train()
   # e = fnn_point.evaluate(write_vtk=True)
