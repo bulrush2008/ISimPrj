@@ -87,19 +87,20 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, dataBounds:dict)->None:
 
   # write P/U/V/W/T field and X/Y/Z
 
-  # header - for P
-  OffsetP = 0 # the first variable, no offsets
-  bStr1 = b'      <DataArray type="Float64" Name="P" NumberOfComponents="1" format="appended" offset="'
-  bStr2 = str("%10d"%OffsetP).encode("utf-8")
-  bStr3 = b'"/>\n'
-  bStrs = bStr1 + bStr2 + bStr3
-  #print(bStrs)
-  vtr.write(bStrs)
+#   # header - for P
+#   OffsetP = 0 # the first variable, no offsets
+#   bStr1 = b'      <DataArray type="Float64" Name="P" NumberOfComponents="1" format="appended" offset="'
+#   bStr2 = str("%10d"%OffsetP).encode("utf-8")
+#   bStr3 = b'"/>\n'
+#   bStrs = bStr1 + bStr2 + bStr3
+#   #print(bStrs)
+#   vtr.write(bStrs)
 
   # header - for U
   bStr1 = b'      <DataArray type="Float64" Name="U" NumberOfComponents="1" format="appended" offset="'
 
-  OffsetU = OffsetP + lenX*lenY*lenZ * 8 + 4  # P before
+  # OffsetU = OffsetP + lenX*lenY*lenZ * 8 + 4  # P before
+  OffsetU = 0
   bStr2 = str("%10d"%OffsetU).encode("utf-8")
 
   bStr3 = b'"/>\n'
@@ -109,7 +110,8 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, dataBounds:dict)->None:
   # header - for V
   bStr1 = b'      <DataArray type="Float64" Name="V" NumberOfComponents="1" format="appended" offset="'
 
-  OffsetV = OffsetU * 2 # P/U before
+  # OffsetV = OffsetU * 2 # P/U before
+  OffsetV = OffsetU + lenX*lenY*lenZ*8 + 4
   bStr2 = str("%10d"%OffsetV).encode("utf-8")
   bStr3 = b'"/>\n'
   bStrs = bStr1 + bStr2 + bStr3
@@ -117,19 +119,20 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, dataBounds:dict)->None:
 
   # header - for W
   bStr1 = b'      <DataArray type="Float64" Name="W" NumberOfComponents="1" format="appended" offset="'
-  OffsetW = OffsetU * 3 # P/U/V before
+  # OffsetW = OffsetU * 3 # P/U/V before
+  OffsetW = OffsetV + lenX*lenY*lenZ*8 + 4
   bStr2 = str("%10d"%OffsetW).encode("utf-8")
   bStr3 = b'"/>\n'
   bStrs = bStr1 + bStr2 + bStr3
   vtr.write(bStrs)
 
-  # header - for T
-  bStr1 = b'      <DataArray type="Float64" Name="T" NumberOfComponents="1" format="appended" offset="'
-  OffsetT = OffsetU * 4 # P/U/V/W before
-  bStr2 = str("%10d"%OffsetT).encode("utf-8")
-  bStr3 = b'"/>\n'
-  bStrs = bStr1 + bStr2 + bStr3
-  vtr.write(bStrs)
+  # # header - for T
+  # bStr1 = b'      <DataArray type="Float64" Name="T" NumberOfComponents="1" format="appended" offset="'
+  # OffsetT = OffsetU * 4 # P/U/V/W before
+  # bStr2 = str("%10d"%OffsetT).encode("utf-8")	
+  # bStr3 = b'"/>\n'
+  # bStrs = bStr1 + bStr2 + bStr3
+  # vtr.write(bStrs)
 
   vtr.write(b'    </PointData>\n')
 
@@ -139,7 +142,8 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, dataBounds:dict)->None:
   # header - X
   bStr1 = b'      <DataArray type="Float64" Name="Xcenter" NumberOfComponents="1" format="appended" offset="'
 
-  OffsetX = OffsetU * 5 # P/U/V/W/T before
+  # OffsetX = OffsetU * 5 # P/U/V/W/T before
+  OffsetX = OffsetW + lenX*lenY*lenZ*8 + 4
   bStr2 = str("%10d"%OffsetX).encode("utf-8")
   bStr3 = b'"/>\n'
   bStrs = bStr1 + bStr2 + bStr3
@@ -175,15 +179,15 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, dataBounds:dict)->None:
   iSta = dataBounds["Var"][0]
   iEnd = dataBounds["Var"][1]
 
-  # write pressure field "P"
-  datasetName = "P"
+#   # write pressure field "P"
+#   datasetName = "P"
 
-  fieldP = h5[grpName][datasetName][iSta:iEnd]
-  numOfBytes = np.int32((len(fieldP)*8))
+#   fieldP = h5[grpName][datasetName][iSta:iEnd]
+#   numOfBytes = np.int32((len(fieldP)*8))
 
-  # write the byte offsets and float loop data
-  numOfBytes.tofile(vtr)
-  fieldP.tofile(vtr)
+#   # write the byte offsets and float loop data
+#   numOfBytes.tofile(vtr)
+#   fieldP.tofile(vtr)
 
   # write U field "U"
   datasetName = "U"
@@ -214,15 +218,15 @@ def writeVTR(idxBlk:int, dirVTR:Path, dirHDF:Path, dataBounds:dict)->None:
   numOfBytes.tofile(vtr)
   fieldW.tofile(vtr)
 
-  # write pressure field "T"
-  datasetName = "T"
+#   # write pressure field "T"
+#   datasetName = "T"
 
-  fieldT = h5[grpName][datasetName][iSta:iEnd]
-  numOfBytes = np.int32((len(fieldT)*8))
+#   fieldT = h5[grpName][datasetName][iSta:iEnd]
+#   numOfBytes = np.int32((len(fieldT)*8))
 
-  # write the byte offsets and float loop data
-  numOfBytes.tofile(vtr)
-  fieldT.tofile(vtr)
+#   # write the byte offsets and float loop data
+#   numOfBytes.tofile(vtr)
+#   fieldT.tofile(vtr)
 
   # write coords X
   datasetName = "Coords-X"

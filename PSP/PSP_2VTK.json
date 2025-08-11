@@ -1,4 +1,4 @@
 {
-  "h5Dir": "../Eval/gan_t09_C070.h5",
-  "vtkDir": "../Eval/GAN_C070"
+  "h5Dir": "../Eval/Pinn/UVW/",
+  "vtkDir": "../Eval/Pinn_vtk/UVW/"
 }

@@ -3,7 +3,7 @@ import torch
 import numpy as np
 from pathlib import Path
 
-def write2HDF(pred:torch.Tensor, eval_dir_path:Path, var_name:str, coords:dict=None):
+def write2HDF(pred:torch.Tensor, eval_dir_path:Path, var_name:list[str], coords:dict=None):
 #-----------------------------------------------------------------------------
     """
     - 将预测数据，写入 HDF 数据库
@@ -25,13 +25,14 @@ def write2HDF(pred:torch.Tensor, eval_dir_path:Path, var_name:str, coords:dict=N
         grp = h5.create_group(grp_name)  # if not, created it
         pass
 
-    # 根据参数化输入，预测流场
     # the predicted data should be detached and converted to numpy format
-    pred = pred.detach().cpu().numpy()
+    pred = pred.detach().cpu().numpy() # [NUM_POINTS, NUM_VARS]
 
     # write data into h5 database directly
-    ds_name = f"{var_name}"
-    grp.create_dataset(ds_name, data=pred, dtype=np.float64)
+    for i,var in enumerate(var_name):
+        ds_name = f"{var}"
+        data = pred[:,i].flatten()
+        grp.create_dataset(ds_name, data=data, dtype=np.float64)
 
     # write coordinates it necessary
     if coords is not None:

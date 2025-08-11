@@ -37,6 +37,8 @@ class ModelPoint(nn.Module):
     
     self.dict_path = Path(config["dict_dir_path"]).joinpath(f"{config['dict_load_name']}")
 
+    print(f"loading model from {self.dict_path}")
+
     print(f"*Use device: {self.device}")
     print(f"*Use dropout: {self.dropout}")
     print(f"*Use learning rate: {self.learning_rate}")
@@ -138,8 +140,9 @@ class ModelPoint(nn.Module):
     
     outputs = self.forward(params, coords) # (N, len(var_name))
     data_loss = self.loss_function(outputs, targets)
-    pinn_loss = self.pinn_loss_function(outputs, coords)
-    loss = (1 - self.alpha) * data_loss + self.alpha * pinn_loss
+    # pinn_loss = self.pinn_loss_function(outputs, coords)
+    # loss = (1 - self.alpha) * data_loss + self.alpha * pinn_loss
+    loss = data_loss
     self.optimiser.zero_grad()
     loss.backward()
     self.optimiser.step()

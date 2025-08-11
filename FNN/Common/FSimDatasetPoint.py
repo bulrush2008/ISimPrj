@@ -11,6 +11,8 @@ BLOCK_NUM = 8
 SPACE_DIM = 3
 PARAM_DIM = 3
 
+EPS = 1e-8
+
 class FSimDatasetPoint(Dataset):
 #===============================================================================
   """
@@ -25,7 +27,7 @@ class FSimDatasetPoint(Dataset):
     for v in var_name:
       if v not in ["P", "U", "V", "W", "T"]:
         raise ValueError("Error: the Variable Name must be P/U/V/W/T.")
-
+      
     self.inp_serial   = []
     self.coord_serial   = []
     self.value_serial   = []
@@ -81,6 +83,25 @@ class FSimDatasetPoint(Dataset):
     self.value_serial  = torch.cat([torch.from_numpy(arr) for arr in self.value_serial], dim=0).to(torch.float32)
 
     assert self.inp_serial.shape[0] == self.coord_serial.shape[0] == self.value_serial.shape[0]
+
+    self._standardize_value()
+    self._normalize_coord()
+
+    
+  def _standardize_value(self):
+    value_mean = self.value_serial.mean(dim=0)
+    value_std = self.value_serial.std(dim=0)
+    self.value_serial = (self.value_serial - value_mean) / (value_std + EPS)
+    for i, val in enumerate(self.value_case):
+      self.value_case[i] = (val - value_mean) / (value_std + EPS)
+  
+  def _normalize_coord(self):
+    coord_min = self.coord_serial.min(dim=0).values
+    coord_max = self.coord_serial.max(dim=0).values
+    self.coord_serial = (self.coord_serial - coord_min) / (coord_max - coord_min + EPS)
+    for i, coord in enumerate(self.coord_case):
+      self.coord_case[i] = (coord - coord_min) / (coord_max - coord_min + EPS)
+    
     
   def __len__(self):
     if self.mode == "serial":
@@ -106,6 +127,7 @@ class FSimDatasetPoint(Dataset):
       )
     else:
       raise ValueError(f"Invalid mode: {self.mode}")
+  
   
   @property
   def mode(self):

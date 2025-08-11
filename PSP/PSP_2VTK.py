@@ -42,70 +42,103 @@ class PSP(object):
   def _HDF2VTK(self):
   #----------------------------------------------------------------------------
     """
-    Get data from .h5 file, write them to vtm and vtr files, in order to be
-    displayed by Paraview
+    Get data from .h5 files in directory, write them to vtm and vtr files, in order to be
+    displayed by Paraview. Each .h5 file will be processed into its own subdirectory.
     """
     numOfBlocks = 8
+    
+    # Check if hdf_path is a directory containing .h5 files
+    hdf_dir = Path(self.hdf_path)
+    if not hdf_dir.exists():
+        print(f"Error: HDF directory {hdf_dir} does not exist!")
+        return
+    
+    # Find all .h5 files in the directory
+    h5_files = list(hdf_dir.glob("*.h5"))
+    if not h5_files:
+        print(f"No .h5 files found in {hdf_dir}")
+        return
+    
+    print(f"Found {len(h5_files)} .h5 files to process")
+    
+    # Create main VTM directory
     dirVTM = Path(self.vtm_path)
-    if not dirVTM.exists(): dirVTM.mkdir()
+    if not dirVTM.exists(): 
+        dirVTM.mkdir(parents=True)
+    
+    # Process each .h5 file
+    for h5_file in h5_files:
+        # Extract case name from filename (remove .h5 extension)
+        case_name = h5_file.stem
+        print(f"Processing case: {case_name}")
+        
+        # Create subdirectory for this case
+        case_dir = dirVTM.joinpath(case_name)
+        if not case_dir.exists():
+            case_dir.mkdir(parents=True)
+        
+        # Create VTM file for this case
+        fileVTM = case_dir.joinpath("t01.vtm")
+        
+        # write the vtm file and return the path of vtr files
+        dirVTR = writeVTM(numOfBlocks, fileVTM)
+        
+        dirVTR = case_dir.joinpath(dirVTR)
+        print(f"VTR directory: {dirVTR}")
+        
+        if not dirVTR.exists(): 
+            dirVTR.mkdir(parents=True)
+        
+        # Current HDF file path
+        dirHDF = h5_file
+        print(f"Processing HDF file: {dirHDF}")
 
-    fileVTM = dirVTM.joinpath("t01.vtm")
+        # certain block's left and right edge in the data array
+        numCoordsEachBlk = [[2,27,2,52,2,12],
+                            [2,27,2,52,2,13],
+                            [2,27,2,53,2,12],
+                            [2,27,2,53,2,13],
+                            [2,28,2,52,2,12],
+                            [2,28,2,52,2,13],
+                            [2,28,2,53,2,12],
+                            [2,28,2,53,2,13]]
 
-    # write the vtm file and return the path of vtr files
-    dirVTR = writeVTM(numOfBlocks, fileVTM)
+        # positions is a dictionary
+        positions = splitData(numCoordsEachBlk)
 
-    dirVTR = dirVTM.joinpath(dirVTR)
-    print(dirVTR)
+        # Process each block for this case
+        for idx in range(numOfBlocks):
+            vFL = positions["Var"][idx]
+            vFR = positions["Var"][idx+1]
 
-    if not dirVTR.exists(): dirVTR.mkdir(parents=True)
+            xFL = positions["X"][idx]
+            xFR = positions["X"][idx+1]
 
-    #dirHDF = Path("../GAN").joinpath("gan.h5")
-    #dirHDF = Path("../FNN").joinpath("fnn.h5")
-    dirHDF = Path(self.hdf_path)
-    alive = dirHDF.exists()
-    print("HDF File exists? ", alive)
+            yFL = positions["Y"][idx]
+            yFR = positions["Y"][idx+1]
 
-    # certain block's left and right edge in the data array
-    numCoordsEachBlk = [[2,27,2,52,2,12],
-                        [2,27,2,52,2,13],
-                        [2,27,2,53,2,12],
-                        [2,27,2,53,2,13],
-                        [2,28,2,52,2,12],
-                        [2,28,2,52,2,13],
-                        [2,28,2,53,2,12],
-                        [2,28,2,53,2,13]]
+            zFL = positions["Z"][idx]
+            zFR = positions["Z"][idx+1]
 
-    # positions is a dictionary
-    positions = splitData(numCoordsEachBlk)
+            dataBounds = {"Var":[vFL, vFR], "X":[xFL, xFR], "Y":[yFL, yFR], "Z":[zFL, zFR]}
 
-    for idx in range(numOfBlocks):
-      vFL = positions["Var"][idx]
-      vFR = positions["Var"][idx+1]
-
-      xFL = positions["X"][idx]
-      xFR = positions["X"][idx+1]
-
-      yFL = positions["Y"][idx]
-      yFR = positions["Y"][idx+1]
-
-      zFL = positions["Z"][idx]
-      zFR = positions["Z"][idx+1]
-
-      dataBounds = {"Var":[vFL, vFR], "X":[xFL, xFR], "Y":[yFL, yFR], "Z":[zFL, zFR]}
-
-      writeVTR( idxBlk    = idx,
-                dirVTR    = dirVTR,
-                dirHDF    = dirHDF,
-                dataBounds= dataBounds )
-      pass
-    pass
+            writeVTR( idxBlk    = idx,
+                      dirVTR    = dirVTR,
+                      dirHDF    = dirHDF,
+                      dataBounds= dataBounds )
+        
+        print(f"Completed processing case: {case_name}")
+    
+    print(f"Finished processing all {len(h5_files)} cases")
 
 if __name__=="__main__":
 
   psp = PSP()
 
-  # 仅打印提示i信息
-  print("Now We Convert Predicting Field to VTK format from HDF data")
+  # 仅打印提示信息
+  print("Now We Convert Multiple Predicting Fields to VTK format from HDF data directory")
+  print(f"HDF directory: {psp.hdf_path}")
+  print(f"VTK output directory: {psp.vtm_path}")
 
   # 执行动作
   psp.act()

@@ -1,6 +1,7 @@
 
 import sys
 import json
+import argparse
 
 import h5py
 import torch
@@ -17,6 +18,7 @@ from tqdm import tqdm
 from util.MetricTracker import MetricTracker
 from util.Write2HDF import write2HDF
 from util.error import LInfError, L2Error, L1Error
+from util.plots import parity_plot
 import wandb
 
 
@@ -27,13 +29,14 @@ class FnnPoint(object):
 
   - 调用方法类和数据类，实现特定的应用任务
   """
-  def __init__(self):
+  def __init__(self, use_wandb=False):
   #-----------------------------------------------------------------------------
     # split the cases into train and test sets
     # now: 125 = 100 + 25
     with open("./fnnPoint.json", 'r') as inp:
       self.config = json.load(inp)
 
+    self.use_wandb = use_wandb
     self._setup_dataset()
     self._setup_model()
     pass
@@ -93,15 +96,18 @@ class FnnPoint(object):
         self.test_L2_summary[var].append(self.test_L2_tracker[var].summary())
       pass
     
-      wandb_log = {"avg_train_loss": self.train_loss_tracker.average()}
+      if self.use_wandb:
+        wandb_log = {"avg_train_loss": self.train_loss_tracker.average()}
+        for var in self.config["var"]:
+          wandb_log[f"avg_test_LInf_{var}"] = self.test_LInf_tracker[var].average()
+          wandb_log[f"avg_test_L2_{var}"] = self.test_L2_tracker[var].average()
+        wandb.log(wandb_log)
+      
       for var in self.config["var"]:
-        wandb_log[f"avg_test_LInf_{var}"] = self.test_LInf_tracker[var].average()
-        wandb_log[f"avg_test_L2_{var}"] = self.test_L2_tracker[var].average()
         self.test_LInf_tracker[var].reset()
         self.test_L2_tracker[var].reset()
       
       self.train_loss_tracker.reset()
-      # wandb.log(wandb_log)
 
     # directory of model
     dir_model = Path(self.config["dict_dir_path"])
@@ -109,25 +115,30 @@ class FnnPoint(object):
 
     # save model parameters
     model_dicts_name = dir_model.joinpath(f"dict_{datetime.now().strftime('%Y%m%d%H%M%S')}")
+    model_json_name = model_dicts_name.with_suffix(".json")
     torch.save(self.model.state_dict(), model_dicts_name)
+    with open(model_json_name, "w") as f:
+      json.dump(self.config, f)
     pass 
   
-  def evaluate(self, write_vtk:bool=False):
+  def evaluate(self, write_vtk:bool=False, plot_parity:bool=False):
     """
     """
     self.model.eval()
     self.fs_dataset_test.mode = "case"
-    # error = {"L-inf": [], "L-2": [], "L-1": []}
     e_L1, e_L2, e_LInf = [], [], []
 
     for inp, axis_points, coord, value in tqdm(self.fs_dataset_test, desc="Evaluating"):
       with torch.no_grad():
         inp = inp.repeat(coord.shape[0], 1)
         pred = self.model.forward(params=inp, coords=coord)
-        pred = pred.squeeze(1) # (1, P) # NOTE: This shit is weird but necessary
+        # pred = pred.squeeze(1) # (1, P) # NOTE: This shit is weird but necessary
         if write_vtk:
           path = Path(self.config["eval_dir_path"]).joinpath(f"{inp[0][0]}_{inp[0][1]}_{inp[0][2]}.h5")
           write2HDF(pred, path, self.config["var"], axis_points)
+        if plot_parity:
+          parity_plot(pred, value, inp, self.config["var"], self.config["parity_dir_path"])
+  
         e_LInf.append(LInfError(pred, value)) # [len(var_name)]
         e_L2.append(L2Error(pred, value)) # [len(var_name)]
         e_L1.append(L1Error(pred, value)) # [len(var_name)]
@@ -176,16 +187,27 @@ class FnnPoint(object):
 
   
 if __name__ == "__main__":
-  # Read wandb key from file
-  # try:
-  #     with open("../wandb.key", 'r') as f:
-  #         wandb_key = f.read().strip()
-  # except FileNotFoundError:
-  #     raise FileNotFoundError("wandb.key file not found. Please create a file named 'wandb.key' containing your wandb API key.")
+  # Parse command line arguments
+  parser = argparse.ArgumentParser(description='FNN Point Training/Evaluation')
+  parser.add_argument('--wandb', action='store_true', help='Enable wandb logging')
+  args = parser.parse_args()
 
-  # wandb.login(key=wandb_key)
-  # wandb.init(project="pinn_08_07")
-  fnn_point = FnnPoint()
+  # Initialize wandb if flag is set
+  if args.wandb:
+    # Read wandb key from file
+    try:
+        with open("../wandb.key", 'r') as f:
+            wandb_key = f.read().strip()
+    except FileNotFoundError:
+        raise FileNotFoundError("wandb.key file not found. Please create a file named 'wandb.key' containing your wandb API key.")
+
+    wandb.login(key=wandb_key)
+    wandb.init(project="pinn_08_07")
+    print("wandb logging enabled")
+  else:
+    print("wandb logging disabled")
+
+  fnn_point = FnnPoint(use_wandb=args.wandb)
   fnn_point.train()
-  # e = fnn_point.evaluate(write_vtk=True)
+  # e = fnn_point.evaluate(write_vtk=True, plot_parity=True)
   # print(e)

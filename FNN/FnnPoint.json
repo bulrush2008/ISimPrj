@@ -6,8 +6,8 @@
     "train_batch_size": 4096,
     "dropout": null,
     "load_dict": false,
-    "dict_dir_path": "./StateDicts/Pinn",
-    "dict_load_name": "dict_20250804220844",
+    "dict_dir_path": "./StateDicts/Pinn/UVW",
+    "dict_load_name": null,
     "train_data": "../FSCases/FSHDF/MatrixData.h5",
     "architecture": [
       [6, 512],
@@ -19,5 +19,7 @@
     ],
     "learning_rate": 0.005,
     "activation": "leaky_relu",
-    "eval_dir_path": "../Eval/Pinn"
+    "eval_dir_path": "../Eval/Pinn/UVW",
+    "parity_dir_path": "./Pics/PointNN/UVW",
+    "pinn_loss": false
   }
