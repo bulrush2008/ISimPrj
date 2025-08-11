@@ -87,6 +87,11 @@ class FSimDatasetPoint(Dataset):
     self._standardize_value()
     self._normalize_coord()
 
+    print(f"the mean of value_serial: {self.value_serial.mean(dim=0)}")
+    print(f"the std of value_serial: {self.value_serial.std(dim=0)}")
+    print(f"the min of coord_serial: {self.coord_serial.min(dim=0).values}")
+    print(f"the max of coord_serial: {self.coord_serial.max(dim=0).values}")
+
     
   def _standardize_value(self):
     value_mean = self.value_serial.mean(dim=0)
