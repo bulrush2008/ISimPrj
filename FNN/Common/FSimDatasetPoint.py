@@ -18,7 +18,14 @@ class FSimDatasetPoint(Dataset):
   """
   - FSimDatasetPoint: Dataset for Point training on FSim data
   """
-  def __init__(self, file:Path, case_list:list, var_name:list[str], mode:str="serial"):
+  def __init__(self, 
+               file:Path, 
+               case_list:list, 
+               var_name:list[str], 
+               mode:str="serial", 
+               split:str="train",
+               train_value_mean=None,
+               train_value_std=None):
   #-----------------------------------------------------------------------------
     """
     """
@@ -84,7 +91,13 @@ class FSimDatasetPoint(Dataset):
 
     assert self.inp_serial.shape[0] == self.coord_serial.shape[0] == self.value_serial.shape[0]
 
-    self._standardize_value()
+    if split == "train":
+      self._standardize_value_train()
+    elif split == "test":
+      self._standardize_value_test(train_value_mean, train_value_std)
+    else:
+      raise ValueError(f"Invalid split: {split}")
+    
     self._normalize_coord()
 
     print(f"the mean of value_serial: {self.value_serial.mean(dim=0)}")
@@ -93,12 +106,19 @@ class FSimDatasetPoint(Dataset):
     print(f"the max of coord_serial: {self.coord_serial.max(dim=0).values}")
 
     
-  def _standardize_value(self):
+  def _standardize_value_train(self):
     value_mean = self.value_serial.mean(dim=0)
     value_std = self.value_serial.std(dim=0)
     self.value_serial = (self.value_serial - value_mean) / (value_std + EPS)
     for i, val in enumerate(self.value_case):
       self.value_case[i] = (val - value_mean) / (value_std + EPS)
+    self.train_value_mean = value_mean
+    self.train_value_std = value_std
+
+  def _standardize_value_test(self, train_value_mean, train_value_std):
+    self.value_serial = (self.value_serial - train_value_mean) / (train_value_std + EPS)
+    for i, val in enumerate(self.value_case):
+      self.value_case[i] = (val - train_value_mean) / (train_value_std + EPS)
   
   def _normalize_coord(self):
     coord_min = self.coord_serial.min(dim=0).values

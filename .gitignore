@@ -12,9 +12,17 @@ GAN/StateDicts
 GAN/Pics
 GAN/Common/__pycache__
 GAN/__pycache__
+Eval/*
+**/*.key
 Eval/FNN*
 Eval/GAN*
 Eval/fnn*
 Eval/gan*
 Eval/Comparison/*.png
 Ref
+FNN/wandb/*
+**/*.ipynb
+**/*.pyc
+**/Exp*
+.vscode
+.DS_Store

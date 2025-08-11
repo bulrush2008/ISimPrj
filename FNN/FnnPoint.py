@@ -50,8 +50,18 @@ class FnnPoint(object):
     self.trn_set = trn_set
     self.tst_set = tst_set
     self.file_path_h5 = Path(self.config["train_data"])
-    self.fs_dataset_train = FSimDatasetPoint(file=self.file_path_h5, case_list=trn_set, var_name=self.config["var"])
-    self.fs_dataset_test = FSimDatasetPoint(file=self.file_path_h5, case_list=tst_set, var_name=self.config["var"])
+
+    self.fs_dataset_train = FSimDatasetPoint(file=self.file_path_h5, 
+                                             case_list=trn_set, 
+                                             var_name=self.config["var"], 
+                                             split="train")
+    self.fs_dataset_test = FSimDatasetPoint(file=self.file_path_h5, 
+                                            case_list=tst_set, 
+                                            var_name=self.config["var"], 
+                                            split="test", 
+                                            train_value_mean=self.fs_dataset_train.train_value_mean, 
+                                            train_value_std=self.fs_dataset_train.train_value_std)
+    
     self.train_loader = DataLoader(self.fs_dataset_train, batch_size=self.train_batch_size, shuffle=True, 
                                    num_workers=4, pin_memory=True)
     self.test_loader = DataLoader(self.fs_dataset_test, batch_size=self.train_batch_size, shuffle=True, 
