@@ -215,7 +215,7 @@ class Regression(nn.Module):
 
     x = (x-imin) / irange
     y = (y-imin) / irange
-    
+
     fig, ax = plt.subplots(1,1)
     ax.plot(x,y,  ls='',
                   marker='o',
@@ -235,7 +235,8 @@ class Regression(nn.Module):
     var = self.varName
     current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
 
-    fig.savefig(f"./Pics/regression_{var}-{order:03d}-{current_time}.png")
+    cur_dir = Path(__file__).parent.parent
+    fig.savefig(cur_dir.joinpath(f"Pics/regression_{var}-{order:03d}-{current_time}.png"))
     plt.close()
     pass
   pass  # end class Regression

@@ -84,11 +84,13 @@ class FNN_Train(object):
     filePathH5 = self.filePathH5
 
     # directory of loss png
-    dirPNG = Path("./Pics")
+    cur_dir = Path(__file__).parent
+    dirPNG = cur_dir.joinpath("Pics")
+    #print(f"debug: dirPNG: {dirPNG}, line 89 in FNN_Train.py"); sys.exit("line 89")
     if not dirPNG.exists(): dirPNG.mkdir(parents=True)
 
     # directory of model
-    dirModel = Path("./StateDicts")
+    dirModel = cur_dir.joinpath("StateDicts")
     if not dirModel.exists(): dirModel.mkdir(parents=True)
 
     # train
@@ -136,7 +138,8 @@ class FNN_Train(object):
       fsDataset_test = FSimDataset(dataPath, testSet, var)
 
       # gen a obj as regression, and then train the model
-      var_dict_path = Path(f"./StateDicts/dict_{var}.pth")
+      cur_dir = Path(__file__).parent
+      var_dict_path = cur_dir.joinpath(f"StateDicts/dict_{var}.pth")
 
       if not var_dict_path.exists():
         var_dict_path = None
@@ -222,6 +225,8 @@ class FNN_Train(object):
     ax.legend()
 
     current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
-    fig.savefig(f"./Pics/resLinf_{var}-{current_time}.png", dpi=200)
+
+    cur_dir = Path(__file__).parent
+    fig.savefig(cur_dir.joinpath(f"Pics/resLinf_{var}-{current_time}.png"), dpi=200)
     pass
   pass  # end class
