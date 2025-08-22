@@ -1,9 +1,6 @@
 
 """
-This is main function to call:
-  - split the data into train and test sets
-  - train,
-  - predict, and save into the database: .h5
+Train FNN Model
 
 @author     @data       @aff        @version
 Xia, S      2025.2.13   Simpop.cn   v6.x
@@ -35,10 +32,9 @@ class FNN_Train(object):
     # now: 125 = 100 + 25
     cur_dir = Path(__file__).parent
     json_path = cur_dir.joinpath("FNN_Train.json")
-    #print(f"debug: json_path: {json_path}, line 38 in FNN_Train.py")
+
     with open(json_path, 'r') as inp:
       data = json.load(inp)
-      pass
 
     ratioTest = data["test_ratio"]  # e.g. 0.2
     caseSet = CaseSet(ratio=ratioTest)
@@ -54,8 +50,6 @@ class FNN_Train(object):
     cur_dir = Path(__file__).parent.parent
     self.filePathH5 = cur_dir.joinpath(matrix_data_path)
 
-    #print(f"debug: filePathH5: {self.filePathH5}, line 57 in FNN_Train.py")
-
     self.fieldList = data["vars"]
 
     # data storing residuals between CFD field and prediction
@@ -66,8 +60,6 @@ class FNN_Train(object):
     for var in self.fieldList.keys():
       self.res_trn_hist[var] = []
       self.res_tst_hist[var] = []
-      pass
-    pass  # end '__init__()'
 
   def train(self):
   #-----------------------------------------------------------------------------
@@ -86,7 +78,6 @@ class FNN_Train(object):
     # directory of loss png
     cur_dir = Path(__file__).parent
     dirPNG = cur_dir.joinpath("Pics")
-    #print(f"debug: dirPNG: {dirPNG}, line 89 in FNN_Train.py"); sys.exit("line 89")
     if not dirPNG.exists(): dirPNG.mkdir(parents=True)
 
     # directory of model
@@ -100,7 +91,6 @@ class FNN_Train(object):
                 dataPath = filePathH5,
                 dirPNG   = dirPNG,
                 dirModel = dirModel)
-    pass  # end func 'self.train'
 
   def _train( self,
               varList :dict,
