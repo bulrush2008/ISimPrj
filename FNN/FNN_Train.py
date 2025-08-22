@@ -113,7 +113,6 @@ class FNN_Train(object):
     fields = []
     for key in varList.keys():
       fields.append(key)
-      pass
 
     # including all trained models
     models = {}
@@ -137,7 +136,6 @@ class FNN_Train(object):
         print(f"Train from ZERO for {var}")
       else:
         print(f"Train from dict_{var}.pth")
-        pass
 
       R = Regression(var, var_dict_path)
 
@@ -150,7 +148,6 @@ class FNN_Train(object):
         print(f" >> Training {var}, epoch {i+1}/{epochs}")
         for inp, label, _ in fsDataset_train:
           R.train(inp, label)
-          pass
 
         # we need calculate field error to do estimation for both train and
         #   test data set
@@ -215,5 +212,4 @@ class FNN_Train(object):
 
     cur_dir = Path(__file__).parent
     fig.savefig(cur_dir.joinpath(f"Pics/resLinf_{var}-{current_time}.png"), dpi=200)
-    pass
-  pass  # end class
+  # end class
