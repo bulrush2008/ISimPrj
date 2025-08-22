@@ -1,12 +1,9 @@
 
 """
-This is main function to call:
-  - split the data into train and test sets
-  - train,
-  - predict, and save into the database: .h5
+This is main function to call
 
 @author     @data       @aff        @version
-Xia, S      2025.2.13   Simpop.cn   v6.x
+Xia, S      2025.8.22   Simpop.cn   v6.x
 """
 import sys
 
@@ -26,13 +23,11 @@ if __name__=="__main__":
   for arg in args:
     if arg == "--train"  : Train   = True
     if arg == "--predict": Predict = True
-    pass
 
   if Train:
     print("---------- Train ----------")
     fnn_train = FNN_Train()
     fnn_train.train()
-    pass
 
   if Predict:
     print("---------- Eval  ----------")
@@ -42,5 +37,3 @@ if __name__=="__main__":
 
   if not Train and not Predict:
     print("Trival, FNN Did Nothing.")
-    pass
-  pass # end "if __name__==..."
