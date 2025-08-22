@@ -23,7 +23,6 @@ class FNN_Train(object):
 #===============================================================================
   """
   - 应用任务类
-
   - 调用方法类和数据类，实现特定的应用任务
   """
   def __init__( self ):
@@ -63,9 +62,10 @@ class FNN_Train(object):
 
   def train(self):
   #-----------------------------------------------------------------------------
-    # train the fields one has assigned, which must be in
-    # ["P", "T", "U", "V", "W"]
-    # the order in list does not matter
+    """
+    - train the fields one has assigned, which must be in ["P"/"T"/"U"/"V"/"W"]
+    """
+
     fieldList = self.fieldList
 
     print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
@@ -93,15 +93,16 @@ class FNN_Train(object):
                 dirModel = dirModel)
 
   def _train( self,
-              varList :dict,
-              trainSet:list,
-              testSet :list,
-              dataPath:Path,
-              dirPNG:Path,
-              dirModel:Path )->None:
+              varList  :dict,
+              trainSet :list,
+              testSet  :list,
+              dataPath :Path,
+              dirPNG   :Path,
+              dirModel :Path )->None:
   #-----------------------------------------------------------------------------
     """
     Train the FNN model by a give trainset, in which some cases field included.
+
     - varList : dict of epochs for each field, such as ["P":1,"T":2]
     - trainSet: list of case names in train set, each is a string
     - testSet : list of case names in test set, each is a string
@@ -180,15 +181,11 @@ class FNN_Train(object):
       for inp, field, _ in fsDataset_test:
         R.save_regression_png(order=ipic, inp=inp, target=field)
         ipic += 1
-        pass
 
       # save model parameters
       model_dicts_name = dirModel.joinpath(f"dict_{var}.pth")
       torch.save(R.model.state_dict(), model_dicts_name)
-      pass  # end all var-models training
-
     # now all variable models have been trained
-    pass
 
   def write_e_hists(self, var:str):
   #-----------------------------------------------------------------------------
