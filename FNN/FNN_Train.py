@@ -35,6 +35,7 @@ class FNN_Train(object):
     # now: 125 = 100 + 25
     cur_dir = Path(__file__).parent
     json_path = cur_dir.joinpath("FNN_Train.json")
+    #print(f"debug: json_path: {json_path}, line 38 in FNN_Train.py")
     with open(json_path, 'r') as inp:
       data = json.load(inp)
       pass
@@ -49,7 +50,11 @@ class FNN_Train(object):
 
     # path of data used as training and possibly test
     matrix_data_path = data["train_data"]
-    self.filePathH5 = Path(matrix_data_path)
+
+    cur_dir = Path(__file__).parent.parent
+    self.filePathH5 = cur_dir.joinpath(matrix_data_path)
+
+    #print(f"debug: filePathH5: {self.filePathH5}, line 57 in FNN_Train.py")
 
     self.fieldList = data["vars"]
 
