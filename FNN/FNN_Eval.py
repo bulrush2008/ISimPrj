@@ -24,14 +24,14 @@ class FNN_Eval(object):
 #===============================================================================
   """
   - 应用任务类
-
   - 调用方法类和数据类，实现特定的应用任务
   """
   def __init__( self ):
   #-----------------------------------------------------------------------------
     # split the cases into train and test sets
     # now: 125 = 100 + 25
-    with open("./FNN_Eval.json", 'r') as inp:
+    cur_dir = Path(__file__).parent
+    with open(cur_dir.joinpath("FNN_Eval.json"), 'r') as inp:
       data = json.load(inp)
       pass
 
@@ -44,9 +44,10 @@ class FNN_Eval(object):
 
     # path of data used as training and possibly test
     matrix_data_path = data["train_data"]
-    self.filePathH5 = Path(matrix_data_path)
+    parent_dir = Path(__file__).parent.parent
+    self.filePathH5 = parent_dir.joinpath(matrix_data_path)
 
-    self.eval_file = data["eval_file"]
+    self.eval_file = parent_dir.joinpath(data["eval_file"])
 
     # this input is real
     # but should be normalized, before feed into the NN model
