@@ -212,4 +212,7 @@ class FNN_Train(object):
 
     cur_dir = Path(__file__).parent
     fig.savefig(cur_dir.joinpath(f"Pics/resLinf_{var}-{current_time}.png"), dpi=200)
+
+  def __repr__(self):
+    return str(self.__dict__) # 只显示属性
   # end class
