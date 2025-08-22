@@ -8,12 +8,11 @@ Xia, S      2025.8.22   Simpop.cn   v6.x
 import sys
 
 from FNN_Train import FNN_Train
-from FNN_Eval import FNN_Eval
+from FNN_Eval  import FNN_Eval
 
 if __name__=="__main__":
 #===============================================================================
-  """
-  - 主函数
+  """主函数
   """
   args = sys.argv
   num_args = len(args)
@@ -36,4 +35,4 @@ if __name__=="__main__":
     pass
 
   if not Train and not Predict:
-    print("Trival, FNN Did Nothing.")
+    print("... FNN Have Done Nothing ...")
