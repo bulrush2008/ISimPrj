@@ -33,7 +33,9 @@ class FNN_Train(object):
   #-----------------------------------------------------------------------------
     # split the cases into train and test sets
     # now: 125 = 100 + 25
-    with open("./FNN_Train.json", 'r') as inp:
+    cur_dir = Path(__file__).parent
+    json_path = cur_dir.joinpath("FNN_Train.json")
+    with open(json_path, 'r') as inp:
       data = json.load(inp)
       pass
 
@@ -52,7 +54,7 @@ class FNN_Train(object):
     self.fieldList = data["vars"]
 
     # data storing residuals between CFD field and prediction
-    #   including both for train and test sets 
+    #   including both for train and test sets
     self.res_trn_hist = {}
     self.res_tst_hist = {}
 
@@ -114,7 +116,7 @@ class FNN_Train(object):
     for key in varList.keys():
       fields.append(key)
       pass
-  
+
     # including all trained models
     models = {}
 
