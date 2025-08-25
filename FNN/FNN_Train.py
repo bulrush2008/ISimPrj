@@ -98,15 +98,13 @@ class FNN_Train(object):
     """
     Train the FNN model by a give trainset, in which some cases field included.
 
-    - varList   : dict of epochs for each field, such as ["P":1,"T":2]
     - trnSet    : list of case names in train set, each is a string
     - tstSet    : list of case names in test set, each is a string
     """
 
     # extract the var names
     fields = []
-    varList = self.fieldList
-    for key in varList.keys():
+    for key in self.fieldList.keys():
       fields.append(key)
 
     # including all trained models
@@ -137,7 +135,7 @@ class FNN_Train(object):
       print(f"*Now we are training {var} field:")
 
       # train the model
-      epochs = varList[var]
+      epochs = self.fieldList[var]
 
       for i in range(epochs):
         print(f" >> Training {var}, epoch {i+1}/{epochs}")
