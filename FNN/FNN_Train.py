@@ -80,9 +80,7 @@ class FNN_Train(object):
     - train the fields one has assigned, which must be in ["P"/"T"/"U"/"V"/"W"]
     """
 
-    fieldList = self.fieldList
-
-    print(f"*Fields Models Will Be Trained with Epochs {fieldList}.")
+    print(f"*Fields Models Will Be Trained with Epochs {self.fieldList}.")
 
     trnSet = self.trnSet
     tstSet = self.tstSet
