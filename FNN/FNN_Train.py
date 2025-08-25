@@ -27,6 +27,21 @@ class FNN_Train(object):
   """
   def __init__( self ):
   #-----------------------------------------------------------------------------
+    """
+    # 6 attributes:
+    self.trnSet = None
+    self.tstSet = None
+    self.filePathH5 = None
+    self.fieldList = None
+    self.res_trn_hist = None
+    self.res_tst_hist = None
+
+    # 3 methods:
+    self.train = self.train
+    self._train = self._train
+    self.write_e_hists = self.write_e_hists
+    """
+
     # split the cases into train and test sets
     # now: 125 = 100 + 25
     cur_dir = Path(__file__).parent
