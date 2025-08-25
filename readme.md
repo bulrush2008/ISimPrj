@@ -1,10 +1,7 @@
-Intelligent Sim: iSim，i for Intelligent, Instant and Interconnected
-	- h5 file save data in its 'DataSet' object. One can read it and return data
-  	of numpy format
-		2024.12.9
-	- PSP module is responsible for
-  	- read vtk files (vtm & vtrs), form the data to a matrix, and write them to
-  		a h5 file, serving as a database
-		- read matrix data from h5 file, write them back to a vtk file, which can be
-			displayed by a third-party software Paraview.
-		2024.12.9
+Intelligent Simulation: for short, ISim
+- 'i/I' for Intelligent, Instant or Interconnected.
+- h5 file save data in its 'DataSet' object. One can read and return numpy data.
+- PSP (Preprocessing, Save and Postprocessing) module is responsible for
+  - read vtk files (vtm & vtrs), and transform them to a matrix data of h5 format.
+  - read h5 matrix data, transform back to a vtk.
+	2025.8.25
