@@ -88,12 +88,6 @@ class FNN_Train(object):
     dirModel = cur_dir.joinpath("StateDicts")
     if not dirModel.exists(): dirModel.mkdir(parents=True)
 
-    # train
-    """
-    Train the FNN model by a give trainset, in which some cases field included.
-
-    """
-
     # extract the var names
     fields = []
     for key in self.fieldList.keys():
