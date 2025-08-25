@@ -52,10 +52,7 @@ class FNN_Train(object):
     ratioTest = data["test_ratio"]  # e.g. 0.2
     caseSet = CaseSet(ratio=ratioTest)
 
-    trnSet, tstSet = caseSet.splitSet()
-
-    self.trnSet = trnSet
-    self.tstSet = tstSet
+    self.trnSet, self.tstSet = caseSet.splitSet()
 
     # path of data used as training and possibly test
     matrix_data_path = data["train_data"]
@@ -82,9 +79,6 @@ class FNN_Train(object):
 
     print(f"*Fields Models Will Be Trained with Epochs {self.fieldList}.")
 
-    trnSet = self.trnSet
-    tstSet = self.tstSet
-
     # directory of loss png
     cur_dir = Path(__file__).parent
     dirPNG = cur_dir.joinpath("Pics")
@@ -98,8 +92,6 @@ class FNN_Train(object):
     """
     Train the FNN model by a give trainset, in which some cases field included.
 
-    - trnSet    : list of case names in train set, each is a string
-    - tstSet    : list of case names in test set, each is a string
     """
 
     # extract the var names
@@ -114,11 +106,11 @@ class FNN_Train(object):
     for var in fields:
       # obj to get the train data set
       # train set serves as (1) train & (2) error estimation
-      fsDataset_train = FSimDataset(self.filePathH5, trnSet, var)
+      fsDataset_train = FSimDataset(self.filePathH5, self.trnSet, var)
 
       # obj to get the test data set
       # test set servers only as erro estimation
-      fsDataset_test = FSimDataset(self.filePathH5, tstSet, var)
+      fsDataset_test = FSimDataset(self.filePathH5, self.tstSet, var)
 
       # gen a obj as regression, and then train the model
       cur_dir = Path(__file__).parent
