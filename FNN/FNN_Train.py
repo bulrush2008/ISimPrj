@@ -36,9 +36,8 @@ class FNN_Train(object):
     self.res_trn_hist = None
     self.res_tst_hist = None
 
-    # 3 methods:
+    # 2 methods:
     self.train = self.train
-    self._train = self._train
     self.write_e_hists = self.write_e_hists
     """
 
@@ -100,32 +99,18 @@ class FNN_Train(object):
     if not dirModel.exists(): dirModel.mkdir(parents=True)
 
     # train
-    self._train(varList  = fieldList,
-                trainSet = trnSet,
-                testSet  = tstSet,
-                dataPath = filePathH5,
-                dirPNG   = dirPNG,
-                dirModel = dirModel)
-
-  def _train( self,
-              varList  :dict,
-              trainSet :list,
-              testSet  :list,
-              dataPath :Path,
-              dirPNG   :Path,
-              dirModel :Path )->None:
-  #-----------------------------------------------------------------------------
     """
     Train the FNN model by a give trainset, in which some cases field included.
 
-    - varList : dict of epochs for each field, such as ["P":1,"T":2]
-    - trainSet: list of case names in train set, each is a string
-    - testSet : list of case names in test set, each is a string
-    - dataPath: path of data of train set
+    - varList   : dict of epochs for each field, such as ["P":1,"T":2]
+    - trnSet    : list of case names in train set, each is a string
+    - tstSet    : list of case names in test set, each is a string
+    - filePathH5: path of data of train set
     """
 
     # extract the var names
     fields = []
+    varList = self.fieldList
     for key in varList.keys():
       fields.append(key)
 
@@ -136,11 +121,11 @@ class FNN_Train(object):
     for var in fields:
       # obj to get the train data set
       # train set serves as (1) train & (2) error estimation
-      fsDataset_train = FSimDataset(dataPath, trainSet, var)
+      fsDataset_train = FSimDataset(filePathH5, trnSet, var)
 
       # obj to get the test data set
       # test set servers only as erro estimation
-      fsDataset_test = FSimDataset(dataPath, testSet, var)
+      fsDataset_test = FSimDataset(filePathH5, tstSet, var)
 
       # gen a obj as regression, and then train the model
       cur_dir = Path(__file__).parent
