@@ -85,8 +85,6 @@ class FNN_Train(object):
     trnSet = self.trnSet
     tstSet = self.tstSet
 
-    filePathH5 = self.filePathH5
-
     # directory of loss png
     cur_dir = Path(__file__).parent
     dirPNG = cur_dir.joinpath("Pics")
@@ -103,7 +101,6 @@ class FNN_Train(object):
     - varList   : dict of epochs for each field, such as ["P":1,"T":2]
     - trnSet    : list of case names in train set, each is a string
     - tstSet    : list of case names in test set, each is a string
-    - filePathH5: path of data of train set
     """
 
     # extract the var names
@@ -119,11 +116,11 @@ class FNN_Train(object):
     for var in fields:
       # obj to get the train data set
       # train set serves as (1) train & (2) error estimation
-      fsDataset_train = FSimDataset(filePathH5, trnSet, var)
+      fsDataset_train = FSimDataset(self.filePathH5, trnSet, var)
 
       # obj to get the test data set
       # test set servers only as erro estimation
-      fsDataset_test = FSimDataset(filePathH5, tstSet, var)
+      fsDataset_test = FSimDataset(self.filePathH5, tstSet, var)
 
       # gen a obj as regression, and then train the model
       cur_dir = Path(__file__).parent
