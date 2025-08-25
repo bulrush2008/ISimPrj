@@ -85,7 +85,11 @@ class FNN_Eval(object):
     ifield = 0
     for var in fields:
       # check if the state dicts existed
-      stateDictsPath = Path("StateDicts")
+      cur_dir = Path(__file__).parent
+      stateDictsPath = cur_dir.joinpath("StateDicts")
+      if not stateDictsPath.exists():
+        stateDictsPath.mkdir(parents=True)
+
       var_dict_path = stateDictsPath.joinpath(f"dict_{var}.pth")
 
       if not var_dict_path.exists():
