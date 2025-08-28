@@ -89,8 +89,8 @@ class FNN_Train(object):
     if not dirPNG.exists(): dirPNG.mkdir(parents=True)
 
     # directory of model
-    dirModel = cur_dir.joinpath("StateDicts")
-    if not dirModel.exists(): dirModel.mkdir(parents=True)
+    model_dir = cur_dir.joinpath("StateDicts")
+    if not model_dir.exists(): model_dir.mkdir(parents=True)
 
     # extract the var names
     fields = []
@@ -167,7 +167,7 @@ class FNN_Train(object):
         ipic += 1
 
       # save model parameters
-      model_dicts_name = dirModel.joinpath(f"dict_{var}.pth")
+      model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
       torch.save(R.model.state_dict(), model_dicts_name)
     # now all variable models have been trained
 
