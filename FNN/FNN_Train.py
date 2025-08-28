@@ -129,7 +129,7 @@ class FNN_Train(object):
       epochs = self.field_list[var]
 
       for i in range(epochs):
-        print(f"> Training {var}, epoch {i+1}/{epochs}")
+        print(f"> Train {var}, epoch {i+1}/{epochs}")
         for inp, label, _ in fsDataset_train:
           R.train(inp, label)
 
@@ -153,14 +153,14 @@ class FNN_Train(object):
         pass
 
       # write residuals for this "var"
-      print(f"> Plotting {var} error history")
+      print(f"> Plott {var} error history")
       self.write_e_hists(var)
 
       # plot loss history and save
-      print(f"> Plotting {var} loss history")
+      print(f"> Plott {var} loss history")
       R.saveLossHistory2PNG(dirPNG)
 
-      print(f"> Plotting {var} regression")
+      print(f"> Plott {var} regression")
       ipic = 0
       for inp, field, _ in fsDataset_test:
         R.save_regression_png(order=ipic, inp=inp, target=field)

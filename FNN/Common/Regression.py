@@ -1,25 +1,26 @@
 
+# standard libs
+import math
+from datetime import datetime
+from pathlib import Path
+
+# third-party libs
 import torch
 import torch.nn as nn
-import math
 import pandas
 import h5py
 
 import numpy as np
 import matplotlib.pyplot as plt
 
-from datetime import datetime
-from pathlib import Path
 
 class Regression(nn.Module):
-#===============================================================================
   """
   - Regression class: Core of FNN
   - 方法类
   """
   # initialize PyTorch pararent class
   def __init__(self, varName:str, dictPath:Path=None):
-  #-----------------------------------------------------------------------------
     super().__init__()
 
     if varName not in ["P", "U", "V", "W", "T"]:
@@ -66,7 +67,6 @@ class Regression(nn.Module):
     pass
 
   def _initialize_weights(self):
-  #-----------------------------------------------------------------------------
     """
     - inner function, call only once at initialization
     - configure initial model weights
@@ -82,11 +82,9 @@ class Regression(nn.Module):
     pass
 
   def forward(self, inputs):
-  #-----------------------------------------------------------------------------
     return self.model(inputs)
 
   def train(self, inputs, targets):
-  #-----------------------------------------------------------------------------
     """
     - 神经网络，根据输入和标签，进行训练
 
@@ -114,7 +112,6 @@ class Regression(nn.Module):
     pass
 
   def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
-  #-----------------------------------------------------------------------------
     """
     - 将预测数据，写入 HDF 数据库
     - 如有必要，会写入坐标
@@ -156,7 +153,6 @@ class Regression(nn.Module):
     pass
 
   def saveLossHistory2PNG(self, outDir:Path)->None:
-  #-----------------------------------------------------------------------------
     """
     打印损失函数
 
@@ -177,7 +173,6 @@ class Regression(nn.Module):
     pass  # end funcsaveLossHistory2PNG
 
   def calc_Field_MSE(self, inp, target)->np.float64:
-  #-----------------------------------------------------------------------------
     """
     Calculate error each case between prediction and real.
     Function's two input parameters are same with 'self.train(...)'
@@ -195,7 +190,6 @@ class Regression(nn.Module):
     return e
 
   def save_regression_png(self, order, inp, target):
-  #-----------------------------------------------------------------------------
     """
     绘制回归图，每个图点的
     - 横坐标: CFD 仿真结果
@@ -241,7 +235,7 @@ class Regression(nn.Module):
     pass
   pass  # end class Regression
 
+
 if __name__=="__main__":
-#===============================================================================
   R = Regression("T")
   pass
