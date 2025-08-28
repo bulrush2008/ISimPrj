@@ -26,7 +26,7 @@ if __name__=="__main__":
   if Train:
     print("---------- Train ----------")
     fnn_train = FNN_Train()
-    fnn_train.train()
+    fnn_train.train_loop()
 
   if Predict:
     print("---------- Eval  ----------")

@@ -74,7 +74,7 @@ class FNN_Train(object):
       self.train_residuals[var] = []
       self.test_residuals[var] = []
 
-  def train(self):
+  def train_loop(self):
     """
     - train the fields one has assigned, which must be in ["P"/"T"/"U"/"V"/"W"]
     """
