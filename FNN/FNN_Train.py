@@ -114,6 +114,7 @@ class FNN_Train(object):
       cur_dir = Path(__file__).parent
       var_dict_path = cur_dir.joinpath(f"StateDicts/dict_{var}.pth")
 
+      print("") # 打印空行，隔开两个模型的训练过程
       if not var_dict_path.exists():
         var_dict_path = None
         print(f"> Train from ZERO for {var}")
@@ -152,11 +153,14 @@ class FNN_Train(object):
         pass
 
       # write residuals for this "var"
+      print(f"> Plotting error history for {var}")
       self.write_e_hists(var)
 
       # plot loss history and save
+      print(f"> Plotting loss history for {var}")
       R.saveLossHistory2PNG(dirPNG)
 
+      print(f"> Plotting regression for {var}")
       ipic = 0
       for inp, field, _ in fsDataset_test:
         R.save_regression_png(order=ipic, inp=inp, target=field)
@@ -173,7 +177,6 @@ class FNN_Train(object):
 
     - var : string 变量，用于命名
     """
-    print(f"> Plotting error history for {var}")
 
     fig, ax = plt.subplots(1,1)
 
