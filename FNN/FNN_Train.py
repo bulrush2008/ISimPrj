@@ -75,7 +75,7 @@ class FNN_Train(object):
     - train the fields one has assigned, which must be in ["P"/"T"/"U"/"V"/"W"]
     """
 
-    print(f"*Fields Models Will Be Trained with Epochs {self.fieldList}.")
+    print(f"*Fields models will be trained with epochs {self.fieldList}.")
 
     # directory of loss png
     cur_dir = Path(__file__).parent
