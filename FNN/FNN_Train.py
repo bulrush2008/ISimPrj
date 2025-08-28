@@ -33,7 +33,7 @@ class FNN_Train(object):
     """
     # 6 attributes:
     self.train_set = None
-    self.tstSet = None
+    self.test_set = None
     self.filePathH5 = None
     self.fieldList = None
     self.res_trn_hist = None
@@ -55,7 +55,7 @@ class FNN_Train(object):
     ratioTest = data["test_ratio"]  # e.g. 0.2
     caseSet = CaseSet(ratio=ratioTest)
 
-    self.train_set, self.tstSet = caseSet.splitSet()
+    self.train_set, self.test_set = caseSet.splitSet()
 
     # path of data used as training and possibly test
     matrix_data_path = data["train_data"]
@@ -106,7 +106,7 @@ class FNN_Train(object):
 
       # obj to get the test data set
       # test set servers only as erro estimation
-      fsDataset_test = FSimDataset(self.filePathH5, self.tstSet, var)
+      fsDataset_test = FSimDataset(self.filePathH5, self.test_set, var)
 
       # gen a obj as regression, and then train the model
       cur_dir = Path(__file__).parent
