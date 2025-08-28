@@ -36,8 +36,8 @@ class FNN_Train(object):
     self.test_set = None
     self.h5file_path = None
     self.field_list = None
-    self.res_trn_hist = None
-    self.res_tst_hist = None
+    self.train_residuals = None
+    self.test_residuals = None
 
     # 2 methods:
     self.train = self.train
@@ -67,12 +67,12 @@ class FNN_Train(object):
 
     # data storing residuals between CFD field and prediction
     #   including both for train and test sets
-    self.res_trn_hist = {}
-    self.res_tst_hist = {}
+    self.train_residuals = {}
+    self.test_residuals = {}
 
     for var in self.field_list.keys():
-      self.res_trn_hist[var] = []
-      self.res_tst_hist[var] = []
+      self.train_residuals[var] = []
+      self.test_residuals[var] = []
 
   def train(self):
     """
@@ -148,19 +148,19 @@ class FNN_Train(object):
           e_test = max(e_test, R.calc_Field_MSE(inp, field))
           pass
 
-        self.res_trn_hist[var].append(e_train)
-        self.res_tst_hist[var].append(e_test)
+        self.train_residuals[var].append(e_train)
+        self.test_residuals[var].append(e_test)
         pass
 
       # write residuals for this "var"
-      print(f"> Plotting error history for {var}")
+      print(f"> Plotting {var} error history")
       self.write_e_hists(var)
 
       # plot loss history and save
-      print(f"> Plotting loss history for {var}")
+      print(f"> Plotting {var} loss history")
       R.saveLossHistory2PNG(dirPNG)
 
-      print(f"> Plotting regression for {var}")
+      print(f"> Plotting {var} regression")
       ipic = 0
       for inp, field, _ in fsDataset_test:
         R.save_regression_png(order=ipic, inp=inp, target=field)
@@ -180,8 +180,8 @@ class FNN_Train(object):
 
     fig, ax = plt.subplots(1,1)
 
-    y1 = self.res_trn_hist[var]
-    y2 = self.res_tst_hist[var]
+    y1 = self.train_residuals[var]
+    y2 = self.test_residuals[var]
 
     x = list(range(1,len(y1)+1))
 
