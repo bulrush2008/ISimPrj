@@ -34,7 +34,7 @@ class FNN_Train(object):
     # 6 attributes:
     self.train_set = None
     self.test_set = None
-    self.filePathH5 = None
+    self.h5file_path = None
     self.fieldList = None
     self.res_trn_hist = None
     self.res_tst_hist = None
@@ -61,7 +61,7 @@ class FNN_Train(object):
     matrix_data_path = data["train_data"]
 
     cur_dir = Path(__file__).parent.parent
-    self.filePathH5 = cur_dir.joinpath(matrix_data_path)
+    self.h5file_path = cur_dir.joinpath(matrix_data_path)
 
     self.fieldList = data["vars"]
 
@@ -102,11 +102,11 @@ class FNN_Train(object):
     for var in fields:
       # obj to get the train data set
       # train set serves as (1) train & (2) error estimation
-      fsDataset_train = FSimDataset(self.filePathH5, self.train_set, var)
+      fsDataset_train = FSimDataset(self.h5file_path, self.train_set, var)
 
       # obj to get the test data set
       # test set servers only as erro estimation
-      fsDataset_test = FSimDataset(self.filePathH5, self.test_set, var)
+      fsDataset_test = FSimDataset(self.h5file_path, self.test_set, var)
 
       # gen a obj as regression, and then train the model
       cur_dir = Path(__file__).parent
