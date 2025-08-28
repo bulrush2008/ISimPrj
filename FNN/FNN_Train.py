@@ -85,8 +85,8 @@ class FNN_Train(object):
 
     # directory of loss png
     cur_dir = Path(__file__).parent
-    dirPNG = cur_dir.joinpath("Pics")
-    if not dirPNG.exists(): dirPNG.mkdir(parents=True)
+    pic_dir = cur_dir.joinpath("Pics")
+    if not pic_dir.exists(): pic_dir.mkdir(parents=True)
 
     # directory of model
     model_dir = cur_dir.joinpath("StateDicts")
@@ -129,7 +129,7 @@ class FNN_Train(object):
       epochs = self.field_list[var]
 
       for i in range(epochs):
-        print(f"> Train {var}, epoch {i+1}/{epochs}")
+        print(f"> {var}: epoch {i+1}/{epochs}")
         for inp, label, _ in fsDataset_train:
           R.train(inp, label)
 
@@ -158,7 +158,7 @@ class FNN_Train(object):
 
       # plot loss history and save
       print(f"> Plott {var} loss history")
-      R.saveLossHistory2PNG(dirPNG)
+      R.saveLossHistory2PNG(pic_dir)
 
       print(f"> Plott {var} regression")
       ipic = 0
