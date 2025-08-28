@@ -117,13 +117,13 @@ class FNN_Train(object):
       print("") # 打印空行，隔开两个模型的训练过程
       if not var_dict_path.exists():
         var_dict_path = None
-        print(f"> Train from ZERO for {var}")
+        print(f"> Train {var} from ZERO")
       else:
-        print(f"> Train from dict_{var}.pth")
+        print(f"> Train {var} from dict_{var}.pth")
 
       R = Regression(var, var_dict_path)
 
-      print(f"> Start training {var} field:")
+      #print(f"> Start training {var} field:")
 
       # train the model
       epochs = self.field_list[var]
