@@ -83,7 +83,7 @@ class FSimDataset(object):
       pass
 
     return inp, torch.FloatTensor(data), coords
-  
+
   def plotVTK(self, idx):
   #-----------------------------------------------------------------------------
     pass  # end class func plotVTK

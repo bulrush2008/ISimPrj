@@ -79,7 +79,7 @@ class FNN_Train(object):
     - train the fields one has assigned, which must be in ["P"/"T"/"U"/"V"/"W"]
     """
 
-    print(f"*Fields models will be trained with epochs {self.field_list}.")
+    print(f"> Fields models will be trained with epochs {self.field_list}.")
 
     # directory of loss png
     cur_dir = Path(__file__).parent
@@ -114,19 +114,19 @@ class FNN_Train(object):
 
       if not var_dict_path.exists():
         var_dict_path = None
-        print(f"Train from ZERO for {var}")
+        print(f"> Train from ZERO for {var}")
       else:
-        print(f"Train from dict_{var}.pth")
+        print(f"> Train from dict_{var}.pth")
 
       R = Regression(var, var_dict_path)
 
-      print(f"*Now we are training {var} field:")
+      print(f"> Start training {var} field:")
 
       # train the model
       epochs = self.field_list[var]
 
       for i in range(epochs):
-        print(f" >> Training {var}, epoch {i+1}/{epochs}")
+        print(f"> Training {var}, epoch {i+1}/{epochs}")
         for inp, label, _ in fsDataset_train:
           R.train(inp, label)
 
