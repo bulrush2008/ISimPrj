@@ -20,13 +20,12 @@ from Common.FSimDataset import FSimDataset
 from Common.Regression  import Regression
 
 class FNN_Train(object):
-#===============================================================================
   """
-  - 应用任务类
-  - 调用方法类和数据类，实现特定的应用任务
+  - 实例化网络对象
+  - 实例化数据对象
+  - 组织训练过程
   """
   def __init__( self ):
-  #-----------------------------------------------------------------------------
     """
     # 6 attributes:
     self.trnSet = None
@@ -72,7 +71,6 @@ class FNN_Train(object):
       self.res_tst_hist[var] = []
 
   def train(self):
-  #-----------------------------------------------------------------------------
     """
     - train the fields one has assigned, which must be in ["P"/"T"/"U"/"V"/"W"]
     """
@@ -164,7 +162,6 @@ class FNN_Train(object):
     # now all variable models have been trained
 
   def write_e_hists(self, var:str):
-  #-----------------------------------------------------------------------------
     """
     save the e_hist into a png file
 
