@@ -167,10 +167,12 @@ class FNN_Train(object):
 
   def write_e_hists(self, var:str):
     """
-    save the e_hist into a png file
+    plot error history to pics
 
     - var : string 变量，用于命名
     """
+    print(f"> Plotting error history for {var}")
+
     fig, ax = plt.subplots(1,1)
 
     y1 = self.res_trn_hist[var]
