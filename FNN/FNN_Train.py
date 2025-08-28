@@ -3,18 +3,22 @@
 Train FNN Model
 
 @author     @data       @aff        @version
-Xia, S      2025.2.13   Simpop.cn   v6.x
+Xia, S      2025.8.28   Simpop.cn   v6.x
 """
+
+# standard libs
 import sys
 import json
-
-import h5py
-import torch
-import matplotlib.pyplot as plt
 
 from pathlib import Path
 from datetime import datetime
 
+# third-party libs
+import h5py
+import torch
+import matplotlib.pyplot as plt
+
+# self-defined libs
 from Common.CaseSet import CaseSet
 from Common.FSimDataset import FSimDataset
 from Common.Regression  import Regression
