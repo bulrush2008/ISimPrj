@@ -107,8 +107,8 @@ class FNN_Train(object):
         print(f"> Train {var} from dict_{var}.pth")
 
       self.regressions[var] = Regression(var, var_dict_path)
-
-
+    # 结束for-loop
+  # 结束 __init__
 
   def train_loop(self):
     """
@@ -148,7 +148,7 @@ class FNN_Train(object):
 
         self.train_residuals[var].append(e_train)
         self.test_residuals[var].append(e_test)
-        pass
+      # 完成一个模型的所有训练周期
 
       # write residuals for this "var"
       print("")
@@ -173,7 +173,8 @@ class FNN_Train(object):
       model_dir = cur_dir.joinpath("StateDicts")
       model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
       torch.save(self.regressions[var].model.state_dict(), model_dicts_name)
-    # now all variable models have been trained
+    # 完成所有模型的训练
+  # 结束训练过程：train_loop
 
   def write_e_hists(self, var:str):
     """
@@ -203,4 +204,5 @@ class FNN_Train(object):
 
     cur_dir = Path(__file__).parent
     fig.savefig(cur_dir.joinpath(f"Pics/resLinf_{var}-{current_time}.png"), dpi=200)
-  # end class
+  # 结束函数：write_e_hists
+# end class
