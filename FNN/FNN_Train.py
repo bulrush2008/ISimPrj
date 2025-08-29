@@ -47,29 +47,30 @@ class FNN_Train(object):
     self.write_e_hists()
     """
 
-    # split the cases into train and test sets
-    # now: 125 = 100 + 25
+    #== 读入 .json 设置文件
     cur_dir = Path(__file__).parent
     json_path = cur_dir.joinpath("FNN_Train.json")
 
     with open(json_path, 'r') as inp:
       data = json.load(inp)
 
+    #== 读入算例列表，并分割
     ratioTest = data["test_ratio"]  # e.g. 0.2
     caseSet = CaseSet(ratio=ratioTest)
 
     self.train_set, self.test_set = caseSet.splitSet()
 
+    # 记录数据集位置
     # path of data used as training and possibly test
     matrix_data_path = data["train_data"]
 
     cur_dir = Path(__file__).parent.parent
     self.h5file_path = cur_dir.joinpath(matrix_data_path)
 
+    #记录训练信息，包含带训练的模型名称和训练周期数
     self.train_info = data["vars"]
 
-    # data storing residuals between CFD field and prediction
-    #   including both for train and test sets
+    # 定义存储误差记录的列表变量
     self.train_residuals = {}
     self.test_residuals = {}
 
@@ -77,14 +78,12 @@ class FNN_Train(object):
       self.train_residuals[var] = []
       self.test_residuals[var] = []
 
-    # check the directory of loss png
-    # if not exist, create it
+    # 检查图像存储目录和模型参数目录是否已经创建，如果不存在，则创建该目录
     cur_dir = Path(__file__).parent
+
     pic_dir = cur_dir.joinpath("Pics")
     if not pic_dir.exists(): pic_dir.mkdir(parents=True)
 
-    # check the directory of model parameters file
-    # if not exist, create it
     model_dir = cur_dir.joinpath("StateDicts")
     if not model_dir.exists(): model_dir.mkdir(parents=True)
 
