@@ -25,17 +25,19 @@ from Common.Regression  import Regression
 
 class FNN_Train(object):
   """
+  一个模型对应一个流场，比如温度场 T，对应一个NN模型
+
   - 实例化网络对象
   - 实例化数据对象
   - 组织训练过程
   """
-  def __init__( self ):
+  def __init__(self):
     """
     # 6 attributes:
     self.train_set
     self.test_set
     self.h5file_path
-    self.field_list
+    self.model_list
     self.train_residuals
     self.test_residuals
 
@@ -63,14 +65,14 @@ class FNN_Train(object):
     cur_dir = Path(__file__).parent.parent
     self.h5file_path = cur_dir.joinpath(matrix_data_path)
 
-    self.field_list = data["vars"]
+    self.model_list = data["vars"]
 
     # data storing residuals between CFD field and prediction
     #   including both for train and test sets
     self.train_residuals = {}
     self.test_residuals = {}
 
-    for var in self.field_list.keys():
+    for var in self.model_list.keys():
       self.train_residuals[var] = []
       self.test_residuals[var] = []
 
@@ -79,8 +81,8 @@ class FNN_Train(object):
     - train the fields one has assigned, which must be in ["P"/"T"/"U"/"V"/"W"]
     """
 
-    fields = list(self.field_list.keys())
-    epochs = list(self.field_list.values())
+    fields = list(self.model_list.keys())
+    epochs = list(self.model_list.values())
     print(f"> Models {fields} trained with epochs {epochs}.")
 
     # directory of loss png
@@ -94,7 +96,7 @@ class FNN_Train(object):
 
     # extract the var names
     fields = []
-    for key in self.field_list.keys():
+    for key in self.model_list.keys():
       fields.append(key)
 
     # including all trained models
@@ -126,7 +128,7 @@ class FNN_Train(object):
       #print(f"> Start training {var} field:")
 
       # train the model
-      epochs = self.field_list[var]
+      epochs = self.model_list[var]
 
       for i in range(epochs):
         print(f"> {var}: epoch {i+1}/{epochs}")
