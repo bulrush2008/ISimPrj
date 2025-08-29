@@ -38,7 +38,7 @@ class FNN_Train(object):
     self.train_set
     self.test_set
     self.h5file_path
-    self.model_list
+    self.train_info: including variable and training epochs
     self.train_residuals
     self.test_residuals
 
@@ -66,14 +66,14 @@ class FNN_Train(object):
     cur_dir = Path(__file__).parent.parent
     self.h5file_path = cur_dir.joinpath(matrix_data_path)
 
-    self.model_list = data["vars"]
+    self.train_info = data["vars"]
 
     # data storing residuals between CFD field and prediction
     #   including both for train and test sets
     self.train_residuals = {}
     self.test_residuals = {}
 
-    for var in self.model_list.keys():
+    for var in self.train_info.keys():
       self.train_residuals[var] = []
       self.test_residuals[var] = []
 
@@ -82,8 +82,8 @@ class FNN_Train(object):
     - train the fields one has assigned, which must be in ["P"/"T"/"U"/"V"/"W"]
     """
 
-    fields = list(self.model_list.keys())
-    epochs = list(self.model_list.values())
+    fields = list(self.train_info.keys())
+    epochs = list(self.train_info.values())
     print(f"> Models {fields} trained with epochs {epochs}.")
 
     # directory of loss png
@@ -121,7 +121,7 @@ class FNN_Train(object):
       #print(f"> Start training {var} field:")
 
       # train the model
-      epochs = self.model_list[var]
+      epochs = self.train_info[var]
 
       for i in range(epochs):
         print(f"> {var}: epoch {i+1}/{epochs}")
