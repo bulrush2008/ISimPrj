@@ -87,39 +87,45 @@ class FNN_Train(object):
     model_dir = cur_dir.joinpath("StateDicts")
     if not model_dir.exists(): model_dir.mkdir(parents=True)
 
-
-  def train_loop(self):
-    """
-    Train fields assigned in ["P"/"T"/"U"/"V"/"W"]
-    """
-
     fields = list(self.train_info.keys())
     epochs = list(self.train_info.values())
+
     print(f"> Models {fields} trained with epochs {epochs}.")
+    print("") # 打印空行
 
-    # train fields
+    self.fsDataset_train = {}
+    self.fsDataset_test = {}
+
+    self.regressions = {}
+    # 初始化应用对象
     for var in fields:
-      # obj to get the train data set
-      # train set serves as (1) train & (2) error estimation
-      fsDataset_train = FSimDataset(self.h5file_path, self.train_set, var)
+      self.fsDataset_train[var] = FSimDataset(self.h5file_path, self.train_set, var)
+      self.fsDataset_test[var]  = FSimDataset(self.h5file_path, self.test_set,  var)
 
-      # obj to get the test data set
-      # test set servers only as erro estimation
-      fsDataset_test = FSimDataset(self.h5file_path, self.test_set, var)
-
-      # gen a obj as regression, and then train the model
-      cur_dir = Path(__file__).parent
       var_dict_path = cur_dir.joinpath(f"StateDicts/dict_{var}.pth")
 
-      print("") # 打印空行，隔开两个模型的训练过程
       if not var_dict_path.exists():
         var_dict_path = None
         print(f"> Train {var} from ZERO")
       else:
         print(f"> Train {var} from dict_{var}.pth")
 
-      R = Regression(var, var_dict_path)
+      self.regressions[var] = Regression(var, var_dict_path)
 
+
+
+  def train_loop(self):
+    """
+    主训练循环
+    """
+
+    fields = list(self.train_info.keys())
+    epochs = list(self.train_info.values())
+
+    # train fields
+    for var in fields:
+
+      #print("") # 打印空行，隔开两个模型的训练过程
       #print(f"> Start training {var} field:")
 
       # train the model
@@ -127,22 +133,22 @@ class FNN_Train(object):
 
       for i in range(epochs):
         print(f"> {var}: epoch {i+1}/{epochs}")
-        for inp, label, _ in fsDataset_train:
-          R.train(inp, label)
+        for inp, label, _ in self.fsDataset_train[var]:
+          self.regressions[var].train(inp, label)
 
         # we need calculate field error to do estimation for both train and
         #   test data set
 
         # for the train set
         e_train = 0.0
-        for inp, field, _ in fsDataset_train:
-          e_train = max(e_train, R.calc_Field_MSE(inp, field))
+        for inp, field, _ in self.fsDataset_train[var]:
+          e_train = max(e_train, self.regressions[var].calc_Field_MSE(inp, field))
           pass
 
         # for the test set
         e_test = 0.0
-        for inp, field, _ in fsDataset_test:
-          e_test = max(e_test, R.calc_Field_MSE(inp, field))
+        for inp, field, _ in self.fsDataset_test[var]:
+          e_test = max(e_test, self.regressions[var].calc_Field_MSE(inp, field))
           pass
 
         self.train_residuals[var].append(e_train)
@@ -158,19 +164,19 @@ class FNN_Train(object):
 
       cur_dir = Path(__file__).parent
       pic_dir = cur_dir.joinpath("Pics")
-      R.saveLossHistory2PNG(pic_dir)
+      self.regressions[var].saveLossHistory2PNG(pic_dir)
 
       print(f"> Plot {var} regression")
 
       ipic = 0
-      for inp, field, _ in fsDataset_test:
-        R.save_regression_png(order=ipic, inp=inp, target=field)
+      for inp, field, _ in self.fsDataset_test[var]:
+        self.regressions[var].save_regression_png(order=ipic, inp=inp, target=field)
         ipic += 1
 
       # save model parameters
       model_dir = cur_dir.joinpath("StateDicts")
       model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
-      torch.save(R.model.state_dict(), model_dicts_name)
+      torch.save(self.regressions[var].model.state_dict(), model_dicts_name)
     # now all variable models have been trained
 
   def write_e_hists(self, var:str):
