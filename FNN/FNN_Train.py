@@ -87,7 +87,7 @@ class FNN_Train(object):
     model_dir = cur_dir.joinpath("StateDicts")
     if not model_dir.exists(): model_dir.mkdir(parents=True)
 
-    print(f"> We will train {self.train_info}")
+    print(f"> We will train {self.train_info}\n")
 
     self.fsDataset_train = {}
     self.fsDataset_test = {}
@@ -151,6 +151,7 @@ class FNN_Train(object):
         pass
 
       # write residuals for this "var"
+      print("")
       print(f"> Plot {var} error history")
       self.write_e_hists(var)
 
