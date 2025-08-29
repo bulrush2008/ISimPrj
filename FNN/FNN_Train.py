@@ -87,18 +87,14 @@ class FNN_Train(object):
     model_dir = cur_dir.joinpath("StateDicts")
     if not model_dir.exists(): model_dir.mkdir(parents=True)
 
-    fields = list(self.train_info.keys())
-    epochs = list(self.train_info.values())
-
-    print(f"> Models {fields} trained with epochs {epochs}.")
-    print("") # 打印空行
+    print(f"> We will train {self.train_info}")
 
     self.fsDataset_train = {}
     self.fsDataset_test = {}
 
     self.regressions = {}
-    # 初始化应用对象
-    for var in fields:
+    # 初始化应用对象，类似于先创建全局变量
+    for var in self.train_info.keys():
       self.fsDataset_train[var] = FSimDataset(self.h5file_path, self.train_set, var)
       self.fsDataset_test[var]  = FSimDataset(self.h5file_path, self.test_set,  var)
 
@@ -120,19 +116,18 @@ class FNN_Train(object):
     """
 
     fields = list(self.train_info.keys())
-    epochs = list(self.train_info.values())
 
     # train fields
-    for var in fields:
+    for var in self.train_info.keys():
 
-      #print("") # 打印空行，隔开两个模型的训练过程
+      print("") # 打印空行，隔开两个模型的训练过程
       #print(f"> Start training {var} field:")
 
       # train the model
-      epochs = self.train_info[var]
+      epoch = self.train_info[var]
 
-      for i in range(epochs):
-        print(f"> {var}: epoch {i+1}/{epochs}")
+      for i in range(epoch):
+        print(f"> {var}: epoch {i+1}/{epoch}")
         for inp, label, _ in self.fsDataset_train[var]:
           self.regressions[var].train(inp, label)
 
