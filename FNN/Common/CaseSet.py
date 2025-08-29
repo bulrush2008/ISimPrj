@@ -30,7 +30,7 @@ class CaseSet(object):
     # 将每个 block 的三维数据捋成一维后，组合为一个一维数组
     # 此变量定义类每个 block 数据，在一维整体数组中的位置
     self.blockPosi = []
- 
+
     # 此内部函数用于计算 self.blockInfo & self.blockPosi 的具体信息
     self._calcBlockInfo()
 

@@ -156,14 +156,15 @@ class FNN_Train(object):
         pass
 
       # write residuals for this "var"
-      print(f"> Plott {var} error history")
+      print(f"> Plot {var} error history")
       self.write_e_hists(var)
 
       # plot loss history and save
-      print(f"> Plott {var} loss history")
+      print(f"> Plot {var} loss history")
       R.saveLossHistory2PNG(pic_dir)
 
-      print(f"> Plott {var} regression")
+      print(f"> Plot {var} regression")
+
       ipic = 0
       for inp, field, _ in fsDataset_test:
         R.save_regression_png(order=ipic, inp=inp, target=field)
