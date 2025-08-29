@@ -32,16 +32,16 @@ class FNN_Train(object):
   def __init__( self ):
     """
     # 6 attributes:
-    self.train_set = None
-    self.test_set = None
-    self.h5file_path = None
-    self.field_list = None
-    self.train_residuals = None
-    self.test_residuals = None
+    self.train_set
+    self.test_set
+    self.h5file_path
+    self.field_list
+    self.train_residuals
+    self.test_residuals
 
     # 2 methods:
-    self.train = self.train
-    self.write_e_hists = self.write_e_hists
+    self.train_loop()
+    self.write_e_hists()
     """
 
     # split the cases into train and test sets
