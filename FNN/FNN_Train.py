@@ -90,7 +90,7 @@ class FNN_Train(object):
 
   def train_loop(self):
     """
-    - train the fields one has assigned, which must be in ["P"/"T"/"U"/"V"/"W"]
+    Train fields assigned in ["P"/"T"/"U"/"V"/"W"]
     """
 
     fields = list(self.train_info.keys())
