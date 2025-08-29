@@ -77,6 +77,18 @@ class FNN_Train(object):
       self.train_residuals[var] = []
       self.test_residuals[var] = []
 
+    # check the directory of loss png
+    # if not exist, create it
+    cur_dir = Path(__file__).parent
+    pic_dir = cur_dir.joinpath("Pics")
+    if not pic_dir.exists(): pic_dir.mkdir(parents=True)
+
+    # check the directory of model parameters file
+    # if not exist, create it
+    model_dir = cur_dir.joinpath("StateDicts")
+    if not model_dir.exists(): model_dir.mkdir(parents=True)
+
+
   def train_loop(self):
     """
     - train the fields one has assigned, which must be in ["P"/"T"/"U"/"V"/"W"]
@@ -85,15 +97,6 @@ class FNN_Train(object):
     fields = list(self.train_info.keys())
     epochs = list(self.train_info.values())
     print(f"> Models {fields} trained with epochs {epochs}.")
-
-    # directory of loss png
-    cur_dir = Path(__file__).parent
-    pic_dir = cur_dir.joinpath("Pics")
-    if not pic_dir.exists(): pic_dir.mkdir(parents=True)
-
-    # directory of model
-    model_dir = cur_dir.joinpath("StateDicts")
-    if not model_dir.exists(): model_dir.mkdir(parents=True)
 
     # train fields
     for var in fields:
@@ -153,6 +156,9 @@ class FNN_Train(object):
 
       # plot loss history and save
       print(f"> Plot {var} loss history")
+
+      cur_dir = Path(__file__).parent
+      pic_dir = cur_dir.joinpath("Pics")
       R.saveLossHistory2PNG(pic_dir)
 
       print(f"> Plot {var} regression")
@@ -163,6 +169,7 @@ class FNN_Train(object):
         ipic += 1
 
       # save model parameters
+      model_dir = cur_dir.joinpath("StateDicts")
       model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
       torch.save(R.model.state_dict(), model_dicts_name)
     # now all variable models have been trained
