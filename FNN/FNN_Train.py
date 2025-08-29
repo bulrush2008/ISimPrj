@@ -23,6 +23,7 @@ from Common.CaseSet import CaseSet
 from Common.FSimDataset import FSimDataset
 from Common.Regression  import Regression
 
+
 class FNN_Train(object):
   """
   一个模型对应一个流场，比如温度场 T，对应一个NN模型
@@ -100,7 +101,7 @@ class FNN_Train(object):
       fields.append(key)
 
     # including all trained models
-    models = {}
+    #models = {}
 
     # train fields
     for var in fields:
