@@ -95,14 +95,6 @@ class FNN_Train(object):
     model_dir = cur_dir.joinpath("StateDicts")
     if not model_dir.exists(): model_dir.mkdir(parents=True)
 
-    # extract the var names
-    fields = []
-    for key in self.model_list.keys():
-      fields.append(key)
-
-    # including all trained models
-    #models = {}
-
     # train fields
     for var in fields:
       # obj to get the train data set
