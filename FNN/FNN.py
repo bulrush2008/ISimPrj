@@ -26,7 +26,11 @@ if __name__=="__main__":
   if Train:
     print("---------- Train ----------")
     fnn_train = FNN_Train()
-    fnn_train.train_loop()
+
+    while (True):
+      istep = fnn_train.train_loop("T", 2)
+      if istep >= 11:
+        break
 
   if Predict:
     print("---------- Eval  ----------")

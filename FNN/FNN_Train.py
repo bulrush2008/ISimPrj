@@ -108,72 +108,85 @@ class FNN_Train(object):
 
       self.regressions[var] = Regression(var, var_dict_path)
     # 结束for-loop
+
+    # 迭代计数器
+    self.istep = 0
   # 结束 __init__
 
-  def train_loop(self):
+  def train_loop(self, var:str, numb:int) -> int:
     """
-    主训练循环
+    主训练循环，
+
+    - 对变量 "var" 做训练迭代，迭代次数为 "numb"
+    - 每次检查是否超过最大迭代次数(self.train_info['var'])，以及剩余迭代次数
+      * 如果剩余次数小于 "numb"，则按照剩余次数进行训练
+      * 如果剩余次数大于 "numb"，则迭代次数为 "numb"
     """
 
-    fields = list(self.train_info.keys())
+    #fields = list(self.train_info.keys())
 
     # train fields
-    for var in self.train_info.keys():
 
-      print("") # 打印空行，隔开两个模型的训练过程
-      #print(f"> Start training {var} field:")
+    print("") # 打印空行，隔开两个模型的训练过程
+    #print(f"> Start training {var} field:")
 
-      # train the model
-      epoch = self.train_info[var]
+    # train the model
+    epoch = self.train_info[var]
+    real_numb = min(epoch - self.istep, numb)
 
-      for i in range(epoch):
-        print(f"> {var}: epoch {i+1}/{epoch}")
-        for inp, label, _ in self.fsDataset_train[var]:
-          self.regressions[var].train(inp, label)
+    for i in range(real_numb):
+      print(f"> {var}: epoch {self.istep+1}/{epoch}")
 
-        # we need calculate field error to do estimation for both train and
-        #   test data set
+      for inp, label, _ in self.fsDataset_train[var]:
+        self.regressions[var].train(inp, label)
 
-        # for the train set
-        e_train = 0.0
-        for inp, field, _ in self.fsDataset_train[var]:
-          e_train = max(e_train, self.regressions[var].calc_Field_MSE(inp, field))
-          pass
+      self.istep += 1
 
-        # for the test set
-        e_test = 0.0
-        for inp, field, _ in self.fsDataset_test[var]:
-          e_test = max(e_test, self.regressions[var].calc_Field_MSE(inp, field))
-          pass
+      # we need calculate field error to do estimation for both train and
+      #   test data set
 
-        self.train_residuals[var].append(e_train)
-        self.test_residuals[var].append(e_test)
-      # 完成一个模型的所有训练周期
+      # for the train set
+      #e_train = 0.0
+      #for inp, field, _ in self.fsDataset_train[var]:
+      #  e_train = max(e_train, self.regressions[var].calc_Field_MSE(inp, field))
+      #  pass
 
-      # write residuals for this "var"
-      print("")
-      print(f"> Plot {var} error history")
-      self.write_e_hists(var)
+      # for the test set
+      #e_test = 0.0
+      #for inp, field, _ in self.fsDataset_test[var]:
+      #  e_test = max(e_test, self.regressions[var].calc_Field_MSE(inp, field))
+      #  pass
 
-      # plot loss history and save
-      print(f"> Plot {var} loss history")
+      #self.train_residuals[var].append(e_train)
+      #self.test_residuals[var].append(e_test)
+    # 完成一个模型的所有训练周期
 
-      cur_dir = Path(__file__).parent
-      pic_dir = cur_dir.joinpath("Pics")
-      self.regressions[var].saveLossHistory2PNG(pic_dir)
+    # write residuals for this "var"
+    # print("")
+    # print(f"> Plot {var} error history")
+    # self.write_e_hists(var)
 
-      print(f"> Plot {var} regression")
+    # # plot loss history and save
+    # print(f"> Plot {var} loss history")
 
-      ipic = 0
-      for inp, field, _ in self.fsDataset_test[var]:
-        self.regressions[var].save_regression_png(order=ipic, inp=inp, target=field)
-        ipic += 1
+    # cur_dir = Path(__file__).parent
+    # pic_dir = cur_dir.joinpath("Pics")
+    # self.regressions[var].saveLossHistory2PNG(pic_dir)
 
-      # save model parameters
-      model_dir = cur_dir.joinpath("StateDicts")
-      model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
-      torch.save(self.regressions[var].model.state_dict(), model_dicts_name)
+    # print(f"> Plot {var} regression")
+
+    # ipic = 0
+    # for inp, field, _ in self.fsDataset_test[var]:
+    #   self.regressions[var].save_regression_png(order=ipic, inp=inp, target=field)
+    #   ipic += 1
+
+    # save model parameters
+    cur_dir = Path(__file__).parent
+    model_dir = cur_dir.joinpath("StateDicts")
+    model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
+    torch.save(self.regressions[var].model.state_dict(), model_dicts_name)
     # 完成所有模型的训练
+    return self.istep
   # 结束训练过程：train_loop
 
   def write_e_hists(self, var:str):
