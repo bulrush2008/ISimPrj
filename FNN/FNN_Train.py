@@ -123,13 +123,6 @@ class FNN_Train(object):
       * 如果剩余次数大于 "numb"，则迭代次数为 "numb"
     """
 
-    #fields = list(self.train_info.keys())
-
-    # train fields
-
-    print("") # 打印空行，隔开两个模型的训练过程
-    #print(f"> Start training {var} field:")
-
     # train the model
     epoch = self.train_info[var]
     real_numb = min(epoch - self.istep, numb)
