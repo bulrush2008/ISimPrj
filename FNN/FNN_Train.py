@@ -113,7 +113,7 @@ class FNN_Train(object):
     self.istep = 0
   # 结束 __init__
 
-  def train_loop(self, var:str, numb:int) -> int:
+  def train_loop(self, var:str, numb:int) -> (int, int):
     """
     主训练循环，
 
@@ -186,7 +186,7 @@ class FNN_Train(object):
     model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
     torch.save(self.regressions[var].model.state_dict(), model_dicts_name)
     # 完成所有模型的训练
-    return self.istep
+    return (self.istep, self.train_info[var])
   # 结束训练过程：train_loop
 
   def write_e_hists(self, var:str):
