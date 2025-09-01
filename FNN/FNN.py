@@ -29,7 +29,10 @@ if __name__=="__main__":
 
     while (True):
       istep = fnn_train.train_loop("T", 2)
+
+      print(f"##Current step: {istep}")
       if istep >= 11:
+        print("Training Over.")
         break
 
   if Predict:
