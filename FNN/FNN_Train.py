@@ -139,12 +139,10 @@ class FNN_Train(object):
       e_train = 0.0
       for inp, field, _ in self.fsDataset_train[var]:
         e_train = max(e_train, self.regressions[var].calc_Field_MSE(inp, field))
-        pass
 
       e_test = 0.0
       for inp, field, _ in self.fsDataset_test[var]:
         e_test = max(e_test, self.regressions[var].calc_Field_MSE(inp, field))
-        pass
 
       self.train_residuals[var].append(e_train)
       self.test_residuals[var].append(e_test)
@@ -156,12 +154,13 @@ class FNN_Train(object):
       print(f"> Plot {var} error history")
       self.write_e_hists(var)
 
-    # # plot loss history and save
-    # print(f"> Plot {var} loss history")
+    # plot loss history and save
+    if self.istep >= epoch:
+      print(f"> Plot {var} loss history")
 
-    # cur_dir = Path(__file__).parent
-    # pic_dir = cur_dir.joinpath("Pics")
-    # self.regressions[var].saveLossHistory2PNG(pic_dir)
+      cur_dir = Path(__file__).parent
+      pic_dir = cur_dir.joinpath("Pics")
+      self.regressions[var].saveLossHistory2PNG(pic_dir)
 
     # print(f"> Plot {var} regression")
 
