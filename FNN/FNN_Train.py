@@ -135,29 +135,26 @@ class FNN_Train(object):
 
       self.istep += 1
 
-      # we need calculate field error to do estimation for both train and
-      #   test data set
+      # calculate and record residuals
+      e_train = 0.0
+      for inp, field, _ in self.fsDataset_train[var]:
+        e_train = max(e_train, self.regressions[var].calc_Field_MSE(inp, field))
+        pass
 
-      # for the train set
-      #e_train = 0.0
-      #for inp, field, _ in self.fsDataset_train[var]:
-      #  e_train = max(e_train, self.regressions[var].calc_Field_MSE(inp, field))
-      #  pass
+      e_test = 0.0
+      for inp, field, _ in self.fsDataset_test[var]:
+        e_test = max(e_test, self.regressions[var].calc_Field_MSE(inp, field))
+        pass
 
-      # for the test set
-      #e_test = 0.0
-      #for inp, field, _ in self.fsDataset_test[var]:
-      #  e_test = max(e_test, self.regressions[var].calc_Field_MSE(inp, field))
-      #  pass
+      self.train_residuals[var].append(e_train)
+      self.test_residuals[var].append(e_test)
+    # 完成了此模型的此次阶段训练任务：训练次数=min{numb, epoch-istep}
 
-      #self.train_residuals[var].append(e_train)
-      #self.test_residuals[var].append(e_test)
-    # 完成一个模型的所有训练周期
-
-    # write residuals for this "var"
-    # print("")
-    # print(f"> Plot {var} error history")
-    # self.write_e_hists(var)
+    if self.istep >= epoch:
+      # write residuals for this "var"
+      print("")
+      print(f"> Plot {var} error history")
+      self.write_e_hists(var)
 
     # # plot loss history and save
     # print(f"> Plot {var} loss history")
