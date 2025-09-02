@@ -148,13 +148,13 @@ class FNN_Train(object):
       self.test_residuals[var].append(e_test)
     # 完成了此模型的此次阶段训练任务：训练次数=min{numb, epoch-istep}
 
+    # plot residuals of "var"
     if self.istep >= epoch:
-      # write residuals for this "var"
       print("")
       print(f"> Plot {var} error history")
       self.write_e_hists(var)
 
-    # plot loss history and save
+    # plot loss history
     if self.istep >= epoch:
       print(f"> Plot {var} loss history")
 
@@ -162,12 +162,14 @@ class FNN_Train(object):
       pic_dir = cur_dir.joinpath("Pics")
       self.regressions[var].saveLossHistory2PNG(pic_dir)
 
-    # print(f"> Plot {var} regression")
+    # plot regression graph
+    if self.istep >= epoch:
+      print(f"> Plot {var} regression")
 
-    # ipic = 0
-    # for inp, field, _ in self.fsDataset_test[var]:
-    #   self.regressions[var].save_regression_png(order=ipic, inp=inp, target=field)
-    #   ipic += 1
+      ipic = 0
+      for inp, field, _ in self.fsDataset_test[var]:
+        self.regressions[var].save_regression_png(order=ipic, inp=inp, target=field)
+        ipic += 1
 
     # save model parameters
     cur_dir = Path(__file__).parent
@@ -175,6 +177,7 @@ class FNN_Train(object):
     model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
     torch.save(self.regressions[var].model.state_dict(), model_dicts_name)
     # 完成所有模型的训练
+
     return (self.istep, self.train_info[var])
   # 结束训练过程：train_loop
 
