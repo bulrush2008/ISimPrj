@@ -105,9 +105,9 @@ class FNN_Train(object):
 
       if not var_dict_path.exists():
         var_dict_path = None
-        print(f"> Train {var} from ZERO")
+        print(f"> train {var} from ZERO")
       else:
-        print(f"> Train {var} from dict_{var}.pth")
+        print(f"> train {var} from dict_{var}.pth")
 
 
       # 实例化回归网络类
@@ -119,21 +119,17 @@ class FNN_Train(object):
     print("")
   # 结束 __init__
 
-  def train_loop(self, var:str, numb:int) -> tuple[int, int]:
+  def train_loop(self, var:str, iteration_number:int) -> str:
     """
     主训练循环，
 
-    - 对变量 "var" 做训练迭代，迭代次数为 "numb"
-    - 每次检查是否超过最大迭代次数(self.train_info['var'])，以及剩余迭代次数
-      * 如果剩余次数小于 "numb"，则按照剩余次数进行训练
-      * 如果剩余次数大于 "numb"，则迭代次数为 "numb"
+    - 对变量 "var" 做训练迭代，迭代次数为 "iteration_number"
     """
 
     # train the model
     epoch = self.train_info[var]
-    real_numb = min(epoch - self.istep[var], numb)
 
-    for i in range(real_numb):
+    for i in range(iteration_number):
       print(f"> {var}: epoch {self.istep[var]+1}/{epoch}")
 
       for inp, label, _ in self.fsDataset_train[var]:
@@ -152,17 +148,17 @@ class FNN_Train(object):
 
       self.train_residuals[var].append(e_train)
       self.test_residuals[var].append(e_test)
-    # 完成了此模型的此次阶段训练任务：训练次数=min{numb, epoch-istep[var]}
+    # 完成了此模型的此次阶段训练任务
 
     # plot residuals of "var"
     if self.istep[var] >= epoch:
       print("")
-      print(f"> Plot {var} error history")
+      print(f"> plot {var} error history")
       self.plot_residual(var)
 
     # plot loss history
     if self.istep[var] >= epoch:
-      print(f"> Plot {var} loss history")
+      print(f"> plot {var} loss history")
 
       cur_dir = Path(__file__).parent
       pic_dir = cur_dir.joinpath("Pics")
@@ -170,7 +166,7 @@ class FNN_Train(object):
 
     # plot regression graph
     if self.istep[var] >= epoch:
-      print(f"> Plot {var} regression")
+      print(f"> plot {var} regression")
 
       ipic = 0
       for inp, field, _ in self.fsDataset_test[var]:
@@ -183,8 +179,10 @@ class FNN_Train(object):
     model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
     torch.save(self.regressions[var].model.state_dict(), model_dicts_name)
 
-    return (self.istep[var], self.train_info[var])
-  # 结束训练过程：train_loop
+    return_msgs = (f"trained {var} with {iteration_number} iterations, "
+                   f"iterating state: {self.istep[var]}/{epoch}")
+    return return_msgs
+  # 结束训练函数：train_loop
 
   def plot_residual(self, var:str):
     """

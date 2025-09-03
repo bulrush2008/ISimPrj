@@ -30,16 +30,25 @@ if __name__=="__main__":
     print("---------- Train ----------")
     fnn_train = FNN_Train()
 
+    chunk_iter = 2
+
     for var, epoch in fnn_train.train_info.items():
-      chunk_iter = 2
-      while True:
-        istep, epoch = fnn_train.train_loop(var, chunk_iter)
+      N = epoch
+      n = chunk_iter
 
-        print(f"> Current step: {istep}/{epoch}")
+      # 分割训练步骤
+      steps = [n]*(N//n) + ([N%n] if N%n else [])
+      for step in steps:
+        messages = fnn_train.train_loop(var, step)
+        print("> "+messages)
 
-        if istep >= epoch:
-          print(f"{var} training over.\n")
-          break
+      print("") # 空行
+
+        # print(f"> Current step: {istep}/{epoch}")
+
+        # if istep >= epoch:
+        #   print(f"{var} training over.\n")
+        #   break
 
   if Predict:
     print("---------- Eval  ----------")
