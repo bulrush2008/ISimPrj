@@ -235,7 +235,7 @@ class Regression(nn.Module):
     #fig.savefig(work_dir.joinpath(f"Pics/regression_{var}-{order:03d}-{current_time}.png"))
 
     # 不再在文件名中打印当时时间戳
-    fig.savefig(work_dir.joinpath(f"Pics/regression_{var}_{order:03d}.png"))
+    fig.savefig(work_dir.joinpath(f"Pics/{var}_regression_{order:03d}.png"))
     plt.close()
     # end function plot_regression()
   # end class Regression
