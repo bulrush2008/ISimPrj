@@ -152,7 +152,7 @@ class Regression(nn.Module):
     h5.close()
     pass
 
-  def plot_lossHistory(self, outDir:Path)->None:
+  def plot_loss_history(self, outDir:Path)->None:
     """
     打印损失函数
 
@@ -170,9 +170,9 @@ class Regression(nn.Module):
     #outFile = outDir.joinpath(f"lossHist_{var}-{current_time}.png")
 
     # 文件名中不再含有当时的时间戳
-    outFile = outDir.joinpath(f"loss_history_{var}.png")
+    outFile = outDir.joinpath(f"{var}_loss_history.png")
     ax.figure.savefig(outFile)
-    # 函数 plot_lossHistory 结束
+    # 函数 plot_loss_history 结束
 
   def calculate_field_error(self, inp, target) -> np.float64:
     """

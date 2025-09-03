@@ -160,7 +160,7 @@ class FNN_Train(object):
 
       cur_dir = Path(__file__).parent
       pic_dir = cur_dir.joinpath("Pics")
-      self.regressions[var].plot_lossHistory(pic_dir)
+      self.regressions[var].plot_loss_history(pic_dir)
 
     # plot regression graph
     if self.istep >= epoch:
