@@ -7,14 +7,11 @@ Xia, S      2025.8.28   Simpop.cn   v6.x
 """
 
 # standard libs
-import sys
 import json
 
 from pathlib import Path
-from datetime import datetime
 
 # third-party libs
-import h5py
 import torch
 import matplotlib.pyplot as plt
 
@@ -82,10 +79,12 @@ class FNN_Train(object):
     cur_dir = Path(__file__).parent
 
     pic_dir = cur_dir.joinpath("Pics")
-    if not pic_dir.exists(): pic_dir.mkdir(parents=True)
+    if not pic_dir.exists():
+      pic_dir.mkdir(parents=True)
 
     model_dir = cur_dir.joinpath("StateDicts")
-    if not model_dir.exists(): model_dir.mkdir(parents=True)
+    if not model_dir.exists():
+      model_dir.mkdir(parents=True)
 
     print(f"> We will train {self.train_info}\n")
 

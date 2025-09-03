@@ -17,19 +17,20 @@ if __name__=="__main__":
   args = sys.argv
   num_args = len(args)
 
-  Train = False; Predict= False
+  Train   = False
+  Predict = False
 
   for arg in args:
-    if arg == "--train"  : Train   = True
-    if arg == "--predict": Predict = True
+    if arg == "--train":
+      Train   = True
+    if arg == "--predict":
+      Predict = True
 
   if Train:
     print("---------- Train ----------")
     fnn_train = FNN_Train()
 
     for var, epoch in fnn_train.train_info.items():
-      #print(f"{var}"); sys.exit("debug")
-
       for i in range(epoch):
         istep, epoch = fnn_train.train_loop(var, 1)
 

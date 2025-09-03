@@ -1,7 +1,6 @@
 
 # standard libs
 import math
-from datetime import datetime
 from pathlib import Path
 
 # third-party libs
@@ -185,7 +184,8 @@ class Regression(nn.Module):
     output = self.forward(inp).detach().numpy()
 
     # a/b both of type torch.FloatTensor
-    a = output; b = target.detach().numpy()
+    a = output
+    b = target.detach().numpy()
     #e = sum(abs(a-b))
     e = max(abs(a-b))
 
