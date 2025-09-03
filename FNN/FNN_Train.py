@@ -138,11 +138,11 @@ class FNN_Train(object):
       # calculate and record residuals
       e_train = 0.0
       for inp, field, _ in self.fsDataset_train[var]:
-        e_train = max(e_train, self.regressions[var].calc_Field_MSE(inp, field))
+        e_train = max(e_train, self.regressions[var].calculate_field_error(inp, field))
 
       e_test = 0.0
       for inp, field, _ in self.fsDataset_test[var]:
-        e_test = max(e_test, self.regressions[var].calc_Field_MSE(inp, field))
+        e_test = max(e_test, self.regressions[var].calculate_field_error(inp, field))
 
       self.train_residuals[var].append(e_train)
       self.test_residuals[var].append(e_test)

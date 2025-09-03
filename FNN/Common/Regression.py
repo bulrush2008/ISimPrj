@@ -174,7 +174,7 @@ class Regression(nn.Module):
     ax.figure.savefig(outFile)
     # 函数 plot_lossHistory 结束
 
-  def calc_Field_MSE(self, inp, target)->np.float64:
+  def calculate_field_error(self, inp, target) -> np.float64:
     """
     Calculate error each case between prediction and real.
     Function's two input parameters are same with 'self.train(...)'
