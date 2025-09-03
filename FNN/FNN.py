@@ -31,10 +31,15 @@ if __name__=="__main__":
     fnn_train = FNN_Train()
 
     for var, epoch in fnn_train.train_info.items():
-      for i in range(epoch):
-        istep, epoch = fnn_train.train_loop(var, 1)
+      chunk_iter = 2
+      while True:
+        istep, epoch = fnn_train.train_loop(var, chunk_iter)
 
-        print(f"##Current step: {istep}/{epoch}")
+        print(f"> Current step: {istep}/{epoch}")
+
+        if istep >= epoch:
+          print(f"{var} training over.\n")
+          break
 
     # while (True):
     #   istep, epoch = fnn_train.train_loop("T", 1)

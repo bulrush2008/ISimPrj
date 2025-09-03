@@ -91,8 +91,9 @@ class FNN_Train(object):
     self.fsDataset_train = {}
     self.fsDataset_test = {}
 
+    # 回归类模型字典
     self.regressions = {}
-    # 迭代计数器
+    # 迭代计数器字典
     self.istep = {}
 
     # 初始化应用对象，类似于先创建全局变量
@@ -108,13 +109,14 @@ class FNN_Train(object):
       else:
         print(f"> Train {var} from dict_{var}.pth")
 
+
       # 实例化回归网络类
       self.regressions[var] = Regression(var, var_dict_path)
 
-      # 迭代计数器
+      # 迭代计数器初始化
       self.istep[var] = 0
     # 结束for-loop
-
+    print("")
   # 结束 __init__
 
   def train_loop(self, var:str, numb:int) -> tuple[int, int]:
