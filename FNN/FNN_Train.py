@@ -113,7 +113,7 @@ class FNN_Train(object):
     self.istep = 0
   # 结束 __init__
 
-  def train_loop(self, var:str, numb:int) -> (int, int):
+  def train_loop(self, var:str, numb:int) -> tuple[int, int]:
     """
     主训练循环，
 
