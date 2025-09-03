@@ -101,13 +101,13 @@ class FNN_Train(object):
       self.fsDataset_train[var] = FSimDataset(self.h5file_path, self.train_set, var)
       self.fsDataset_test[var]  = FSimDataset(self.h5file_path, self.test_set,  var)
 
-      var_dict_path = cur_dir.joinpath(f"StateDicts/dict_{var}.pth")
+      var_dict_path = cur_dir.joinpath(f"StateDicts/{var}_dict.pth")
 
       if not var_dict_path.exists():
         var_dict_path = None
         print(f"> train {var} from ZERO")
       else:
-        print(f"> train {var} from dict_{var}.pth")
+        print(f"> train {var} from {var}_dict.pth")
 
 
       # 实例化回归网络类
@@ -176,7 +176,7 @@ class FNN_Train(object):
     # save model parameters
     cur_dir = Path(__file__).parent
     model_dir = cur_dir.joinpath("StateDicts")
-    model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
+    model_dicts_name = model_dir.joinpath(f"{var}_dict.pth")
     torch.save(self.regressions[var].model.state_dict(), model_dicts_name)
 
     return_msgs = (f"trained {var} with {iteration_number} iterations, "
