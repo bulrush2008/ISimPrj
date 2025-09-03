@@ -41,14 +41,6 @@ if __name__=="__main__":
           print(f"{var} training over.\n")
           break
 
-    # while (True):
-    #   istep, epoch = fnn_train.train_loop("T", 1)
-
-    #   print(f"##Current step: {istep}/{epoch}")
-    #   if istep >= epoch:
-    #     print("Training Over.")
-    #     break
-
   if Predict:
     print("---------- Eval  ----------")
     fnn_eval = FNN_Eval()
