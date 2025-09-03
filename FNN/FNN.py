@@ -27,13 +27,21 @@ if __name__=="__main__":
     print("---------- Train ----------")
     fnn_train = FNN_Train()
 
-    while (True):
-      istep, epoch = fnn_train.train_loop("T", 1)
+    for var, epoch in fnn_train.train_info.items():
+      #print(f"{var}"); sys.exit("debug")
 
-      print(f"##Current step: {istep}/{epoch}")
-      if istep >= epoch:
-        print("Training Over.")
-        break
+      for i in range(epoch):
+        istep, epoch = fnn_train.train_loop(var, 1)
+
+        print(f"##Current step: {istep}/{epoch}")
+
+    # while (True):
+    #   istep, epoch = fnn_train.train_loop("T", 1)
+
+    #   print(f"##Current step: {istep}/{epoch}")
+    #   if istep >= epoch:
+    #     print("Training Over.")
+    #     break
 
   if Predict:
     print("---------- Eval  ----------")

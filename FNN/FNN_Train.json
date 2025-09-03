@@ -1,6 +1,7 @@
 {
   "model": "FNN_Train",
   "vars": {
+    "P":1,
     "T":1
   },
   "test_ratio": 0.2,

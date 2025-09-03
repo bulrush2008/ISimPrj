@@ -93,6 +93,9 @@ class FNN_Train(object):
     self.fsDataset_test = {}
 
     self.regressions = {}
+    # 迭代计数器
+    self.istep = {}
+
     # 初始化应用对象，类似于先创建全局变量
     for var in self.train_info.keys():
       self.fsDataset_train[var] = FSimDataset(self.h5file_path, self.train_set, var)
@@ -106,11 +109,13 @@ class FNN_Train(object):
       else:
         print(f"> Train {var} from dict_{var}.pth")
 
+      # 实例化回归网络类
       self.regressions[var] = Regression(var, var_dict_path)
+
+      # 迭代计数器
+      self.istep[var] = 0
     # 结束for-loop
 
-    # 迭代计数器
-    self.istep = 0
   # 结束 __init__
 
   def train_loop(self, var:str, numb:int) -> tuple[int, int]:
@@ -125,15 +130,15 @@ class FNN_Train(object):
 
     # train the model
     epoch = self.train_info[var]
-    real_numb = min(epoch - self.istep, numb)
+    real_numb = min(epoch - self.istep[var], numb)
 
     for i in range(real_numb):
-      print(f"> {var}: epoch {self.istep+1}/{epoch}")
+      print(f"> {var}: epoch {self.istep[var]+1}/{epoch}")
 
       for inp, label, _ in self.fsDataset_train[var]:
         self.regressions[var].train(inp, label)
 
-      self.istep += 1
+      self.istep[var] += 1
 
       # calculate and record residuals
       e_train = 0.0
@@ -146,16 +151,16 @@ class FNN_Train(object):
 
       self.train_residuals[var].append(e_train)
       self.test_residuals[var].append(e_test)
-    # 完成了此模型的此次阶段训练任务：训练次数=min{numb, epoch-istep}
+    # 完成了此模型的此次阶段训练任务：训练次数=min{numb, epoch-istep[var]}
 
     # plot residuals of "var"
-    if self.istep >= epoch:
+    if self.istep[var] >= epoch:
       print("")
       print(f"> Plot {var} error history")
       self.plot_residual(var)
 
     # plot loss history
-    if self.istep >= epoch:
+    if self.istep[var] >= epoch:
       print(f"> Plot {var} loss history")
 
       cur_dir = Path(__file__).parent
@@ -163,7 +168,7 @@ class FNN_Train(object):
       self.regressions[var].plot_loss_history(pic_dir)
 
     # plot regression graph
-    if self.istep >= epoch:
+    if self.istep[var] >= epoch:
       print(f"> Plot {var} regression")
 
       ipic = 0
@@ -177,7 +182,7 @@ class FNN_Train(object):
     model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
     torch.save(self.regressions[var].model.state_dict(), model_dicts_name)
 
-    return (self.istep, self.train_info[var])
+    return (self.istep[var], self.train_info[var])
   # 结束训练过程：train_loop
 
   def plot_residual(self, var:str):
