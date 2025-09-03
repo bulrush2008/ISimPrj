@@ -168,7 +168,7 @@ class FNN_Train(object):
 
       ipic = 0
       for inp, field, _ in self.fsDataset_test[var]:
-        self.regressions[var].save_regression_png(order=ipic, inp=inp, target=field)
+        self.regressions[var].plot_regression(order=ipic, inp=inp, target=field)
         ipic += 1
 
     # save model parameters

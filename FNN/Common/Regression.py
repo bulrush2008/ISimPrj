@@ -191,7 +191,7 @@ class Regression(nn.Module):
 
     return e
 
-  def save_regression_png(self, order, inp, target):
+  def plot_regression(self, order, inp, target):
     """
     绘制回归图，每个图点的
     - 横坐标: CFD 仿真结果
@@ -229,13 +229,16 @@ class Regression(nn.Module):
     ax.legend()
 
     var = self.varName
-    current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
+    work_dir = Path(__file__).parent.parent
 
-    cur_dir = Path(__file__).parent.parent
-    fig.savefig(cur_dir.joinpath(f"Pics/regression_{var}-{order:03d}-{current_time}.png"))
+    #current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
+    #fig.savefig(work_dir.joinpath(f"Pics/regression_{var}-{order:03d}-{current_time}.png"))
+
+    # 不再在文件名中打印当时时间戳
+    fig.savefig(work_dir.joinpath(f"Pics/regression_{var}_{order:03d}.png"))
     plt.close()
-    pass
-  pass  # end class Regression
+    # end function plot_regression()
+  # end class Regression
 
 
 if __name__=="__main__":
