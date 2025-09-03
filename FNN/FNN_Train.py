@@ -210,6 +210,6 @@ class FNN_Train(object):
     #fig.savefig(cur_dir.joinpath(f"Pics/resLinf_{var}-{current_time}.png"), dpi=200)
 
     # 图片名称不再显示时间戳
-    fig.savefig(cur_dir.joinpath(f"Pics/residual_{var}.png"), dpi=100)
+    fig.savefig(cur_dir.joinpath(f"Pics/{var}_residual.png"), dpi=100)
   # 结束函数：plot_residual
 # end class
