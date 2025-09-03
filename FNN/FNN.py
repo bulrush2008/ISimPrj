@@ -28,7 +28,7 @@ if __name__=="__main__":
     fnn_train = FNN_Train()
 
     while (True):
-      istep, epoch = fnn_train.train_loop("T", 2)
+      istep, epoch = fnn_train.train_loop("T", 1)
 
       print(f"##Current step: {istep}/{epoch}")
       if istep >= epoch:

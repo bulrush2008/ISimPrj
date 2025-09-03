@@ -205,9 +205,12 @@ class FNN_Train(object):
 
     ax.legend()
 
-    current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
-
     cur_dir = Path(__file__).parent
-    fig.savefig(cur_dir.joinpath(f"Pics/resLinf_{var}-{current_time}.png"), dpi=200)
+
+    #current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
+    #fig.savefig(cur_dir.joinpath(f"Pics/resLinf_{var}-{current_time}.png"), dpi=200)
+
+    # 图片名称不再显示时间戳
+    fig.savefig(cur_dir.joinpath(f"Pics/residual_{var}.png"), dpi=100)
   # 结束函数：write_e_hists
 # end class
