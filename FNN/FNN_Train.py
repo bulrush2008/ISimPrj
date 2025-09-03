@@ -160,7 +160,7 @@ class FNN_Train(object):
 
       cur_dir = Path(__file__).parent
       pic_dir = cur_dir.joinpath("Pics")
-      self.regressions[var].saveLossHistory2PNG(pic_dir)
+      self.regressions[var].plot_lossHistory(pic_dir)
 
     # plot regression graph
     if self.istep >= epoch:
@@ -176,7 +176,6 @@ class FNN_Train(object):
     model_dir = cur_dir.joinpath("StateDicts")
     model_dicts_name = model_dir.joinpath(f"dict_{var}.pth")
     torch.save(self.regressions[var].model.state_dict(), model_dicts_name)
-    # 完成所有模型的训练
 
     return (self.istep, self.train_info[var])
   # 结束训练过程：train_loop
