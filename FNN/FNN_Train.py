@@ -44,7 +44,7 @@ class FNN_Train(object):
 
     # 2 methods:
     self.train_loop()
-    self.write_e_hists()
+    self.plot_residual()
     """
 
     #== 读入 .json 设置文件
@@ -152,7 +152,7 @@ class FNN_Train(object):
     if self.istep >= epoch:
       print("")
       print(f"> Plot {var} error history")
-      self.write_e_hists(var)
+      self.plot_residual(var)
 
     # plot loss history
     if self.istep >= epoch:
@@ -181,7 +181,7 @@ class FNN_Train(object):
     return (self.istep, self.train_info[var])
   # 结束训练过程：train_loop
 
-  def write_e_hists(self, var:str):
+  def plot_residual(self, var:str):
     """
     plot error history to pics
 
@@ -212,5 +212,5 @@ class FNN_Train(object):
 
     # 图片名称不再显示时间戳
     fig.savefig(cur_dir.joinpath(f"Pics/residual_{var}.png"), dpi=100)
-  # 结束函数：write_e_hists
+  # 结束函数：plot_residual
 # end class
