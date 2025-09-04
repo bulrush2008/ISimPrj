@@ -58,6 +58,8 @@ class FNN_train(object):
     ratioTest = data["test_ratio"]  # e.g. 0.2
     caseSet = CaseSet(ratio=ratioTest)
 
+    self.train_set: List[str]
+    self.test_set:  List[str]
     self.train_set, self.test_set = caseSet.splitSet()
 
     # 记录数据集位置
@@ -91,13 +93,13 @@ class FNN_train(object):
 
     print(f"> We will train {self.train_info}\n")
 
-    self.fsDataset_train = {}
-    self.fsDataset_test = {}
+    self.fsDataset_train: Dict[str, FSimDataset] = {}
+    self.fsDataset_test: Dict[str, FSimDataset] = {}
 
     # 回归类模型字典
-    self.regressions = {}
+    self.regressions: Dict[str, Regression] = {}
     # 迭代计数器字典
-    self.istep = {}
+    self.istep: Dict[str, int] = {}
 
     # 初始化应用对象，类似于先创建全局变量
     for var in self.train_info.keys():

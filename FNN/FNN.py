@@ -30,7 +30,7 @@ if __name__=="__main__":
     print("---------- Train ----------")
     fnn_train = FNN_train()
 
-    chunk_iter = 3
+    chunk_iter = 1
     print(f"> chunk_iter: {chunk_iter}")
 
     for var, epoch in fnn_train.train_info.items():
