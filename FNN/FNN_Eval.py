@@ -66,6 +66,12 @@ class FNN_eval(object):
   # end __init__
 
   def predict( self ):
+    """预测，并保存到数据库
+    """
+    eval_dir = Path(__file__).parent.parent.joinpath("Eval")
+    if not eval_dir.exists():
+      eval_dir.mkdir(parents=True)
+
     # create a new empty h5 file to save the prediced data
     outH5Path = Path(self.eval_file)  # now called "./fnn.h5"
     h5 = h5py.File(outH5Path, 'w')
