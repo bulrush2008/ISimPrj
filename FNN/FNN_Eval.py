@@ -20,19 +20,16 @@ from Common.FSimDataset import FSimDataset
 from Common.Regression  import Regression
 
 class FNN_Eval(object):
-#===============================================================================
   """
   - 应用任务类
   - 调用方法类和数据类，实现特定的应用任务
   """
   def __init__( self ):
-  #-----------------------------------------------------------------------------
-    # split the cases into train and test sets
-    # now: 125 = 100 + 25
+    """split the cases into train and test sets
+    """
     cur_dir = Path(__file__).parent
     with open(cur_dir.joinpath("FNN_Eval.json"), 'r') as inp:
       data = json.load(inp)
-      pass
 
     ratioTest = data["test_ratio"]  # e.g. 0.2
     caseSet = CaseSet(ratio=ratioTest)
@@ -66,10 +63,9 @@ class FNN_Eval(object):
     inp[2] = (inp[2] - emin) / (emax-emin)
 
     self.eval_inp = inp
-    pass  # end __init__
+  # end __init__
 
   def predict( self ):
-  #-----------------------------------------------------------------------------
     # create a new empty h5 file to save the prediced data
     outH5Path = Path(self.eval_file)  # now called "./fnn.h5"
     h5 = h5py.File(outH5Path, 'w')
@@ -117,9 +113,8 @@ class FNN_Eval(object):
         R.write2HDF(inp, outH5Path, coords=coords)
       else:
         R.write2HDF(inp, outH5Path, coords=None)
-        pass
 
       ifield += 1
-      pass  # end for self.predict
-    pass  # end self.predict in class
-  pass
+    # end for-loop
+  # end self.predict method
+# end FNN_Eval
