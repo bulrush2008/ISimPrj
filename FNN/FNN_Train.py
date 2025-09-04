@@ -8,7 +8,7 @@ Xia, S      2025.8.28   Simpop.cn   v6.x
 
 # standard libs
 import json
-from typing import Dict, List, Union
+from typing import Dict, List, Any
 
 from pathlib import Path
 
@@ -128,7 +128,7 @@ class FNN_train(object):
     # train the model
     epoch = self.train_info[var]
 
-    for i in range(iteration_number):
+    for _ in range(iteration_number):
       print(f"> {var}: epoch {self.istep[var]+1}/{epoch}")
 
       for inp, label, _ in self.fsDataset_train[var]:
