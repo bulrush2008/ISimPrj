@@ -81,10 +81,10 @@ class Regression(nn.Module):
       pass
     pass
 
-  def forward(self, inputs):
+  def forward(self, inputs:np.ndarray) -> torch.FloatTensor:
     return self.model(inputs)
 
-  def train(self, inputs, targets):
+  def train(self, inputs:np.ndarray, targets:torch.FloatTensor)->None:
     """
     - 神经网络，根据输入和标签，进行训练
 

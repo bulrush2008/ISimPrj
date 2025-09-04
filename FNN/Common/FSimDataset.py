@@ -1,7 +1,7 @@
 
 #from torch.utils.data import Dataset
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, Dict, List
 
 import torch
 import h5py
@@ -43,7 +43,7 @@ class FSimDataset(object):
   #-----------------------------------------------------------------------------
     return self.numCases
 
-  def __getitem__(self, idx:int) -> Tuple[np.ndarray, torch.FloatTensor, dict[str, list[float]]]:
+  def __getitem__(self, idx:int) -> Tuple[np.ndarray, torch.FloatTensor, Dict[str, List[float]]]:
   #-----------------------------------------------------------------------------
     """
     return the input params and field
