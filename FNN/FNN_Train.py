@@ -8,6 +8,7 @@ Xia, S      2025.8.28   Simpop.cn   v6.x
 
 # standard libs
 import json
+from typing import Dict, List
 
 from pathlib import Path
 
@@ -70,8 +71,8 @@ class FNN_train(object):
     self.train_info = data["vars"]
 
     # 定义存储误差记录的列表变量
-    self.train_residuals = {}
-    self.test_residuals = {}
+    self.train_residuals: Dict[str, List[float]] = {}
+    self.test_residuals: Dict[str, List[float]] = {}
 
     for var in self.train_info.keys():
       self.train_residuals[var] = []
