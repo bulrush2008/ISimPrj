@@ -1,4 +1,5 @@
 
+# pyright: reportMissingTypeStubs=false
 # standard libs
 import math
 from pathlib import Path
@@ -19,7 +20,7 @@ class Regression(nn.Module):
   - 方法类
   """
   # initialize PyTorch pararent class
-  def __init__(self, varName:str, dictPath:Path):
+  def __init__(self, varName:str, dictPath:Path) -> None:
     super().__init__()
 
     if varName not in ["P", "U", "V", "W", "T"]:
