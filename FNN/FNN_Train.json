@@ -1,5 +1,5 @@
 {
-  "model": "FNN_Train",
+  "model": "FNN_train",
   "vars": {
     "T":1
   },

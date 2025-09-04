@@ -8,8 +8,8 @@ Xia, S      2025.8.22   Simpop.cn   v6.x
 
 import argparse
 
-from FNN_Train import FNN_train
-from FNN_Eval  import FNN_eval
+from FNN_train import FNN_train
+from FNN_eval  import FNN_eval
 
 if __name__=="__main__":
   """

@@ -1,5 +1,5 @@
 {
-  "model": "FNN_Eval",
+  "model": "FNN_eval",
   "train_data": "FSCases/FSHDF/MatrixData.h5",
   "test_ratio": 0.2,
   "eval_inp": [478.15,	1.84143565,	291666.6667],
