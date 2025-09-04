@@ -54,7 +54,11 @@ class CaseSet(object):
   def _calcBlockInfo(self):
   #-----------------------------------------------------------------------------
     # 用于计算每个 block 的网格/变量数目
-    calcPtsNum = lambda l: (l[1]-l[0]+1) * (l[3]-l[2]+1) * (l[5]-l[4]+1)
+    def calcPtsNum( dims:list ) -> int:
+      pts_x = dims[1] - dims[0] + 1
+      pts_y = dims[3] - dims[2] + 1
+      pts_z = dims[5] - dims[4] + 1
+      return pts_x * pts_y * pts_z
 
     # block 0
     ptsB0 = [2,27,2,52,2,12]
