@@ -8,7 +8,7 @@ Xia, S      2025.8.28   Simpop.cn   v6.x
 
 # standard libs
 import json
-from typing import Dict, List, Any
+from typing import Dict, List
 
 from pathlib import Path
 
@@ -183,29 +183,29 @@ class FNN_train(object):
     return return_msgs
   # 结束训练函数：train_loop
 
-  def plot_residual(self, var:str):
+  def plot_residual(self, var:str) -> None:
     """
     plot error history to pics
 
     - var : string 变量，用于命名
     """
 
-    fig, ax = plt.subplots(1,1)
+    fig, ax = plt.subplots(1,1) # type: ignore
 
     y1 = self.train_residuals[var]
     y2 = self.test_residuals[var]
 
     x = list(range(1,len(y1)+1))
 
-    ax.plot(x, y1, label="Train")
-    ax.plot(x, y2, label="Test")
+    ax.plot(x, y1, label="Train") # type: ignore
+    ax.plot(x, y2, label="Test") # type: ignore
 
     # log-y
-    ax.set_yscale("log")
-    ax.set_xlabel("Epochs")
-    ax.set_ylabel("Linf norm")
+    ax.set_yscale("log") # type: ignore
+    ax.set_xlabel("Epochs") # type: ignore
+    ax.set_ylabel("Linf norm") # type: ignore
 
-    ax.legend()
+    ax.legend() # type: ignore
 
     cur_dir = Path(__file__).parent
 
@@ -213,6 +213,6 @@ class FNN_train(object):
     #fig.savefig(cur_dir.joinpath(f"Pics/resLinf_{var}-{current_time}.png"), dpi=200)
 
     # 图片名称不再显示时间戳
-    fig.savefig(cur_dir.joinpath(f"Pics/{var}_residual.png"), dpi=100)
+    fig.savefig(cur_dir.joinpath(f"Pics/{var}_residual.png"), dpi=100)  # type: ignore
   # 结束函数：plot_residual
 # end class
