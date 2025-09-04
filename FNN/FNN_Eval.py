@@ -8,7 +8,6 @@ This is main function to call:
 @author     @data       @aff        @version
 Xia, S      2025.2.13   Simpop.cn   v6.x
 """
-import sys
 import json
 
 import h5py
@@ -90,13 +89,13 @@ class FNN_Eval(object):
       if not stateDictsPath.exists():
         stateDictsPath.mkdir(parents=True)
 
-      var_dict_path = stateDictsPath.joinpath(f"dict_{var}.pth")
+      var_dict_path = stateDictsPath.joinpath(f"{var}_dict.pth")
 
       if not var_dict_path.exists():
         var_dict_path = None
-        print(f">>> Predicting Field {var}: TRIVAL!")
+        print(f"> predicting field {var}: NULL!")
       else:
-        print(f">>> Predicting Field {var}!")
+        print(f"> predicting field {var}!")
         pass
 
       # create a Regression obj as model to do predicting
