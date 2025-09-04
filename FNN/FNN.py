@@ -12,25 +12,21 @@ from FNN_Train import FNN_train
 from FNN_Eval  import FNN_Eval
 
 if __name__=="__main__":
-  """主函数
   """
-  itrain   = False
-  ipredict = False
+  解析命令参数，根据具体命令参数，选择训练或预测模式
+  """
 
+  # 创建解析器对象
   parser = argparse.ArgumentParser(description="训练 or 预测，随你挑")
+
   # 把 --train 和 --predict 都设成「布尔开关」
   parser.add_argument("--train",   action="store_true", help="启动训练")
   parser.add_argument("--predict", action="store_true", help="启动预测")
 
+  # 解析命令行参数
   args = parser.parse_args()
 
   if args.train:
-    itrain = True
-
-  if args.predict:
-    ipredict = True
-
-  if itrain:
     print("---------- Train ----------")
     fnn_train = FNN_train()
 
@@ -48,7 +44,7 @@ if __name__=="__main__":
 
       print("") # 空行
 
-  if ipredict:
+  if args.predict:
     print("---------- Eval  ----------")
     fnn_eval = FNN_Eval()
     fnn_eval.predict()
