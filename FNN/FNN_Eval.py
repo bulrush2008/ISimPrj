@@ -34,7 +34,7 @@ class FNN_eval(object):
     ratioTest = data["test_ratio"]  # e.g. 0.2
     caseSet = CaseSet(ratio=ratioTest)
 
-    trnSet_, tstSet = caseSet.splitSet()
+    _, tstSet = caseSet.splitSet()
 
     self.tstSet = tstSet
 
