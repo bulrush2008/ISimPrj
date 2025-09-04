@@ -19,7 +19,7 @@ class Regression(nn.Module):
   - 方法类
   """
   # initialize PyTorch pararent class
-  def __init__(self, varName:str, dictPath:Path=None):
+  def __init__(self, varName:str, dictPath:Path):
     super().__init__()
 
     if varName not in ["P", "U", "V", "W", "T"]:
@@ -45,12 +45,13 @@ class Regression(nn.Module):
       nn.Identity()
     )
 
-    if dictPath is not None:
+    if dictPath.exists():
       self.model.load_state_dict(torch.load(dictPath))
+      print(f"> train {varName} from {varName}_dict.pth")
     else:
       # initialize weights，using He Kaiming method now
       self._initialize_weights()
-      pass
+      print(f"> train {varName} from ZERO")
 
     # regressive problem, MSE is proper
     self.loss_function = nn.MSELoss()

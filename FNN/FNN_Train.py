@@ -8,7 +8,7 @@ Xia, S      2025.8.28   Simpop.cn   v6.x
 
 # standard libs
 import json
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from pathlib import Path
 
@@ -106,14 +106,8 @@ class FNN_train(object):
       self.fsDataset_train[var] = FSimDataset(self.h5file_path, self.train_set, var)
       self.fsDataset_test[var]  = FSimDataset(self.h5file_path, self.test_set,  var)
 
-      var_dict_path = cur_dir.joinpath(f"StateDicts/{var}_dict.pth")
-
-      if not var_dict_path.exists():
-        var_dict_path = None
-        print(f"> train {var} from ZERO")
-      else:
-        print(f"> train {var} from {var}_dict.pth")
-
+      # 模型参数文件的路径
+      var_dict_path: Path = cur_dir.joinpath(f"StateDicts/{var}_dict.pth")
 
       # 实例化回归网络类
       self.regressions[var] = Regression(var, var_dict_path)

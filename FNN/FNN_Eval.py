@@ -91,16 +91,8 @@ class FNN_eval(object):
       if not stateDictsPath.exists():
         stateDictsPath.mkdir(parents=True)
 
-      var_dict_path = stateDictsPath.joinpath(f"{var}_dict.pth")
-
-      if not var_dict_path.exists():
-        var_dict_path = None
-        print(f"> predicting field {var}: NULL!")
-      else:
-        print(f"> predicting field {var}!")
-        pass
-
       # create a Regression obj as model to do predicting
+      var_dict_path = stateDictsPath.joinpath(f"{var}_dict.pth")
       R = Regression(var, var_dict_path)
       R.model.eval()  # only to predict
 
