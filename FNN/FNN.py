@@ -5,7 +5,8 @@ This is main function to call
 @author     @data       @aff        @version
 Xia, S      2025.8.22   Simpop.cn   v6.x
 """
-import sys
+
+import argparse
 
 from FNN_Train import FNN_train
 from FNN_Eval  import FNN_Eval
@@ -13,19 +14,23 @@ from FNN_Eval  import FNN_Eval
 if __name__=="__main__":
   """主函数
   """
-  args = sys.argv
-  num_args = len(args)
+  itrain   = False
+  ipredict = False
 
-  Train   = False
-  Predict = False
+  parser = argparse.ArgumentParser(description="训练 or 预测，随你挑")
+  # 把 --train 和 --predict 都设成「布尔开关」
+  parser.add_argument("--train",   action="store_true", help="启动训练")
+  parser.add_argument("--predict", action="store_true", help="启动预测")
 
-  for arg in args:
-    if arg == "--train":
-      Train   = True
-    if arg == "--predict":
-      Predict = True
+  args = parser.parse_args()
 
-  if Train:
+  if args.train:
+    itrain = True
+
+  if args.predict:
+    ipredict = True
+
+  if itrain:
     print("---------- Train ----------")
     fnn_train = FNN_train()
 
@@ -43,11 +48,8 @@ if __name__=="__main__":
 
       print("") # 空行
 
-  if Predict:
+  if ipredict:
     print("---------- Eval  ----------")
     fnn_eval = FNN_Eval()
     fnn_eval.predict()
     pass
-
-  if not Train and not Predict:
-    print("... FNN has done nothing ...")
