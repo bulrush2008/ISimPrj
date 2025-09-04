@@ -194,7 +194,7 @@ class Regression(nn.Module):
 
     return e
 
-  def plot_regression(self, order, inp, target):
+  def plot_regression(self, order:int, inp:np.ndarray, target:torch.FloatTensor):
     """
     绘制回归图，每个图点的
     - 横坐标: CFD 仿真结果
