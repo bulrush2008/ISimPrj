@@ -7,11 +7,10 @@ Xia, S      2025.8.22   Simpop.cn   v6.x
 """
 import sys
 
-from FNN_Train import FNN_Train
+from FNN_Train import FNN_train
 from FNN_Eval  import FNN_Eval
 
 if __name__=="__main__":
-#===============================================================================
   """主函数
   """
   args = sys.argv
@@ -28,7 +27,7 @@ if __name__=="__main__":
 
   if Train:
     print("---------- Train ----------")
-    fnn_train = FNN_Train()
+    fnn_train = FNN_train()
 
     chunk_iter = 3
 
@@ -44,12 +43,6 @@ if __name__=="__main__":
 
       print("") # 空行
 
-        # print(f"> Current step: {istep}/{epoch}")
-
-        # if istep >= epoch:
-        #   print(f"{var} training over.\n")
-        #   break
-
   if Predict:
     print("---------- Eval  ----------")
     fnn_eval = FNN_Eval()
@@ -57,4 +50,4 @@ if __name__=="__main__":
     pass
 
   if not Train and not Predict:
-    print("... FNN Have Done Nothing ...")
+    print("... FNN has done nothing ...")

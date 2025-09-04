@@ -21,13 +21,15 @@ from Common.FSimDataset import FSimDataset
 from Common.Regression  import Regression
 
 
-class FNN_Train(object):
+class FNN_train(object):
   """
-  一个模型对应一个流场，比如温度场 T，对应一个NN模型
+  一个模型对应一个流场，比如温度场对应一个神经网络模型，压力场对应另一个神经网络模型
 
-  - 实例化网络对象
-  - 实例化数据对象
-  - 组织训练过程
+  - 类方法
+    - 实例化神经网络对象
+    - 实例化数据对象
+  - 训练模型
+  - 绘制误差曲线
   """
   def __init__(self):
     """
