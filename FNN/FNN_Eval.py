@@ -19,7 +19,7 @@ from Common.CaseSet import CaseSet
 from Common.FSimDataset import FSimDataset
 from Common.Regression  import Regression
 
-class FNN_Eval(object):
+class FNN_eval(object):
   """
   - 应用任务类
   - 调用方法类和数据类，实现特定的应用任务
