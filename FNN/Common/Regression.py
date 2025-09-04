@@ -174,7 +174,9 @@ class Regression(nn.Module):
     ax.figure.savefig(outFile)
     # 函数 plot_loss_history 结束
 
-  def calculate_field_error(self, inp, target) -> np.float64:
+  def calculate_field_error(self,
+                            inp: np.ndarray,
+                            target: torch.FloatTensor) -> np.float64:
     """
     Calculate error each case between prediction and real.
     Function's two input parameters are same with 'self.train(...)'
