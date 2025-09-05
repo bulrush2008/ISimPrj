@@ -5,7 +5,6 @@ from typing import Tuple, Dict, List
 
 import torch
 import h5py
-import numpy as np
 
 #class FSimDataset(Dataset):
 class FSimDataset(object):
@@ -57,7 +56,7 @@ class FSimDataset(object):
     hdf = self.dataFile
     cid = self.caseList[idx]
 
-    inp = hdf[cid]["input"]["inp"][:]  # numpy.ndarray
+    inp = hdf[cid]["input"]["inp"][:]  # numpy.ndarray # type: ignore
     inp = torch.FloatTensor(inp)  # convert to type torch.FloatTensor
 
     data = []
@@ -71,19 +70,19 @@ class FSimDataset(object):
       key = f"block{blk:03d}"
 
       # for the variable field
-      varFieldBlk = list(hdf[cid][key][self.varName][:])
+      varFieldBlk = list(hdf[cid][key][self.varName][:])  # type: ignore
       data += varFieldBlk
 
       # coord x
-      crd = list(hdf[cid][key]["X"][:])
+      crd = list(hdf[cid][key]["X"][:])  # type: ignore
       coords["x"] += crd
 
       # coord y
-      crd = list(hdf[cid][key]["Y"][:])
+      crd = list(hdf[cid][key]["Y"][:])  # type: ignore
       coords["y"] += crd
 
       # coord z
-      crd = list(hdf[cid][key]["Z"][:])
+      crd = list(hdf[cid][key]["Z"][:])  # type: ignore
       coords["z"] += crd
       pass
 
