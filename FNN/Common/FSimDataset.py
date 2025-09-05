@@ -46,7 +46,7 @@ class FSimDataset(object):
   def __getitem__(
       self,
       idx:int
-  ) -> Tuple[np.ndarray, torch.FloatTensor, Dict[str, List[float]]]:
+  ) -> Tuple[torch.FloatTensor, torch.FloatTensor, Dict[str, List[float]]]:
   #-----------------------------------------------------------------------------
     """
     return the input params and field
