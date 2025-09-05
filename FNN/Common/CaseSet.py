@@ -46,7 +46,7 @@ class CaseSet(object):
     """
     - so you can use the class as: obj[idx]
     """
-    if idx >= self.size:
+    if idx > len(self):
       raise IndexError(f"{idx} beyond range.")
 
     return self.idxList[idx]
