@@ -142,18 +142,18 @@ class Regression(nn.Module):
 
     # write data into h5 database directly
     dsName = f"{self.varName}"
-    grp.create_dataset(dsName, data=output, dtype=np.float64)
+    grp.create_dataset(dsName, data=output, dtype=np.float64) # type: ignore
 
     # write coordinates it necessary
     if coords is not None:
       dsName = "Coords-X"
-      grp.create_dataset(dsName, data=coords["x"], dtype=np.float64)
+      grp.create_dataset(dsName, data=coords["x"], dtype=np.float64) # type: ignore
 
       dsName = "Coords-Y"
-      grp.create_dataset(dsName, data=coords["y"], dtype=np.float64)
+      grp.create_dataset(dsName, data=coords["y"], dtype=np.float64) # type: ignore
 
       dsName = "Coords-Z"
-      grp.create_dataset(dsName, data=coords["z"], dtype=np.float64)
+      grp.create_dataset(dsName, data=coords["z"], dtype=np.float64) # type: ignore
       pass
 
     h5.close()
@@ -178,7 +178,7 @@ class Regression(nn.Module):
 
     # 文件名中不再含有当时的时间戳
     outFile = outDir.joinpath(f"{var}_loss_history.png")
-    ax.figure.savefig(outFile)
+    ax.figure.savefig(outFile)  # type: ignore
     # 函数 plot_loss_history 结束
 
   def calculate_field_error(self,
@@ -252,5 +252,4 @@ class Regression(nn.Module):
 
 
 if __name__=="__main__":
-  R = Regression("T")
   pass
