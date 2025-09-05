@@ -182,7 +182,7 @@ class Regression(nn.Module):
     # 函数 plot_loss_history 结束
 
   def calculate_field_error(self,
-                            inp: np.ndarray,
+                            inp: torch.FloatTensor,
                             target: torch.FloatTensor) -> np.float64:
     """
     Calculate error each case between prediction and real.
@@ -201,7 +201,7 @@ class Regression(nn.Module):
 
     return e
 
-  def plot_regression(self, order:int, inp:np.ndarray, target:torch.FloatTensor):
+  def plot_regression(self, order:int, inp:torch.FloatTensor, target:torch.FloatTensor):
     """
     绘制回归图，每个图点的
     - 横坐标: CFD 仿真结果
