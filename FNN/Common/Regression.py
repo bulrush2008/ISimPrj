@@ -3,6 +3,7 @@
 # standard libs
 import math
 from pathlib import Path
+from typing import Union, Dict, List
 
 # third-party libs
 import torch
@@ -112,7 +113,12 @@ class Regression(nn.Module):
     self.optimiser.step()
     pass
 
-  def write2HDF(self, inp:torch.FloatTensor, dirFileHDF:Path, coords:list=None):
+  def write2HDF(
+      self,
+      inp:torch.FloatTensor,
+      dirFileHDF:Path,
+      coords:Union[Dict[str, List[float]], None]=None
+  ) -> None:
     """
     - 将预测数据，写入 HDF 数据库
     - 如有必要，会写入坐标
