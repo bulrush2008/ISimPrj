@@ -43,10 +43,10 @@ class FSimDataset(object):
   #-----------------------------------------------------------------------------
     return self.numCases
 
-  def __getitem__(self, idx:int) -> Tuple[np.ndarray,
-                                          torch.FloatTensor,
-                                          Dict[str, List[float]]
-                                         ]:
+  def __getitem__(
+      self,
+      idx:int
+  ) -> Tuple[np.ndarray, torch.FloatTensor, Dict[str, List[float]]]:
   #-----------------------------------------------------------------------------
     """
     return the input params and field
